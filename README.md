@@ -16,8 +16,8 @@ comme code) :
 
 ```
     source venv/bin/activate
-    geonature install_gn_module <mon_chemin_absolu_vers_le_module> <url_relative_du_module>
-    # Exemple geonature install_gn_module /home/`whoami`/gn_module_conservation_strategy-X.Y.Z /cs)
+    geonature install_gn_module <mon_chemin_absolu_vers_le_module> <code_du_module>
+    # Exemple geonature install_gn_module /home/`whoami`/gn_module_conservation_strategy-X.Y.Z cs)
 ```
 
 * L'installation du module doit créer le fichier ``config/settings.ini`` 
@@ -28,7 +28,7 @@ le copiant dans ``config/settings.ini`` pour l'y modifier.
 * Complétez la configuration du module dans le fichier ``config/conf_gn_module.toml`` 
 (créé lors de l'installation du module) en surcouchant les valeurs par 
 défaut présentes dans le fichier ``config/conf_gn_module.sample.toml``:
-  * Ensuite, relancez la mise à jour de la configuration de GeoNature :
+  * Ensuite, relancez la mise à jour de la configuration du module :
     * Se rendre dans le répertoire ``geonature/backend``
     * Activer le venv (si nécessaire) : ``source venv/bin/activate``
     * Lancer la commande de mise à jour de configuration du module 
@@ -53,6 +53,17 @@ en la reconstruisant. Pour se faire, lancez les commandes suivantes :
   * charger le *venv* : `source venv/bin/activate`
   * recontruire l'interface (*frontend*) : `geonature frontend_build`
 
+
+## Déploiement sur Flore Sentinelle 
+
+### En mode développement
+* Se placer dans le dossier du module : `cd ~/workspace/cbna/scalp/gn_module_conservation_strategy`
+* Uploader le code (supprimer l'option `--dry-run` si tout est ok) : `rsync -av --exclude .git --exclude .gitignore --exclude tsconfig.json --exclude __pycache__ --exclude var --exclude settings.ini --exclude conf_gn_module.toml ./ geonatureadmin@floresent-srv:~/modules/cs/ --dry-run`
+* Lors du premier déploiement suivre les étapes d'installation du module décrites ci-dessus.
+* Lors des synchronisations suivante :
+  * si la base de données est modifiée, la mettre à jour
+  * recompiler le module en relançant sa configuration dans le `venv` du 
+    backend de GeoNature : `geonature update_module_configuration cs`
 
 ## Licence
 
