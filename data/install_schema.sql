@@ -99,6 +99,8 @@ COMMENT ON COLUMN cor_territory_taxon.cd_nom IS
 COMMENT ON COLUMN cor_territory_taxon.presence_meshes_count IS 
     E'Nombre de mailles 5x5km INPN du territoire dans lesquelles '
      'le taxon est présent.' ;
+COMMENT ON COLUMN cor_territory_taxon.small_isolated_population IS
+    E'Indique (si TRUE) que le taxon est présent dans le territoire en petite population isolée.';
 COMMENT ON COLUMN cor_territory_taxon.indigenousness IS 
     E'Code d''indigénat du taxon sur le territoire. '
      'Valeurs : I, I?, E.' ;
@@ -112,9 +114,9 @@ COMMENT ON COLUMN cor_territory_taxon.rarity IS
     E'Pourcentage de rareté (Cr) du taxon dans ce territoire. '
      'Calcul : Cr = 100 - 100 x (Nb mailles présence sur territoire après 1990 / Nb total de mailles sur territoire).' ;
 COMMENT ON COLUMN cor_territory_taxon.rarity_class IS 
-    E'classe de rareté correspondant au pourcentage. ' ;
+    E'Classe de rareté correspondant au pourcentage. ' ;
 COMMENT ON COLUMN cor_territory_taxon.computed_conservation_priority IS 
-    E'Iindice de priorité de conservation. '
+    E'Indice de priorité de conservation. '
      'Valeurs : 1 à 5.' ;
 COMMENT ON COLUMN cor_territory_taxon.compute_date IS 
     E'Date à laquelle le calcul de l''indice de priorité de conservation '
