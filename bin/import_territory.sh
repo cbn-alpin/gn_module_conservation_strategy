@@ -96,7 +96,7 @@ function main() {
 }
 
 function importTerritories() {
-    printMsg "Import taxons list into « ${module_schema}.t_territory »"
+    printMsg "Import territories list into « ${module_schema}.t_territory »"
 
     local head="$(csvtool -t TAB -u TAB head 1 "${territory_csv_path}")"
     stdbuf -oL csvtool drop 1 "${territory_csv_path}"  |
