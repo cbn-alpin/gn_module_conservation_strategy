@@ -25,6 +25,11 @@ et y stocker le chemin vers le fichier de configuration de GeoNature.
 Vous pouvez maintenant (optionel) surcoucher éventuellement un des 
 paramètres présent dans le fichier ``config/settings.default.ini`` en 
 le copiant dans ``config/settings.ini`` pour l'y modifier.
+* Réaliser les imports nécessaires au fonctionnement du module à l'aide 
+des scripts présents dans le dossier `bin/` pour :
+  * les territoires
+  * les taxons prioritaires
+* Vous trouverez plus d'informations sur l'importation de données et ces scripts dans [la documentation qui leur est dédiée](docs/import-data.md).
 * Complétez la configuration du module dans le fichier ``config/conf_gn_module.toml`` 
 (créé lors de l'installation du module) en surcouchant les valeurs par 
 défaut présentes dans le fichier ``config/conf_gn_module.sample.toml``:
@@ -58,7 +63,7 @@ en la reconstruisant. Pour se faire, lancez les commandes suivantes :
 
 ### En mode développement
 * Se placer dans le dossier du module : `cd ~/workspace/cbna/scalp/gn_module_conservation_strategy`
-* Uploader le code (supprimer l'option `--dry-run` si tout est ok) : `rsync -av --exclude .git --exclude .gitignore --exclude tsconfig.json --exclude __pycache__ --exclude var --exclude settings.ini --exclude conf_gn_module.toml ./ geonatureadmin@floresent-srv:~/modules/cs/ --dry-run`
+* Uploader le code (supprimer l'option `--dry-run` si tout est ok) : `rsync -av --exclude .git --exclude .gitignore --exclude tsconfig.json --exclude __pycache__ --exclude var --exclude settings.ini --exclude conf_gn_module.toml --exclude module.config.ts ./ geonatureadmin@floresent-srv:~/modules/cs/ --dry-run`
 * Lors du premier déploiement suivre les étapes d'installation du module décrites ci-dessus.
 * Lors des synchronisations suivante :
   * si la base de données est modifiée, la mettre à jour
