@@ -1,0 +1,71 @@
+// Form fields
+mat-form-field,
+cs-action-form,
+.action-btn-container,
+.actions-container {
+  padding: .3rem;
+}
+form.ng-invalid,
+mat-select.ng-invalid {
+  border-left: none !important;
+}
+input.cs-grow {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+// Mat Slider
+::ng-deep .mat-slider.mat-slider-horizontal.cs-grow-slider {
+  width: 100%;
+  margin-top: 15px;
+  padding-bottom: 0;
+
+  .mat-slider-wrapper {
+    top: 18px;
+  }
+  .mat-slider-track-wrapper {
+    height: 12px;
+    border-radius: 10px
+  }
+  .mat-slider-track-fill,
+  .mat-slider-wrapper,
+  .mat-slider-track-wrapper,
+  .mat-slider-track-background {
+    height: 12px;
+  }
+  .mat-slider-ticks-container {
+    top: 5px;
+  }
+  .mat-slider-thumb {
+    height: 30px;
+    width: 30px;
+    bottom: -15px;
+  }
+}
+
+// Modal
+::ng-deep .edit-assessment-modal {
+  .mat-dialog-container {
+    padding: 0 !important;
+    overflow-x: hidden;
+  }
+  .mat-horizontal-content-container {
+    padding: 0 !important;
+  }
+}
+.mat-dialog-title {
+  margin-bottom: 0 !important;
+}
+.modal-header, .modal-footer {
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+.mat-dialog-content {
+  margin: 0;
+  padding: 0;
+}
+.modal-body {
+  height: 55vh;
+  min-height: 20vh;
+  overflow-y: auto;
+}

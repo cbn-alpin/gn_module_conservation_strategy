@@ -1,0 +1,27 @@
+// CARD
+.card-body {
+  padding: 4px;
+  display: block;
+  height: 100%;
+}
+.card-header {
+  padding: 0 .25rem;
+}
+.card-header h3 {
+  padding-top: 20px;
+}
+
+// FORM
+:host ::ng-deep #cs-territory-select .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+// TAB LINKS
+.mat-tab-link.mat-tab-label-active {
+  opacity: 1;
+}
+a.mat-tab-link:hover {
+  text-decoration: none !important;
+  color: rgba($color: #000000, $alpha: 1.0);
+  background-color: rgba($color: #000000, $alpha: .1);
+}

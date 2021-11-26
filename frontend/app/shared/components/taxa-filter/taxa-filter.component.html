@@ -1,0 +1,33 @@
+<mat-form-field>
+  <mat-label> {{ label }} </mat-label>
+
+  <input
+    matNativeControl
+    type="text"
+    placeholder="Saisir au moins {{charNumber}} lettres"
+    [ngClass]="{'loading' : isLoading && parentFormControl.value?.length >= charNumber}"
+    [formControl]="parentFormControl"
+    [placement]="'bottom-left'"
+    [ngbTypeahead]="searchTaxon"
+    [inputFormatter]="formatter"
+    [resultTemplate]="rt"
+    (selectItem)="onTaxonSelected($event)"
+  />
+
+  <button
+    mat-button
+    *ngIf="parentFormControl.value"
+    matSuffix mat-icon-button aria-label="Clear"
+    (click)="onClearField()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <mat-hint class="mat-error" *ngIf="!isLoading && noResult && parentFormControl.value?.length >= charNumber">
+    {{'Taxon.NoTaxonFound' | translate}}
+  </mat-hint>
+
+  <ng-template #rt let-r="result" let-t="term">
+    <span [innerHTML]="r.searchName"> </span>
+  </ng-template>
+</mat-form-field>

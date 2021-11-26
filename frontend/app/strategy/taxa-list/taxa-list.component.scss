@@ -1,0 +1,18 @@
+mat-drawer-container {
+    flex: 1 1 auto;
+    min-height: 300px;
+}
+mat-drawer {
+    width: 250px;
+    // Allow the drop-down list to display its contents over mat-drawer
+    overflow-y: unset !important;
+}
+.mat-paginator-sticky {
+  bottom: 0;
+  position: sticky;
+  z-index: 10;
+}
+:host ::ng-deep .mat-drawer-inner-container {
+    // Allow the drop-down list to display its contents over mat-drawer
+    overflow: unset !important;
+}

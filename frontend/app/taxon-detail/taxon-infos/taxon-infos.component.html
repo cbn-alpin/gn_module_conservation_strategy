@@ -1,0 +1,108 @@
+<div *ngIf="taxonInfos | async as infos">
+
+  <div class="card-container cs-card-description">
+    <mat-card [class.bg-warning]="!infos.attributs?.atlasDescription">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>yard</mat-icon>
+        <mat-card-title>Description</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content
+        class="d-flex"
+      >
+        <div
+          *ngIf="infos.attributs?.atlasDescription ; else noDescription"
+          class="cs-description-text flex-fill pr-3"
+          [innerHtml]="infos.attributs?.atlasDescription | replaceTags : ['h1', 'h2'] : ['h5', 'h6']"
+        ></div>
+
+        <carousel class="cs-description-media flex-fill" *ngIf="infos.medias ; else noMedia">
+          <slide *ngFor="let media of infos.medias">
+            <img
+              class="img-thumbnail"
+              [src]="media.path ? taxhubBaseUrl + '/' + media.path : media.url"
+              [alt]="media.title + ' - ' + media.author"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <p>
+                {{ media.title }} <br/>
+                {{ media.author }}
+              </p>
+            </div>
+          </slide>
+        </carousel>
+      </mat-card-content>
+
+      <ng-template #noDescription>
+        <div class="cs-no-text">
+          <p>
+            <mat-icon inline>warning</mat-icon>
+            Aucune description de ce taxon.</p>
+        </div>
+      </ng-template>
+
+      <ng-template #noMedia>
+        <div class="cs-no-media">
+          <p>Aucune image pour ce taxon</p>
+        </div>
+      </ng-template>
+
+      <mat-card-actions *ngIf="!infos.attributs?.atlasDescription || !infos.medias" class="d-flex flex-row-reverse">
+        <a *ngIf="!infos.attributs?.atlasDescription" mat-raised-button [href]="taxhubEditFormUrl" target="_blank" >
+          Renseignez la description sur TaxHub
+        </a>
+        <a *ngIf="!infos.medias" mat-raised-button [href]="taxhubEditFormUrl" target="_blank" >
+          Ajouter une image sur TaxHub
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="card-container">
+    <mat-card [class.bg-warning]="!infos.attributs?.atlasEcology">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>nature_people</mat-icon>
+        <mat-card-title>Écologie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content
+        *ngIf="infos.attributs?.atlasEcology ; else noEcology"
+        [innerHtml]="infos.attributs?.atlasEcology"
+      ></mat-card-content>
+      <ng-template #noEcology>
+        <mat-card-content>
+          <mat-icon inline>warning</mat-icon>
+          Aucune information sur l'écologie de ce taxon.
+        </mat-card-content>
+        <mat-card-actions class="d-flex flex-row-reverse">
+          <a mat-raised-button [href]="taxhubEditFormUrl" target="_blank" >
+            Renseignez l'écologie sur TaxHub
+          </a>
+        </mat-card-actions>
+      </ng-template>
+    </mat-card>
+  </div>
+
+  <div class="card-container">
+    <mat-card [class.bg-warning]="!infos.attributs?.atlasChorologieDescription">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>landscape</mat-icon>
+        <mat-card-title>Chorologie</mat-card-title>
+      </mat-card-header>
+      <mat-card-content
+        *ngIf="infos.attributs?.atlasChorologieDescription ; else noChorology"
+        [innerHtml]="infos.attributs?.atlasChorologieDescription"
+      ></mat-card-content>
+      <ng-template #noChorology>
+        <mat-card-content>
+          <mat-icon inline>warning</mat-icon>
+          Aucune information sur la chorologie de ce taxon.
+        </mat-card-content>
+        <mat-card-actions class="d-flex flex-row-reverse">
+          <a mat-raised-button [href]="taxhubEditFormUrl" target="_blank" >
+            Renseignez la chorologie sur TaxHub
+          </a>
+        </mat-card-actions>
+      </ng-template>
+    </mat-card>
+  </div>
+</div>

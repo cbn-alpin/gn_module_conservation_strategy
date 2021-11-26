@@ -1,0 +1,12 @@
+<ng-container *ngIf="homeContent | async as content ; else noHomeContent">
+  <div class="cs-home-container" [innerHtml]="content"></div>
+</ng-container>
+
+<ng-template #noHomeContent>
+  <div class="cs-home-container">
+    <p>
+      Ce module vous propose de consulter, créer ou modifier les fiches bilans
+      stationnels des taxons prioritaires d'un territoire.
+    </p>
+  </div>
+</ng-template>

@@ -1,0 +1,55 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex flex-row">
+      <h3>{{ title }} : </h3>
+      <mat-form-field
+        id="cs-territory-select"
+        *ngIf="$territories | async as territories; else noTerritories"
+        class="ml-3"
+      >
+        <mat-select
+          placeholder="Territoires"
+          [(value)]="currentTerritory"
+          (selectionChange)="onTerritoryChanged($event)"
+        >
+          <mat-option
+            *ngFor="let territory of territories"
+            [value]="territory"
+          >
+          {{ territory.label }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matPrefix fontSet="fa" fontIcon="fa-globe"></mat-icon>
+      </mat-form-field>
+      <ng-template #noTerritories>
+        <p>Aucun territoire</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <nav mat-tab-nav-bar>
+      <a mat-tab-link
+        routerLink="/cs"
+        routerLinkActive
+        [routerLinkActiveOptions]="{exact:true}"
+        #rlaHome="routerLinkActive"
+        [active]="rlaHome.isActive"
+      >
+        <mat-icon fontSet="fa" fontIcon="fa-home"></mat-icon>
+        Accueil
+      </a>
+      <a mat-tab-link
+        routerLink="/cs/territories/{{store.selectedTerritory?.code | lowercase }}/priority-taxa"
+        routerLinkActive
+        #rlaPriorityTaxa="routerLinkActive"
+        [active]="rlaPriorityTaxa.isActive"
+      >
+        <mat-icon fontSet="fa" fontIcon="fa-list"></mat-icon>
+        Liste des taxons prioritaires
+      </a>
+    </nav>
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

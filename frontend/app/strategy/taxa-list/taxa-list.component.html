@@ -1,0 +1,181 @@
+<mat-drawer-container>
+  <mat-drawer
+      mode="side"
+      opened
+  >
+    <form>
+      <fieldset>
+        <h4 class="h5">Filtres</h4>
+
+        <div class="pb-3">
+          <cs-taxa-filter
+            #taxonFilter
+            label="Taxon"
+            [apiEndPoint]="baseApiEndpoint + '/territories/' +
+              store.selectedTerritory?.code +
+              '/taxons/search'"
+            [parentFormControl]="filtersForm.controls.taxaFilter"
+            [charNumber]="3"
+            [listLength]="20"
+            (onChange)="onTaxonFilterChanged($event)"
+            (onDelete)="onTaxonFilterDeleted($event)"
+          >
+          </cs-taxa-filter>
+        </div>
+
+        <mat-form-field>
+          <mat-label>Indice de priorité de conservation</mat-label>
+          <mat-select
+            name="cpi"
+            [formControl]="filtersForm.controls.cpiFilter"
+            (selectionChange)="onCpiFilterChanged($event)"
+          >
+            <mat-option value="1"> 1 (régionale, maximale)</mat-option>
+            <mat-option value="2"> 2 (régionale, très forte)</mat-option>
+            <mat-option value="3"> 3 (départementale)</mat-option>
+          </mat-select>
+          <button
+            mat-button
+            *ngIf="filtersForm.controls.cpiFilter.value"
+            matSuffix mat-icon-button aria-label="Clear"
+            (click)="onCpiFilterCleared($event)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-checkbox
+          name="assessment"
+          [formControl]="filtersForm.controls.assessmentFilter"
+          (change)="onAssessmentFilterChanged($event)"
+        >
+          Présence Bilan Stationnel
+        </mat-checkbox>
+      </fieldset>
+    </form>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="cs-taxa-datatable-progress-bar-container" >
+      <mat-progress-bar mode="query" *ngIf="dataSource.loading$ | async"></mat-progress-bar>
+    </div>
+    <div #dataTableContainer class="mat-elevation-z8" [ngStyle]="{ 'height': dataTableHeight + 'px' }">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        matSortActive="taxonName"
+        matSortDirection="asc"
+        matSortDisableClear
+      >
+        <ng-container matColumnDef="fullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom taxon </th>
+          <td mat-cell *matCellDef="let taxon">
+            <i matTooltip="{{taxon.fullName}} [{{taxon.nameCode}}]">{{taxon.shortName}}</i>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cpi">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Indice de priorité </th>
+          <td mat-cell *matCellDef="let taxon">
+            <span *ngIf="taxon?.revisedCpi && !taxon?.computedCpi">
+              {{ taxon.revisedCpi }} (révisé)
+            </span>
+            <span *ngIf="!taxon?.revisedCpi && taxon?.computedCpi">
+              {{ taxon.computedCpi }} (calculé)
+            </span>
+            <span *ngIf="
+              taxon?.computedCpi && taxon?.revisedCpi && taxon?.computedCpi != taxon?.revisedCpi
+            ">
+              {{ taxon.revisedCpi }} / {{ taxon.computedCpi }}
+              (révisé / calculé)
+            </span>
+            <span *ngIf="
+            taxon?.computedCpi && taxon?.revisedCpi && taxon?.computedCpi == taxon?.revisedCpi
+            ">
+              {{ taxon.revisedCpi }} (révisé = calculé)
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateMin">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            matTooltip="Date la plus ancienne d'inventaire de zone de prospection pour un taxon dans un territoire."
+          >
+            Date min prospection
+          </th>
+          <td mat-cell *matCellDef="let taxon"> {{taxon.dateMin | date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dateMax">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            matTooltip="Date la plus récente d'inventaire de zone de prospection pour un taxon dans un territoire."
+          >
+            Date max prospection
+          </th>
+          <td mat-cell *matCellDef="let taxon"> {{taxon.dateMax | date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="areaPresenceCount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            matTooltip="Nombre total de zone de prospection pour un taxon dans un territoire."
+          >
+            Nombre stations
+          </th>
+          <td mat-cell class="text-center" *matCellDef="let taxon"> {{taxon.presenceAreaCount}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="assessmentCount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            matTooltip="Nombre de fiche bilan stationnel créés pour le taxon sur le territoire considéré quelque soit la période de temps considérée."
+          >
+            Nombre de bilan
+          </th>
+          <td mat-cell class="text-center" *matCellDef="let taxon"> {{taxon.assessmentCount}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let taxon">
+            <div class="d-flex justify-content-end flex-wrap">
+              <button
+                mat-icon-button
+                matRipple
+                matTooltip="Voir la fiche détaillée du taxon prioritaire."
+                [routerLink]="[
+                  taxon.nameCode,
+                  { shortName: taxon.shortName }
+                ]"
+              >
+                <mat-icon>description</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        class="mat-paginator-sticky"
+        showFirstLastButtons
+        [length]="dataSource.itemsCount$ | async"
+        [pageSize]="20"
+        [pageSizeOptions]="[10, 20, 50]"
+      ></mat-paginator>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
