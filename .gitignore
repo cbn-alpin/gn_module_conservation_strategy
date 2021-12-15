@@ -1,7 +1,7 @@
 # Module GeoNature
 config/settings.ini
 config/conf_gn_module.toml
-/tsconfig.json
+tsconfig.json
 /frontend/app/module.config.ts
 /log/
 
