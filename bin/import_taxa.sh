@@ -100,9 +100,9 @@ function copyTaxa() {
     printMsg "Import taxa list into « ${module_schema}.${taxa_table_temp} »"
     header_line=$(head -n1 "${taxa_csv_path}")
     csv_columns="${header_line//$'\t'/, }"
-    export PGPASSWORD="${user_pg_pass}"; \
         sed "s/\${columns}/${csv_columns}/g" "${data_dir}/taxa_copy.sql" | \
-        psql -h "${db_host}" -U "${user_pg}" -d "${db_name}" ${psql_verbosity-} \
+        sudo -n -u "${pg_admin_name}" -s \
+        psql -d "${db_name}" ${psql_verbosity-} \
             -v moduleSchema="${module_schema}" \
             -v tmpTable="${taxa_table_temp}" \
             -v gnDbOwner="${user_pg}" \
