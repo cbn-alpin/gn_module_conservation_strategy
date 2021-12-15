@@ -272,7 +272,7 @@ ALTER TABLE t_action ADD CONSTRAINT check_t_action_progress
 CREATE TABLE cor_action_organism (
     id_organism INTEGER NOT NULL,
     id_action INTEGER NOT NULL,
-    PRIMARY KEY (id_ogranism, id_action)
+    PRIMARY KEY (id_organism, id_action)
 ) ;
 COMMENT ON TABLE cor_action_organism IS
     E'Table contenant les actions à prévoir pour chaque bilan.' ;
@@ -338,8 +338,8 @@ ALTER TABLE ONLY t_action ADD CONSTRAINT fk_t_action_id_action_progress
     FOREIGN KEY (id_action_progress) REFERENCES ref_nomenclatures.t_nomenclatures (id_nomenclature)
     ON UPDATE CASCADE ON DELETE SET NULL ;
 
-ALTER TABLE ONLY cor_action_organism ADD CONSTRAINT fk_cor_action_organism_id_ogranism
-    FOREIGN KEY (id_ogranism) REFERENCES utilisateurs.bib_organismes (id_organisme)
+ALTER TABLE ONLY cor_action_organism ADD CONSTRAINT fk_cor_action_organism_id_organism
+    FOREIGN KEY (id_organism) REFERENCES utilisateurs.bib_organismes (id_organisme)
     ON UPDATE CASCADE ON DELETE SET NULL ;
 
 ALTER TABLE ONLY cor_action_organism ADD CONSTRAINT fk_cor_action_organism_id_action
@@ -392,8 +392,8 @@ CREATE INDEX idx_t_action_id_action_type
 CREATE INDEX idx_t_action_id_action_progress
     ON t_action USING btree(id_action_progress) ;
 
-CREATE INDEX idx_cor_action_organism_id_ogranism
-    ON cor_action_organism USING btree(id_ogranism) ;
+CREATE INDEX idx_cor_action_organism_id_organism
+    ON cor_action_organism USING btree(id_organism) ;
 
 CREATE INDEX idx_cor_action_organism_id_action
     ON cor_action_organism USING btree(id_action) ;
