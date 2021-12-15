@@ -4,6 +4,7 @@ config/conf_gn_module.toml
 tsconfig.json
 /frontend/app/module.config.ts
 /log/
+/frontend/assets/templates/home.tpl.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

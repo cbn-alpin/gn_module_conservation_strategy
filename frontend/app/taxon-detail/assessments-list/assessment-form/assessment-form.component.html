@@ -1,0 +1,137 @@
+<div class="modal-header">
+  <h1 class="modal-title" mat-dialog-title>
+    <ng-container *ngIf="(updateMode | async); else addModeTitleTpl">
+      <mat-icon inline="true">edit</mat-icon>
+      Édition d'un bilan
+    </ng-container>
+
+    <ng-template #addModeTitleTpl>
+      <mat-icon inline="true">add_box</mat-icon>
+      Création d'un bilan
+    </ng-template>
+  </h1>
+
+  <button type="button" class="close" aria-label="Close" (click)="onCloseForm()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="modal-body mb-auto">
+      <div formGroupName="assessment" class="d-flex flex-column">
+        <mat-form-field hintLabel="Max {{threats.maxLength}} caractères" appearance="outline">
+          <mat-label>Menaces</mat-label>
+          <textarea
+            #threats
+            matNativeControl
+            formControlName="threats"
+            placeholder="Indiquer en quoi le taxon est menacé vis à vis du territoire courant."
+            rows="6"
+            maxlength="10000"
+          ></textarea>
+          <mat-hint align="end">{{threats.value?.length || 0}}/{{threats.maxLength}}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field hintLabel="Max {{description.maxLength}} caractères" appearance="outline">
+          <mat-label>Description</mat-label>
+          <textarea
+            #description
+            matNativeControl
+            formControlName="description"
+            placeholder="Commentaires, notes et remarques sur le bilan stationnel."
+            rows="6"
+            maxlength="10000"
+          ></textarea>
+          <mat-hint align="end">{{description.value?.length || 0}}/{{description.maxLength}}</mat-hint>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Futur bilan en ...</mat-label>
+          <input
+            class="cs-grow"
+            #nextAssessmentYearCtrl
+            matInput
+            formControlName="nextAssessmentYear"
+            type="number"
+            [min]="currentYear"
+            [max]="currentYear + 25"
+          />
+          <mat-slider
+            class="cs-grow-slider"
+            thumbLabel
+            tickInterval="1"
+            [min]="currentYear"
+            [max]="currentYear + 25"
+            [value]="nextAssessmentYearCtrl.value"
+            (change)="onNextAssessmentYearSliderChange($event)"
+          ></mat-slider>
+        </mat-form-field>
+
+      </div>
+
+      <div class="action-btn-container">
+        <button
+          mat-raised-button
+          class="uppercase"
+          color="primary"
+          (click)="onAddActionForm()"
+        >
+          <mat-icon>add</mat-icon>
+          Ajouter une action
+        </button>
+      </div>
+
+      <div class="actions-container" formGroupName="actions">
+        <ng-template #actionsFormContainer></ng-template>
+      </div>
+    </div>
+
+    <div class="modal-footer d-flex justify-content-between">
+      <button
+        type="button"
+        mat-stroked-button
+        color="warn"
+        (click)="onCloseForm()"
+      >
+        <mat-icon>cancel</mat-icon>
+        Annuler
+      </button>
+
+      <button
+        type="button"
+        mat-stroked-button
+        color="warn"
+        (click)="onResetForm()"
+      >
+        <mat-icon>undo</mat-icon>
+        Réinitialiser
+      </button>
+
+      <button
+        *ngIf="!updateMode.getValue()"
+        mat-raised-button
+        class="uppercase"
+        color="primary"
+        [disabled]="!form.valid || disableSubmit"
+
+        (click)="onCreateAssessment()"
+      >
+        <mat-icon>add</mat-icon>
+        Enregistrer
+      </button>
+
+      <button
+        *ngIf="updateMode.getValue()"
+        mat-raised-button
+        class="uppercase"
+        color="primary"
+        [disabled]="!form.valid || disableSubmit"
+        (click)="onUpdateAssessment()"
+      >
+        <mat-icon>edit</mat-icon>
+        Mettre à jour
+      </button>
+    </div>
+  </form>
+</div>

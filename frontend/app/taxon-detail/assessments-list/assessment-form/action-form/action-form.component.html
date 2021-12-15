@@ -1,0 +1,170 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header
+    [ngClass]="{
+      'bg-success': progressValue == 'pl',
+      'bg-warning': progressValue == 'c',
+      'bg-danger': progressValue == 'pr'
+    }"
+  >
+    <mat-panel-title>
+      Action #{{ actionNumber }}
+    </mat-panel-title>
+    <mat-panel-description class="d-flex justify-content-between">
+      <div class="truncate">
+        <span>{{ level }}</span>
+        <span *ngIf="level && type">&nbsp;-&nbsp;</span>
+        <span>{{ type }}</span>
+        <span *ngIf="progress && (level || type)">&nbsp;-&nbsp;</span>
+        <span>{{ progress }}</span>
+      </div>
+
+      <mat-icon *ngIf="progressValue == 'pr'">event_busy</mat-icon>
+      <mat-icon *ngIf="progressValue == 'c'">event</mat-icon>
+      <mat-icon *ngIf="progressValue == 'pl'">event_available</mat-icon>
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <div class="d-flex flex-column justify-content-between p-2">
+    <div class="d-flex flex-row">
+      <cs-simple-nomenclature
+        class="cs-grow flex-fill mr-3"
+        label="Niveau géographique"
+        [parentFormControl]="parentFormGroup.controls.level"
+        codeNomenclatureType="CS_ACTION_GEO_LEVEL"
+        keyValue="cd_nomenclature"
+        (change)="onLevelNomenclatureChange($event)"
+        (onDelete)="onLevelNomenclatureChange($event)"
+      ></cs-simple-nomenclature>
+
+      <cs-simple-nomenclature
+        class="cs-grow flex-fill"
+        label="Type d'action"
+        [parentFormControl]="parentFormGroup.controls.type"
+        codeNomenclatureType="CS_ACTION"
+        keyValue="cd_nomenclature"
+        (change)="onTypeChange($event)"
+        (onDelete)="onTypeChange($event)"
+      ></cs-simple-nomenclature>
+    </div>
+
+    <div class="d-flex flex-row justify-content-between">
+      <cs-simple-nomenclature
+        class="cs-grow flex-fill mr-3"
+        label="État d'avancement"
+        [parentFormControl]="parentFormGroup.controls.progress"
+        codeNomenclatureType="CS_ACTION_PROGRESS"
+        keyValue="cd_nomenclature"
+        (change)="onProgressChange($event)"
+        (onDelete)="onProgressChange($event)"
+      ></cs-simple-nomenclature>
+
+      <mat-form-field
+        *ngIf="parentFormGroup.controls.progress.value == 'pr'"
+        class="cs-grow flex-fill"
+        appearance="outline"
+      >
+        <mat-label>Prévue pour ...</mat-label>
+        <input
+          class="cs-grow"
+          #planForCtrl
+          matInput
+          [formControl]="parentFormGroup.controls.planFor"
+          type="number"
+          [min]="currentYear"
+          [max]="currentYear + 10"
+        />
+        <mat-slider
+          class="cs-grow-slider"
+          thumbLabel
+          tickInterval="1"
+          [min]="currentYear"
+          [max]="currentYear + 10"
+          [value]="planForCtrl.value"
+          (change)="onPlanForSliderChange($event, parentFormGroup.controls.planFor)"
+        ></mat-slider>
+      </mat-form-field>
+
+      <mat-form-field
+        *ngIf="parentFormGroup.controls.progress.value == 'c'"
+        class="cs-grow flex-fill"
+        appearance="outline"
+      >
+        <mat-label>Début le ...</mat-label>
+        <input
+          [formControl]="parentFormGroup.controls.startingDate"
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Choisir une date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field
+        *ngIf="parentFormGroup.controls.progress.value == 'pl'"
+        class="cs-grow flex-fill"
+        appearance="outline"
+      >
+        <mat-label>Mis en place le ...</mat-label>
+        <input
+          [formControl]="parentFormGroup.controls.implementationDate"
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Choisir une date"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field hintLabel="Max {{descriptionCtrl.maxLength}} caractères" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea
+        #descriptionCtrl
+        matNativeControl
+        [formControl]="parentFormGroup.controls.description"
+        placeholder="Indiquer le détail de l'action à mettre en place ou mise en place."
+        rows="6"
+        maxlength="10000"
+      ></textarea>
+      <mat-hint align="end">
+        {{ descriptionCtrl.value?.length || 0 }}/{{descriptionCtrl.maxLength}}
+      </mat-hint>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label> Partenaires </mat-label>
+      <mat-select
+        #partnersCtrl
+        [formControl]="parentFormGroup.controls.partners"
+        [multiple]="true"
+      >
+        <mat-option *ngFor="let partner of partners | async" [value]="partner.uuid">
+          {{ partner.name }}
+        </mat-option>
+      </mat-select>
+      <button
+        mat-button
+        *ngIf="partnersCtrl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="$event.stopPropagation(); partnersCtrl.reset()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <mat-action-row>
+    <button
+      type="button"
+      mat-stroked-button
+      color="warn"
+      (click)="onDeleteAction($event)"
+    >
+      <mat-icon>delete</mat-icon>
+      Supprimer l'action
+    </button>
+  </mat-action-row>
+</mat-expansion-panel>

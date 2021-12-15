@@ -1,0 +1,27 @@
+<mat-form-field>
+  <mat-label> {{ label }} </mat-label>
+  <mat-select
+    #matSelect
+    [formControl]="parentFormControl"
+    [multiple]="multiSelect"
+    (selectionChange)="onNomenclatureSelected($event)"
+  >
+    <mat-option
+      *ngFor="let label of labels"
+      [value]="label[keyValue]"
+      [title]="label[definitionLang]"
+    >
+    {{ label[labelLang] }}
+    </mat-option>
+  </mat-select>
+  <button
+    mat-button
+    *ngIf="parentFormControl.value"
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="onNomenclatureReset($event)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>

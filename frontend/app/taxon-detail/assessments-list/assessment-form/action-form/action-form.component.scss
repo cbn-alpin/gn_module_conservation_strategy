@@ -1,0 +1,35 @@
+// Generic
+.truncate {
+  max-width: 40vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Expansion panel
+mat-expansion-panel-header {
+  &.bg-success {
+    background-color: #BDE7BD !important;
+  }
+  &.bg-warning {
+    background-color: #FFE08E !important;
+  }
+  &.bg-danger {
+    background-color: #FFB6B3 !important;
+  }
+}
+
+// Form
+form.ng-invalid,
+mat-form-field.ng-invalid,
+input.ng-invalid,
+mat-select.ng-invalid {
+  border-left: none !important;
+}
+input.cs-grow {
+  text-align: center;
+  font-size: 1.5rem;
+}
+:host ::ng-deep .cs-grow .mat-form-field {
+  width: 100%;
+}
