@@ -108,9 +108,6 @@ def search_taxons_by_territory(territory):
         .all()
     )
 
-    from sqlalchemy.dialects import postgresql;
-    print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
-
     # Manage output
     output = [d._asdict() for d in data]
     return prepare_output(output)
@@ -235,9 +232,6 @@ def get_taxons_by_territory(territory):
         .all()
     )
 
-    from sqlalchemy.dialects import postgresql;
-    print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
-
     # Manage output
     output = {
         "total_count": count,
@@ -297,8 +291,6 @@ def get_taxon_infos_by_territory(territory, name_code):
         .filter(CorTerritoryTaxon.cd_nom == name_code)
         .group_by(*fields)
     )
-    # from sqlalchemy.dialects import postgresql;
-    # print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
     data = query.one()._asdict()
 
     # Manage medias
@@ -320,8 +312,6 @@ def get_taxon_infos_by_territory(territory, name_code):
             .filter(TMedias.is_public == True)
             .filter(TMedias.supprime == False)
         )
-        from sqlalchemy.dialects import postgresql;
-        print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
         medias = query.all()
         data["medias"] = [media._asdict() for media in medias]
 
@@ -336,8 +326,6 @@ def get_taxon_infos_by_territory(territory, name_code):
             .join(Taxref, Taxref.cd_ref == CorTaxonAttribut.cd_ref)
             .filter(Taxref.cd_nom == name_code)
         )
-        # from sqlalchemy.dialects import postgresql;
-        # print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
         attributs = query.all()
         data["attributs"] = {}
         for attribut in attributs:
