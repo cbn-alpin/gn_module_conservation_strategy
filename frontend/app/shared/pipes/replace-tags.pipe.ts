@@ -14,9 +14,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class ReplaceTagsPipe implements PipeTransform {
 
   transform(text: string, from: string[], to: string[]): string {
-    console.log('In ReplaceTagsPipe')
     if (from.length > 0 && from.length == to.length) {
-      console.log('Size ok')
       from.forEach((search, idx) => {
         let replace = to[idx];
         text = text.replace(new RegExp(`<(\/?)${search}[^>]*?>`, 'ig'), `<$1${replace}>`);
