@@ -6,9 +6,11 @@ import {
   HostListener,
   OnInit,
   ViewChild,
+  OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
+import { Subscription } from '@librairies/rxjs';
 
 import { tap } from 'rxjs/operators';
 
@@ -22,10 +24,10 @@ import { PriorityTaxa, TaxaDataSource } from './taxa.datasource';
   templateUrl: './taxa-list.component.html',
   styleUrls: ['./taxa-list.component.scss']
 })
-export class CsTaxaListComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+
   filtersForm: FormGroup;
   baseApiEndpoint;
-
   firstLoad: Boolean = true;
   dataTableHeight: number;
   displayedColumns = [
@@ -42,6 +44,7 @@ export class CsTaxaListComponent implements OnInit, AfterViewInit, AfterViewChec
   @ViewChild(MatTable) dataTable: MatTable<PriorityTaxa>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  territorySubcription: Subscription;
 
   constructor(
     private cfg: ConfigService,
@@ -85,6 +88,10 @@ export class CsTaxaListComponent implements OnInit, AfterViewInit, AfterViewChec
     }
   }
 
+  ngOnDestroy(): void {
+    this.territorySubcription.unsubscribe();
+  }
+
   @HostListener("window:resize", ["$event"])
   onWindowResize(event) {
     this.calculateDataTableHeight();
@@ -104,7 +111,7 @@ export class CsTaxaListComponent implements OnInit, AfterViewInit, AfterViewChec
   }
 
   private onTerritoryChange() {
-    this.store.getSelectedTerritoryStatus.subscribe((status) => {
+    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
       if (status === true) {
         this.paginator.firstPage();
         this.loadTaxa();

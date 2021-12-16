@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from '@librairies/rxjs';
+import { Observable, Subscription } from '@librairies/rxjs';
 
 
 import { Assessment, IAssessmentList } from '../../shared/models/assessment.model';
@@ -16,8 +16,10 @@ import { StoreService } from '../../shared/services/store.service';
   templateUrl: './assessments-list.component.html',
   styleUrls: ['./assessments-list.component.scss']
 })
-export class CsAssessmentsListComponent implements OnInit {
+export class CsAssessmentsListComponent implements OnInit, OnDestroy {
+
   assessments: Observable<IAssessmentList>;
+  territorySubcription: Subscription;
 
   constructor(
     private dataService: DataService,
@@ -26,11 +28,15 @@ export class CsAssessmentsListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.getSelectedTerritoryStatus.subscribe((status) => {
+    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
       if (status) {
         this.loadAssessments();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.territorySubcription.unsubscribe();
   }
 
   private loadAssessments() {

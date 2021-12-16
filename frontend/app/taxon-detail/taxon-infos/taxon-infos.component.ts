@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 //import { CarouselConfig } from '@librairies/ngx-bootstrap/carousel/carousel.config';
 import { CarouselConfig } from '@librairies/ngx-bootstrap/carousel';
 
-import { Observable } from '@librairies/rxjs';
+import { Observable, Subscription } from '@librairies/rxjs';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
@@ -22,11 +22,12 @@ interface ITaxon {
     { provide: CarouselConfig, useValue: { interval: 5000, noPause: false, showIndicators: true } }
   ]
 })
-export class TaxonInfosComponent implements OnInit {
+export class TaxonInfosComponent implements OnInit, OnDestroy {
 
   taxhubBaseUrl: string;
   taxhubEditFormUrl: string;
   taxonInfos: Observable<Partial<ITaxon>>;
+  territorySubcription: Subscription;
 
   constructor(
     private cfg: ConfigService,
@@ -37,11 +38,15 @@ export class TaxonInfosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.getSelectedTerritoryStatus.subscribe((status) => {
+    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
       if (status) {
         this.loadTaxonInfos();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.territorySubcription.unsubscribe();
   }
 
   private loadTaxonInfos() {
