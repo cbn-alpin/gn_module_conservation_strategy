@@ -17,7 +17,7 @@ from .models import (
     BibAttributs, # TODO: replace with apptax dependency in GN v2.8.0+
     BibNoms, # TODO: replace with apptax dependency in GN v2.8.0+
     BibOrganisms, # TODO: replace with usershub dependency in GN v2.8.0+
-    CorTerritoryTaxon,
+    TPriorityTaxon,
     TAssessment,
     TAction,
     TMedias, # TODO: replace with apptax dependency in GN v2.8.0+
@@ -84,13 +84,13 @@ def search_taxons_by_territory(territory):
     # Execute query
     query = (DB.session
         .query(
-            CorTerritoryTaxon.cd_nom,
+            TPriorityTaxon.cd_nom,
             Taxref.cd_ref,
             Taxref.lb_nom.label("search_name"),
             Taxref.nom_valide,
         )
-        .join(Taxref, Taxref.cd_nom == CorTerritoryTaxon.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == CorTerritoryTaxon.id_territory)
+        .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
+        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .filter(func.lower(TTerritory.code) == territory.lower())
     )
 
@@ -155,40 +155,33 @@ def get_taxons_by_territory(territory):
         Taxref.nom_complet.label("full_name"),
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
-        CorTerritoryTaxon.cd_nom.label("name_code"),
-        CorTerritoryTaxon.revised_conservation_priority.label("revised_cpi"),
-        CorTerritoryTaxon.computed_conservation_priority.label("computed_cpi"),
-        CorTerritoryTaxon.min_prospect_zone_date.label("date_min"),
-        CorTerritoryTaxon.max_prospect_zone_date.label("date_max"),
-        CorTerritoryTaxon.presence_area_count,
+        TPriorityTaxon.cd_nom.label("name_code"),
+        TPriorityTaxon.revised_conservation_priority.label("revised_cpi"),
+        TPriorityTaxon.computed_conservation_priority.label("computed_cpi"),
+        TPriorityTaxon.min_prospect_zone_date.label("date_min"),
+        TPriorityTaxon.max_prospect_zone_date.label("date_max"),
+        TPriorityTaxon.presence_area_count,
     ]
     query = (DB.session
         .query(
             *fields,
             func.count(TAssessment.id).label("assessment_count")
         )
-        .join(Taxref, Taxref.cd_nom == CorTerritoryTaxon.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == CorTerritoryTaxon.id_territory)
-        .join(
-            TAssessment,
-            and_(
-                TAssessment.taxon_name_code == CorTerritoryTaxon.cd_nom,
-                TAssessment.id_territory == CorTerritoryTaxon.id_territory,
-            ),
-            isouter=True
-        )
+        .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
+        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
         .filter(func.lower(TTerritory.code) == territory.lower())
         .group_by(*fields)
     )
 
     if cd_nom:
-        query = query.filter(CorTerritoryTaxon.cd_nom == cd_nom)
+        query = query.filter(TPriorityTaxon.cd_nom == cd_nom)
 
     if cpi:
         query = query.filter(
             or_(
-                CorTerritoryTaxon.revised_conservation_priority == cpi,
-                CorTerritoryTaxon.computed_conservation_priority == cpi,
+                TPriorityTaxon.revised_conservation_priority == cpi,
+                TPriorityTaxon.computed_conservation_priority == cpi,
             )
         )
     if with_assessment:
@@ -201,12 +194,12 @@ def get_taxons_by_territory(territory):
             available_sort = {
                 'fullName': [Taxref.nom_complet],
                 'cpi': [
-                    CorTerritoryTaxon.revised_conservation_priority,
-                    CorTerritoryTaxon.computed_conservation_priority
+                    TPriorityTaxon.revised_conservation_priority,
+                    TPriorityTaxon.computed_conservation_priority
                 ],
-                'dateMin': [CorTerritoryTaxon.min_prospect_zone_date],
-                'dateMax': [CorTerritoryTaxon.max_prospect_zone_date],
-                'areaPresenceCount': [CorTerritoryTaxon.presence_area_count],
+                'dateMin': [TPriorityTaxon.min_prospect_zone_date],
+                'dateMax': [TPriorityTaxon.max_prospect_zone_date],
+                'areaPresenceCount': [TPriorityTaxon.presence_area_count],
                 'assessmentCount': [func.count(TAssessment.id)],
             }
             order_fields = available_sort.get(column, Taxref.nom_valide)
@@ -265,30 +258,23 @@ def get_taxon_infos_by_territory(territory, name_code):
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
         BibNoms.id.label("taxhub_record_id"),
-        CorTerritoryTaxon.revised_conservation_priority.label("revised_cpi"),
-        CorTerritoryTaxon.computed_conservation_priority.label("computed_cpi"),
-        CorTerritoryTaxon.min_prospect_zone_date.label("date_min"),
-        CorTerritoryTaxon.max_prospect_zone_date.label("date_max"),
-        CorTerritoryTaxon.presence_area_count,
+        TPriorityTaxon.revised_conservation_priority.label("revised_cpi"),
+        TPriorityTaxon.computed_conservation_priority.label("computed_cpi"),
+        TPriorityTaxon.min_prospect_zone_date.label("date_min"),
+        TPriorityTaxon.max_prospect_zone_date.label("date_max"),
+        TPriorityTaxon.presence_area_count,
     ]
     query = (DB.session
         .query(
             *fields,
             func.count(TAssessment.id).label("assessment_count")
         )
-        .join(Taxref, Taxref.cd_nom == CorTerritoryTaxon.cd_nom)
+        .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.taxon_name_code == Taxref.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == CorTerritoryTaxon.id_territory)
-        .join(
-            TAssessment,
-            and_(
-                TAssessment.taxon_name_code == CorTerritoryTaxon.cd_nom,
-                TAssessment.id_territory == CorTerritoryTaxon.id_territory,
-            ),
-            isouter=True
-        )
+        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
         .filter(func.lower(TTerritory.code) == territory.lower())
-        .filter(CorTerritoryTaxon.cd_nom == name_code)
+        .filter(TPriorityTaxon.cd_nom == name_code)
         .group_by(*fields)
     )
     data = query.one()._asdict()

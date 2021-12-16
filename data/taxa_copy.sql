@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS :moduleSchema.:tmpTable ;
 
 
 \echo '-------------------------------------------------------------------------------'
-\echo 'Create temp priority taxa table from "cor_territory_taxon" with additionnal fields'
+\echo 'Create temp priority taxa table from "t_priority_taxon" with additionnal fields'
 CREATE TABLE :moduleSchema.:tmpTable AS
     SELECT
         NULL::INT AS gid,
@@ -31,7 +31,7 @@ CREATE TABLE :moduleSchema.:tmpTable AS
         revised_conservation_priority,
         revision_date,
         revision_comment
-    FROM :moduleSchema.cor_territory_taxon
+    FROM :moduleSchema.t_priority_taxon
 WITH NO DATA ;
 
 
@@ -57,7 +57,7 @@ WITH CSV HEADER DELIMITER E'\t' NULL '\N' ;
 
 \echo '-------------------------------------------------------------------------------'
 \echo 'Insert territory id into temp priority taxa table'
-UPDATE  :moduleSchema.:tmpTable AS tmp SET 
+UPDATE  :moduleSchema.:tmpTable AS tmp SET
     id_territory = t.id_territory
 FROM (
     SELECT id_territory, code

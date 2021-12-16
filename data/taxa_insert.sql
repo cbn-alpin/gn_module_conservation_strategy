@@ -1,13 +1,13 @@
 BEGIN;
 
 \echo '-------------------------------------------------------------------------------'
-\echo 'Copy CSV priority taxa into Conservation Strategy cor_territory_taxon table.'
+\echo 'Copy CSV priority taxa into Conservation Strategy t_priority_taxon table.'
 \echo 'Rights: db owner'
 \echo 'GeoNature database compatibility : v2.4.1+'
 
 \echo '-------------------------------------------------------------------------------'
-\echo 'Insert priority taxa to cor_territory_taxon table'
-INSERT INTO :moduleSchema.cor_territory_taxon (
+\echo 'Insert priority taxa to t_priority_taxon table'
+INSERT INTO :moduleSchema.t_priority_taxon (
     id_territory,
     cd_nom,
     presence_meshes_count,
@@ -37,9 +37,9 @@ INSERT INTO :moduleSchema.cor_territory_taxon (
     FROM :moduleSchema.:tmpTable AS tmp
     WHERE NOT EXISTS (
         SELECT 'X'
-        FROM :moduleSchema.cor_territory_taxon AS ctt
-        WHERE ctt.cd_nom = tmp.cd_nom
-            AND ctt.id_territory = tmp.id_territory
+        FROM :moduleSchema.t_priority_taxon AS tpt
+        WHERE tpt.cd_nom = tmp.cd_nom
+            AND tpt.id_territory = tmp.id_territory
     ) ;
 
 \echo '----------------------------------------------------------------------------'

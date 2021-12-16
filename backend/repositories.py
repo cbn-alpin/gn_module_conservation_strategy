@@ -11,7 +11,7 @@ from pypnnomenclature.models import TNomenclatures
 from .models import (
     BibOrganisms,
     CorActionOrganism,
-    CorTerritoryTaxon,
+    TPriorityTaxon,
     TAction,
     TAssessment,
     TTerritory,
@@ -26,35 +26,34 @@ class AssessmentRepository:
         # Build query
         query = (DB.session
             .query(TAssessment)
-            .join(
-                CorTerritoryTaxon,
-                and_(
-                    CorTerritoryTaxon.cd_nom == TAssessment.taxon_name_code,
-                    CorTerritoryTaxon.id_territory == TAssessment.id_territory,
-                ),
-            )
-            .join(TTerritory, TTerritory.id_territory == CorTerritoryTaxon.id_territory)
+            .join(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
             .filter(TAssessment.id == assessment_id)
         )
         # Execute query
-        results = query.one()
+        results = query.first()
         # Manage output
-        return self._buildOutput(results)
+        return self._buildOutput(results) if results != None else {}
 
     def _buildOutput(self, assessment):
         item = assessment.as_dict(exclude=['id_territory', 'meta_create_by'])
-        item['territory_code'] = assessment.territory.code
+        #item['territory_code'] = assessment.territory.code
         item['meta_create_by'] = assessment.create_by.get_full_name()
         item['actions'] = []
         for action in assessment.actions:
-            action_dict = action.as_dict(exclude=['id_assessment', 'id_action_level', 'id_action_type', 'id_action_progress'])
-            action_dict['level'] = action.action_level.label_default
-            action_dict['level_code'] = action.action_level.cd_nomenclature
-            action_dict['type'] = action.action_type.label_default
-            action_dict['type_code'] = action.action_type.cd_nomenclature
-            action_dict['type_definition'] = action.action_type.definition_default
-            action_dict['progress'] = action.action_progress.label_default
-            action_dict['progress_code'] = action.action_progress.cd_nomenclature
+            action_dict = action.as_dict(exclude=[
+                'id_assessment', 'id_action_level', 'id_action_type', 'id_action_progress'
+            ])
+            if action.action_level:
+                action_dict['level'] = action.action_level.label_default
+                action_dict['level_code'] = action.action_level.cd_nomenclature
+            if action.action_type:
+                action_dict['type'] = action.action_type.label_default
+                action_dict['type_code'] = action.action_type.cd_nomenclature
+                action_dict['type_definition'] = action.action_type.definition_default
+            if action.action_progress:
+                action_dict['progress'] = action.action_progress.label_default
+                action_dict['progress_code'] = action.action_progress.cd_nomenclature
             action_dict['partners'] = []
             for partner in action.partners:
                 action_dict['partners'].append(partner.organism.as_dict())
@@ -65,16 +64,10 @@ class AssessmentRepository:
         # Build query
         query = (DB.session
             .query(TAssessment)
-            .join(
-                CorTerritoryTaxon,
-                and_(
-                    CorTerritoryTaxon.cd_nom == TAssessment.taxon_name_code,
-                    CorTerritoryTaxon.id_territory == TAssessment.id_territory,
-                ),
-            )
-            .join(TTerritory, TTerritory.id_territory == CorTerritoryTaxon.id_territory)
+            .join(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
             .filter(func.lower(TTerritory.code) == territory_code.lower())
-            .filter(CorTerritoryTaxon.cd_nom == taxon_name_code)
+            .filter(TPriorityTaxon.cd_nom == taxon_name_code)
         )
         # Execute query
         count = query.count()
@@ -87,7 +80,7 @@ class AssessmentRepository:
         items = []
         for assessment in results:
             item = assessment.as_dict(exclude=['id_territory', 'meta_create_by'])
-            item['territory_code'] = assessment.territory.code
+            item['territory_code'] = territory_code
             item['meta_create_by'] = assessment.create_by.get_full_name()
             items.append(item)
         return (count, items)
@@ -100,10 +93,13 @@ class AssessmentRepository:
         DB.session.add(assessment)
 
     def _prepare_assessment(self, assessment, actions):
+        id_priority_taxon = self.get_taxon_priority_id(
+            assessment.get("territory_code"),
+            assessment.get("taxon_name_code")
+        )
         assessment_model = TAssessment(
             id=assessment.get("id"),
-            taxon_name_code=assessment.get("taxon_name_code"),
-            id_territory=self.get_territory_id(assessment.get("territory_code")),
+            id_priority_taxon=id_priority_taxon,
             description=assessment.get("description"),
             next_assessment_year=assessment.get("next_assessment_year"),
             threats=assessment.get("threats"),
@@ -116,6 +112,14 @@ class AssessmentRepository:
 
         return assessment_model
 
+    def get_taxon_priority_id(self, territory_code, taxon_name_code):
+        return (DB.session
+            .query(TPriorityTaxon.id)
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+            .filter(func.lower(TTerritory.code) == territory_code.lower())
+            .filter(TPriorityTaxon.cd_nom == taxon_name_code)
+            .scalar()
+        )
 
     def get_territory_id(self, territory_code):
         return (DB.session

@@ -155,9 +155,14 @@ class TTerritory(DB.Model):
 
 
 @serializable
-class CorTerritoryTaxon(DB.Model):
-    __tablename__ = "cor_territory_taxon"
+class TPriorityTaxon(DB.Model):
+    __tablename__ = "t_priority_taxon"
     __table_args__ = {"schema": "pr_conservation_strategy"}
+    id = DB.Column(
+        "id_priority_taxon",
+        DB.Integer,
+        primary_key=True,
+    )
     id_territory = DB.Column(
         DB.Integer,
         DB.ForeignKey(
@@ -165,7 +170,6 @@ class CorTerritoryTaxon(DB.Model):
             ondelete="CASCADE",
             onupdate="CASCADE",
         ),
-        primary_key=True,
     )
     cd_nom = DB.Column(
         DB.Integer,
@@ -174,7 +178,6 @@ class CorTerritoryTaxon(DB.Model):
             ondelete="NULL",
             onupdate="CASCADE",
         ),
-        primary_key=True,
     )
     presence_meshes_count = DB.Column(
         DB.Integer,
@@ -331,22 +334,14 @@ class TAssessment(DB.Model):
         DB.Integer,
         primary_key=True,
     )
-    taxon_name_code = DB.Column(
-        "cd_nom",
+    id_priority_taxon = DB.Column(
         DB.Integer,
         DB.ForeignKey(
-            "taxonomie.taxref.cd_nom",
-            ondelete="NULL",
-            onupdate="CASCADE",
-        ),
-    )
-    id_territory = DB.Column(
-        DB.Integer,
-        DB.ForeignKey(
-            "pr_conservation_strategy.t_territory.id_territory",
+            "pr_conservation_strategy.t_priority_taxon.id_priority_taxon",
             ondelete="CASCADE",
             onupdate="CASCADE",
         ),
+        nullable=False,
     )
     date_min = DB.Column(
         DB.DateTime,
@@ -395,8 +390,8 @@ class TAssessment(DB.Model):
         )
     )
     # Relationships
-    territory = DB.relationship(
-        "TTerritory",
+    priority_taxon = DB.relationship(
+        "TPriorityTaxon",
     )
     actions = DB.relationship(
         "TAction",

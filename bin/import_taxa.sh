@@ -111,7 +111,7 @@ function copyTaxa() {
 }
 
 function importTaxa() {
-    printMsg "Insert taxa list into « ${module_schema}.cor_taxon_territory »"
+    printMsg "Insert taxa list into « ${module_schema}.t_priority_taxon »"
     export PGPASSWORD="${user_pg_pass}"; \
         psql -h "${db_host}" -U "${user_pg}" -d "${db_name}" ${psql_verbosity-} \
             -v moduleSchema="${module_schema}" \
@@ -120,7 +120,7 @@ function importTaxa() {
 }
 
 function deleteTaxa() {
-    printMsg "Delete taxa listed in CSV file from  « ${module_schema}.cor_taxon_territory »"
+    printMsg "Delete taxa listed in CSV file from  « ${module_schema}.t_priority_taxon »"
     export PGPASSWORD="${user_pg_pass}"; \
         psql -h "${db_host}" -U "${user_pg}" -d "${db_name}" ${psql_verbosity-} \
             -v moduleSchema="${module_schema}" \

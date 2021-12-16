@@ -8,7 +8,7 @@ SET client_encoding = 'UTF8' ;
 
 
 \echo '--------------------------------------------------------------------------------'
-\echo 'Create SFT schema'
+\echo 'Create module schema'
 CREATE SCHEMA pr_conservation_strategy ;
 
 
@@ -73,8 +73,9 @@ COMMENT ON COLUMN cor_mesh_taxon.id_area IS
      'Peut-être NULL si la géométrie n''est pas nécessaire.' ;
 
 
-\echo 'Table `cor_territory_taxon`'
-CREATE TABLE cor_territory_taxon (
+\echo 'Table `t_priority_taxon`'
+CREATE TABLE t_priority_taxon (
+    id_priority_taxon SERIAL NOT NULL,
     id_territory INTEGER NOT NULL,
     cd_nom INTEGER NOT NULL,
     presence_meshes_count INTEGER,
@@ -92,65 +93,65 @@ CREATE TABLE cor_territory_taxon (
     min_prospect_zone_date TIMESTAMP without time zone,
     max_prospect_zone_date TIMESTAMP without time zone,
     presence_area_count INTEGER,
-    PRIMARY KEY (id_territory, cd_nom)
+    PRIMARY KEY (id_priority_taxon)
 ) ;
-COMMENT ON TABLE cor_territory_taxon IS
-    E'Table contenant les correspondances entre les taxons et les '
-     'territoires.' ;
-COMMENT ON COLUMN cor_territory_taxon.id_territory IS
+COMMENT ON TABLE t_priority_taxon IS
+    E'Table contenant les informations sur les taxons prioritaires.' ;
+COMMENT ON COLUMN t_priority_taxon.id_priority_taxon IS
+    E'Identifiant du taxon prioritaire.' ;
+COMMENT ON COLUMN t_priority_taxon.id_territory IS
     E'Identifiant du territoire.' ;
-COMMENT ON COLUMN cor_territory_taxon.cd_nom IS
+COMMENT ON COLUMN t_priority_taxon.cd_nom IS
     E'Identifiant du nom retenu du taxon.' ;
-COMMENT ON COLUMN cor_territory_taxon.presence_meshes_count IS
+COMMENT ON COLUMN t_priority_taxon.presence_meshes_count IS
     E'Nombre de mailles 5x5km INPN du territoire dans lesquelles '
      'le taxon est présent.' ;
-COMMENT ON COLUMN cor_territory_taxon.small_isolated_population IS
+COMMENT ON COLUMN t_priority_taxon.small_isolated_population IS
     E'Indique (si TRUE) que le taxon est présent dans le territoire en petite population isolée.';
-COMMENT ON COLUMN cor_territory_taxon.indigenousness IS
+COMMENT ON COLUMN t_priority_taxon.indigenousness IS
     E'Code d''indigénat du taxon sur le territoire. '
      'Valeurs : I, I?, E.' ;
-COMMENT ON COLUMN cor_territory_taxon.iucn_cotation IS
+COMMENT ON COLUMN t_priority_taxon.iucn_cotation IS
     E'Cotation UICN du taxon pour le territoire concerné. '
      'Valeurs : EW, RE, CR*, CR, EN, VU, NT, LC, DD, NE.' ;
-COMMENT ON COLUMN cor_territory_taxon.iucn_criteria IS
+COMMENT ON COLUMN t_priority_taxon.iucn_criteria IS
     E'Critère UICN utilisé pour la cotation du taxon sur le territoire '
      'concerné.' ;
-COMMENT ON COLUMN cor_territory_taxon.rarity IS
+COMMENT ON COLUMN t_priority_taxon.rarity IS
     E'Pourcentage de rareté (Cr) du taxon dans ce territoire. '
      'Calcul : Cr = 100 - 100 x (Nb mailles présence sur territoire après 1990 / Nb total de mailles sur territoire).' ;
-COMMENT ON COLUMN cor_territory_taxon.rarity_class IS
+COMMENT ON COLUMN t_priority_taxon.rarity_class IS
     E'Classe de rareté correspondant au pourcentage. ' ;
-COMMENT ON COLUMN cor_territory_taxon.computed_conservation_priority IS
+COMMENT ON COLUMN t_priority_taxon.computed_conservation_priority IS
     E'Indice de priorité de conservation. '
      'Valeurs : 1 à 5.' ;
-COMMENT ON COLUMN cor_territory_taxon.compute_date IS
+COMMENT ON COLUMN t_priority_taxon.compute_date IS
     E'Date à laquelle le calcul de l''indice de priorité de conservation '
      'a été réalisé.' ;
-COMMENT ON COLUMN cor_territory_taxon.revised_conservation_priority IS
+COMMENT ON COLUMN t_priority_taxon.revised_conservation_priority IS
     E'Indice de priorité de conservation révisé manuellement à dire '
      'd''expert. '
      'Valeurs : 1 à 5.' ;
-COMMENT ON COLUMN cor_territory_taxon.revision_date IS
+COMMENT ON COLUMN t_priority_taxon.revision_date IS
     E'Date à laquelle la valeur d''indice de priorité de conservation '
      'a été révisée.' ;
-COMMENT ON COLUMN cor_territory_taxon.revision_comment IS
+COMMENT ON COLUMN t_priority_taxon.revision_comment IS
     E'Commentaire expliquant le choix révisé de l''indice de priorité '
      'de conservation.' ;
-COMMENT ON COLUMN cor_territory_taxon.min_prospect_zone_date IS
+COMMENT ON COLUMN t_priority_taxon.min_prospect_zone_date IS
     E'Date la plus ancienne d''inventaire de zone de prospection pour '
      'ce taxon dans ce territoire.' ;
-COMMENT ON COLUMN cor_territory_taxon.max_prospect_zone_date IS
+COMMENT ON COLUMN t_priority_taxon.max_prospect_zone_date IS
     E'Date la plus récente d''inventaire de zone de prospection pour '
      'ce taxon dans ce territoire.' ;
-COMMENT ON COLUMN cor_territory_taxon.presence_area_count IS
+COMMENT ON COLUMN t_priority_taxon.presence_area_count IS
     E'Nombre d''aire de présence total pour ce taxon dans ce territoire.' ;
 
 
 \echo 'Table `t_assessment`'
 CREATE TABLE t_assessment (
     id_assessment SERIAL NOT NULL,
-    id_territory INTEGER NOT NULL,
-    cd_nom INTEGER NOT NULL,
+    id_priority_taxon INTEGER NOT NULL,
     date_min TIMESTAMP without time zone,
     date_max TIMESTAMP without time zone,
     assessment_date TIMESTAMP without time zone DEFAULT NOW(),
@@ -168,10 +169,8 @@ COMMENT ON TABLE t_assessment IS
     E'Table contenant les informations des bilans.' ;
 COMMENT ON COLUMN t_assessment.id_assessment IS
     E'Identifiant numérique du bilan.' ;
-COMMENT ON COLUMN t_assessment.id_territory IS
-    E'Identifiant du territoire associé à ce bilan.' ;
-COMMENT ON COLUMN t_assessment.cd_nom IS
-    E'Identifiant du nom retenu du taxon.' ;
+COMMENT ON COLUMN t_assessment.id_priority_taxon IS
+    E'Identifiant du taxon prioritaire associé à ce bilan.' ;
 COMMENT ON COLUMN t_assessment.date_min IS
     E'Date de visite la plus ancienne pour la station la plus ancienne '
      'prise en compte pour ce bilan.' ;
@@ -186,8 +185,7 @@ COMMENT ON COLUMN t_assessment.threats IS
 COMMENT ON COLUMN t_assessment.description IS
     E'Texte permettant de décrire le bilan.' ;
 COMMENT ON COLUMN t_assessment.next_assessment_year IS
-    E'Indique le nombre d''année prévue avant le prochain bilan '
-     'par rapport à la date de création de ce bilan.' ;
+    E'Indique l''année prévue pour la réalisation du prochain bilan.' ;
 COMMENT ON COLUMN t_assessment.computed_data IS
     E'Ensemble des données calculé pour la réalisation de ce bilan.'
      'Ces données peuvent évoluer au cours du temps.' ;
@@ -233,8 +231,7 @@ COMMENT ON COLUMN t_action.id_action_progress IS
     E'Identifiant de la nomenclature utilisée pour indiquer '
      'l''état de progression de l''action.' ;
 COMMENT ON COLUMN t_action.plan_for IS
-    E'Intervalle d''années entre dans la date de création '
-     'de l''action et l''année à prévoir pour réaliser l''action.' ;
+    E'Indique l''année à prévoir pour réaliser l''action.' ;
 COMMENT ON COLUMN t_action.starting_date IS
     E'Date de démarrage de l''action.' ;
 COMMENT ON COLUMN t_action.implementation_date IS
@@ -298,20 +295,16 @@ ALTER TABLE ONLY cor_mesh_taxon ADD CONSTRAINT fk_cor_mesh_taxon_cd_nom
     FOREIGN KEY (cd_nom) REFERENCES taxonomie.taxref (cd_nom)
     ON UPDATE CASCADE ON DELETE CASCADE ;
 
-ALTER TABLE ONLY cor_territory_taxon ADD CONSTRAINT fk_cor_territory_taxon_id_territory
+ALTER TABLE ONLY t_priority_taxon ADD CONSTRAINT fk_t_priority_taxon_id_territory
     FOREIGN KEY (id_territory) REFERENCES t_territory (id_territory)
     ON UPDATE CASCADE ON DELETE CASCADE ;
 
-ALTER TABLE ONLY cor_territory_taxon ADD CONSTRAINT fk_cor_territory_taxon_cd_nom
+ALTER TABLE ONLY t_priority_taxon ADD CONSTRAINT fk_t_priority_taxon_cd_nom
     FOREIGN KEY (cd_nom) REFERENCES taxonomie.taxref (cd_nom)
     ON UPDATE CASCADE ON DELETE CASCADE ;
 
-ALTER TABLE ONLY t_assessment ADD CONSTRAINT fk_t_assessment_id_territory_cd_nom
-    FOREIGN KEY (id_territory, cd_nom) REFERENCES cor_territory_taxon (id_territory, cd_nom)
-    ON UPDATE CASCADE ON DELETE CASCADE ;
-
-ALTER TABLE ONLY t_assessment ADD CONSTRAINT fk_t_assessment_cd_nom
-    FOREIGN KEY (cd_nom) REFERENCES taxonomie.taxref (cd_nom)
+ALTER TABLE ONLY t_assessment ADD CONSTRAINT fk_t_assessment_id_priority_taxon
+    FOREIGN KEY (id_priority_taxon) REFERENCES t_priority_taxon (id_priority_taxon)
     ON UPDATE CASCADE ON DELETE CASCADE ;
 
 ALTER TABLE ONLY t_assessment ADD CONSTRAINT fk_t_assessment_meta_create_by
@@ -365,14 +358,17 @@ CREATE INDEX idx_cor_mesh_taxon_cd_nom
 CREATE INDEX idx_cor_mesh_taxon_id_area
     ON cor_mesh_taxon USING btree(id_area) ;
 
-CREATE INDEX idx_cor_territory_taxon_id_territory
-    ON cor_territory_taxon USING btree(id_territory) ;
+CREATE UNIQUE INDEX idx_uniq_t_priority_taxon
+    ON t_priority_taxon USING btree(id_territory, cd_nom);
 
-CREATE INDEX idx_cor_territory_taxon_cd_nom
-    ON cor_territory_taxon USING btree(cd_nom) ;
+CREATE INDEX idx_t_priority_taxon_id_territory
+    ON t_priority_taxon USING btree(id_territory) ;
 
-CREATE INDEX idx_t_assessment_cd_nom
-    ON t_assessment USING btree(cd_nom) ;
+CREATE INDEX idx_t_priority_taxon_cd_nom
+    ON t_priority_taxon USING btree(cd_nom) ;
+
+CREATE INDEX idx_t_assessment_id_priority_taxon
+    ON t_assessment USING btree(id_priority_taxon) ;
 
 CREATE INDEX idx_t_assessment_meta_create_by
     ON t_assessment USING btree(meta_create_by) ;
