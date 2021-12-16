@@ -23,12 +23,6 @@ export class AssessmentDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log('Assessment id:', this.assessmentId)
-    this.assessmentDetail = this.dataService.getAssessment(this.assessmentId).pipe(
-      map((response) => {
-        console.log(response);
-        return response;
-      }),
-    );
+    this.assessmentDetail = this.dataService.getAssessment(this.assessmentId);
   }
 }

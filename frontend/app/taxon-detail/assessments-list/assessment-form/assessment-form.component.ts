@@ -80,15 +80,12 @@ export class AssessmentForm implements OnInit, AfterViewInit {
       this.dataService
         .getAssessment(this.assessment.id)
         .subscribe(assessment => {
-          console.log(assessment);
           this.assessment = assessment;
           this.initializeFormGroups();
           this.updateMode.next(true);
         });
-      console.log('In UPDATE Mode:', this.assessment);
     } else {
       this.updateMode.next(false);
-      console.log('In CREATE Mode:', this.assessment)
     }
   }
 
@@ -242,7 +239,6 @@ export class AssessmentForm implements OnInit, AfterViewInit {
       assessmentData['assessment']['taxonNameCode'] = this.taxonNameCode;
     }
 
-    console.log("assessmentData:", assessmentData)
     return assessmentData;
   }
 
