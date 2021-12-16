@@ -1,0 +1,391 @@
+{
+	"info": {
+		"_postman_id": "c2ec294a-fe6a-4422-8fe0-be69c780ed6c",
+		"name": "Conservation Strategy Module",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/cs/territories",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/aura",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"aura"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/organisms",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/organisms?order-by=id_organisme",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"organisms"
+					],
+					"query": [
+						{
+							"key": "order-by",
+							"value": "id_organisme",
+							"description": "Permet d'indiquer le champ de la table à utiliser pour ordonner les résultats. Par défaut : nom_organisme."
+						}
+					]
+				},
+				"description": "Liste tous les organismes partenaires."
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/aura/taxons/search?q=ranun&limit=20&page=0",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"aura",
+						"taxons",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "ranun",
+							"description": "Portion du nom scientifique à rechercher. La comparaison utilise ILIKE et rajoute des % avant, après le mot et à la place des espaces."
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "Nombre de résultats à afficher. Par défaut : 20."
+						},
+						{
+							"key": "page",
+							"value": "0",
+							"description": "Numéro de la page de résultat à afficher. Par défaut : 0."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/aura/taxons?limit=20&sort=fullName:asc",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"aura",
+						"taxons"
+					],
+					"query": [
+						{
+							"key": "cd-nom",
+							"value": "",
+							"description": "Filtre sur l'identifiant du nom de taxon à prendre à compte.",
+							"disabled": true
+						},
+						{
+							"key": "with-assessment",
+							"value": "false",
+							"description": "Filtre sur la présence d'au moins un bilan stationnel associé au taxon sur le territoire.",
+							"disabled": true
+						},
+						{
+							"key": "cpi",
+							"value": "1",
+							"description": "Filtre l'indice de priorité de conservation du taxon. Valeurs : 1, 2 ou 3.",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "Nombre de résultats à afficher. Par défaut : 20."
+						},
+						{
+							"key": "page",
+							"value": "2",
+							"description": "Numéro de la page de résultat à afficher. Par défaut : 0.",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "fullName:asc",
+							"description": "Trier les résultats en fonction d'une colonne. Format : <nom-colonne>:<direction>.\n<Nom colonne> peut prendre les valeurs : fullName, cpi, dateMin, dateMax, areaPresenceCount.\n<direction> peut prendre les valeurs : asc, desc."
+						}
+					]
+				},
+				"description": "Retourne les informations synthétiques concernant les taxons prioritaires d'un territoire donné."
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/<nameCode>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/aura/taxons/120962?with-taxhub-attributs=true&with-medias=true",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"aura",
+						"taxons",
+						"120962"
+					],
+					"query": [
+						{
+							"key": "with-taxhub-attributs",
+							"value": "true",
+							"description": "Ajoute la liste des attributs TaxHub si le taxon en possède."
+						},
+						{
+							"key": "with-medias",
+							"value": "true",
+							"description": "Ajoute la liste des medias TaxHub si le taxon en possède."
+						}
+					]
+				},
+				"description": "Retourne les informations synthétiques concernant les taxons prioritaires d'un territoire donné."
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/<nameCode>/assessments",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"actions\": [\n        {\n            \"description\": \"Une description d'action 1.\",\n            \"implementationDate\": null,\n            \"level\": \"l\",\n            \"partners\": [\n                \"af13fb1b-c6e6-478b-860b-9de47903ff16\",\n                \"468fa5ec-d3d8-4828-9499-f95a1b3cc10b\"\n            ],\n            \"planFor\": 2026,\n            \"progress\": \"pr\",\n            \"startingDate\": null,\n            \"type\": \"dbs\",\n            \"uuid\": \"zf04x\"\n        },\n        {\n            \"description\": \"Une description d'action 2.\",\n            \"implementationDate\": null,\n            \"level\": \"t\",\n            \"partners\": [\n                \"5ff47e64-01d4-4e6e-bd09-16d0a7693208\",\n                \"a6416baf-dc32-4d5a-8a49-2b76948f3961\"\n            ],\n            \"planFor\": null,\n            \"progress\": \"c\",\n            \"startingDate\": \"2021-11-30T23:00:00.000Z\",\n            \"type\": \"mf\",\n            \"uuid\": \"kl1qs\"\n        }\n    ],\n    \"assessment\": {\n        \"description\": \"Une description\",\n        \"nextAssessmentYear\": 2034,\n        \"taxonNameCode\": 95847,\n        \"territoryCode\": \"01\",\n        \"threats\": \"Une menace\"\n    }\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/01/taxons/95847/assessments",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"01",
+						"taxons",
+						"95847",
+						"assessments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/<nameCode>/assessments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/01/taxons/95847/assessments?limit=20",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"01",
+						"taxons",
+						"95847",
+						"assessments"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "Nombre de résultats à afficher. Par défaut : 20."
+						},
+						{
+							"key": "page",
+							"value": "0",
+							"description": "Numéro de la page de résultat à afficher. Par défaut : 0.",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/<nameCode>/assessments/<assessmentId>",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "token={{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/territories/aura/taxons/79868/assessments/1",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"territories",
+						"aura",
+						"taxons",
+						"79868",
+						"assessments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "scheme",
+			"value": "http"
+		},
+		{
+			"key": "domain",
+			"value": "127.0.0.1"
+		},
+		{
+			"key": "port",
+			"value": "8000"
+		},
+		{
+			"key": "api_path",
+			"value": ""
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsImlhdCI6MTYzNzE0MjIyNCwiZXhwIjoxNjM3NzQ3MDI0fQ.eyJpZF9yb2xlIjo4MSwibm9tX3JvbGUiOiJNSUxDRU5UIiwicHJlbm9tX3JvbGUiOiJKZWFuLVBhc2NhbCIsImlkX2FwcGxpY2F0aW9uIjozLCJpZF9vcmdhbmlzbWUiOjMsImlkZW50aWZpYW50IjoiamVhbi1wYXNjYWwubWlsY2VudCIsImlkX2Ryb2l0X21heCI6MX0.M04VrRccOcjxExOJoWYB5J_Rc_5vuZySZnrq0WBYjCw"
+		}
+	]
+}
