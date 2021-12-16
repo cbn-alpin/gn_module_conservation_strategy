@@ -75,12 +75,12 @@ INSERT INTO ref_nomenclatures.t_nomenclatures (
     ),
     (
         ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
-        'dbs',
-        'diffuserBilanStationnel',
-        'Diffuser Bilan Stationnel',
-        'Diffuser le bilan stationnel.',
-        'Diffuser Bilan Stationnel',
-        'Diffuser le bilan stationnel.',
+        'dfbs',
+        'diffuserFicheBilanStationnel',
+        'Diffuser Fiche Bilan Stationnel',
+        'Diffuser la fiche bilan stationnel.',
+        'Diffuser Fiche Bilan Stationnel',
+        'Diffuser la fiche bilan stationnel.',
         0,
         CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.002')
     ),
@@ -108,12 +108,12 @@ INSERT INTO ref_nomenclatures.t_nomenclatures (
     ),
     (
         ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
-        'rsa',
-        'realiserSuiviAdapte',
-        'Réaliser Suivi Adapté',
-        'Mettre en place un protocole de suivi adapté à la situation.',
-        'Réaliser Suivi Adapté',
-        'Mettre en place un protocole de suivi adapté à la situation.',
+        'rpc',
+        'realiserPlanDeConservation',
+        'Réaliser Plan Conservation',
+        'Réaliser un plan de conservation.',
+        'Réaliser Plan Conservation',
+        'Réaliser un plan de conservation.',
         0,
         CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.005')
     ),
@@ -170,7 +170,62 @@ INSERT INTO ref_nomenclatures.t_nomenclatures (
         'Établir Mesures Gestion',
         'Établir des mesures de gestion.',
         0,
-        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.009')
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.010')
+    ),
+    (
+        ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+        'rp',
+        'renforcerPopulation',
+        'Renforcer Population',
+        'Renforcer les populations.',
+        'Renforcer Population',
+        'Renforcer les populations.',
+        0,
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.011')
+    ),
+    (
+        ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+        'ir',
+        'introduireReintroduire',
+        'Introduire / Réintroduire',
+        'Introduire ou réintroduire le taxon.',
+        'Introduire / Réintroduire',
+        'Introduire ou réintroduire le taxon.',
+        0,
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.012')
+    ),
+    (
+        ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+        'rpr',
+        'realiserProgrammeRecherche',
+        'Réaliser Programme Recherche',
+        'Réaliser un programme de recherche.',
+        'Réaliser Programme Recherche',
+        'Réaliser un programme de recherche.',
+        0,
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.013')
+    ),
+    (
+        ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+        'c',
+        'concerter',
+        'Concerter',
+        'Se concerter.',
+        'Concerter',
+        'Se concerter.',
+        0,
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.014')
+    ),
+    (
+        ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+        'rsic',
+        'realiserSuiviIndividuCentre',
+        'Réaliser Suivi Individu-Centré',
+        'Réaliser un suivi individu-centré.',
+        'Réaliser Suivi Individu-Centré',
+        'Réaliser un suivi individu-centré.',
+        0,
+        CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION')::varchar, '.015')
     ) ;
 
 
