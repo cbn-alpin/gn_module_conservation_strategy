@@ -1,0 +1,11 @@
+# Files and directory to exclude for sync with Rsync
+.git
+.gitignore
+.rsync-exclude.txt
+__pycache__
+conf_gn_module.toml
+module.config.ts
+node_modules
+settings.ini
+tsconfig.json
+var

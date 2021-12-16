@@ -76,7 +76,11 @@ en la reconstruisant. Pour se faire, lancez les commandes suivantes :
 
 ### En mode développement
 * Se placer dans le dossier du module : `cd ~/workspace/cbna/scalp/gn_module_conservation_strategy`
-* Uploader le code (supprimer l'option `--dry-run` si tout est ok) : `rsync -av --exclude .git --exclude .gitignore --exclude tsconfig.json --exclude __pycache__ --exclude var --exclude settings.ini --exclude conf_gn_module.toml --exclude module.config.ts ./ geonatureadmin@floresent-srv:~/modules/cs/ --dry-run`
+* Uploader le code (supprimer l'option `--dry-run` si tout est ok) :
+`rsync -av --exclude-from ./.rsync-exclude.txt ./ geonatureadmin@<ip-serveur>:~/gn_modules_conservation_strategy/ --dry-run`
+  * Le fichier `.rsync-exclude.txt` contient les noms des fichiers et dossiers
+    qui seront exclus de la synchronisation.
+  * Penser à modifier le chemin du module sur le serveur si votre chemin est différent.
 * Lors du premier déploiement suivre les étapes d'installation du module décrites ci-dessus.
 * Lors des synchronisations suivante :
   * si la base de données est modifiée, la mettre à jour
