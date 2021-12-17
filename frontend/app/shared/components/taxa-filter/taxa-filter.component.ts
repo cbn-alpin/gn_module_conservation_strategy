@@ -2,8 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation } fro
 import { FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 
-import { Observable ,  of } from 'rxjs';
-import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
 
 import { CommonService } from '@geonature_common/service/common.service';
 
@@ -46,6 +45,8 @@ export class TaxaFilterComponent implements OnInit {
   @Input() parentFormControl: FormControl;
   /** URL à utiliser pour l'auto-complétion. */
   @Input() apiEndPoint: string;
+  /** Objet contenant des paramètres à ajouter à l'URL utiliser pour l'auto-complétion. */
+  @Input() apiParams: Record<string, string>;
   /** Nombre de charactere avant que la recherche AJAX soit lançée (obligatoire). */
   @Input() charNumber: number = 3;
   /** Nombre de lignes de résultat à afficher. */
@@ -94,7 +95,7 @@ export class TaxaFilterComponent implements OnInit {
       .distinctUntilChanged()
       .switchMap(search => {
         if (search.length >= this.charNumber) {
-          return this.autocomplete(this.apiEndPoint, {
+          return this.autocomplete({
               q: search,
               limit: this.listLength.toString()
             })
@@ -115,8 +116,9 @@ export class TaxaFilterComponent implements OnInit {
         return response;
       });
 
-  autocomplete(url, params) {
-    return this.http.get<any>(this.apiEndPoint, {params: params});
+  autocomplete(params) {
+    let urlParams = {...this.apiParams, ...params};
+    return this.http.get<any>(this.apiEndPoint, {'params': urlParams});
   }
 
   refreshAllInput() {

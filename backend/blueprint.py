@@ -59,18 +59,16 @@ def get_territory(territory):
     return prepare_output(output, remove_in_key="territory")
 
 
-@blueprint.route("/territories/<territory>/taxons/search", methods=["GET"])
+@blueprint.route("/taxons/search", methods=["GET"])
 @permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
 @json_resp
-def search_taxons_by_territory(territory):
+def search_taxons_by_territory():
     """
     Liste des noms de taxons pour un territoire donné.
 
-    Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-
     Paramètres de la chaine de requête de l'URL :
     :query str q: le nom à rechercher.
+    :query str territory-code: code du territoire concerné.
     :query int limit: le nombre de noms max à retourner.
     :query int page: premier élément à prendre à compte pour le retour.
 
@@ -78,6 +76,7 @@ def search_taxons_by_territory(territory):
     """
     # Get request parameters
     search_name = request.args.get("q")
+    territory = request.args.get("territory-code")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -90,9 +89,12 @@ def search_taxons_by_territory(territory):
             Taxref.nom_valide,
         )
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
-        .filter(func.lower(TTerritory.code) == territory.lower())
     )
+    if territory:
+        query = (query
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+            .filter(func.lower(TTerritory.code) == territory.lower())
+        )
 
     if search_name:
         ilike_search_name = f"%{search_name.replace(' ', '%')}%"

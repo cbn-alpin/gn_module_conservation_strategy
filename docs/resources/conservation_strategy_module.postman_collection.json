@@ -75,7 +75,50 @@
 			"response": []
 		},
 		{
-			"name": "/cs/territories/<territory>/taxons/search",
+			"name": "/cs/taxons/search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{scheme}}://{{domain}}:{{port}}/cs/taxons/search?q=ranun&territory-code=aura&limit=20&page=0",
+					"protocol": "{{scheme}}",
+					"host": [
+						"{{domain}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"cs",
+						"taxons",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "ranun",
+							"description": "Portion du nom scientifique à rechercher. La comparaison utilise ILIKE et rajoute des % avant, après le mot et à la place des espaces."
+						},
+						{
+							"key": "territory-code",
+							"value": "aura",
+							"description": "Code du territoire sur lequel filtrer ma recherche."
+						},
+						{
+							"key": "limit",
+							"value": "20",
+							"description": "Nombre de résultats à afficher. Par défaut : 20."
+						},
+						{
+							"key": "page",
+							"value": "0",
+							"description": "Numéro de la page de résultat à afficher. Par défaut : 0."
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/cs/territories/<territory>/taxons/search Copy",
 			"request": {
 				"method": "GET",
 				"header": [],
