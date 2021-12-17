@@ -286,10 +286,10 @@ INSERT INTO ref_nomenclatures.t_nomenclatures (
 \echo 'Update module infos'
 UPDATE gn_commons.t_modules
 SET
-    module_label = 'Stratégie Conservation',
-    module_picto = 'fa-leaf',
+    module_label = 'Strat. Conservation',
+    module_picto = 'fa-heartbeat',
     module_desc = 'Module d''aide à la décision des actions de la stratégie de conservation à mettre en place pour les taxons prioritaires d''un territoire.'
-WHERE module_code ILIKE :'moduleCode' ;
+WHERE module_code ILIKE UPPER(:'moduleCode') ;
 
 
 \echo '--------------------------------------------------------------------------------'
