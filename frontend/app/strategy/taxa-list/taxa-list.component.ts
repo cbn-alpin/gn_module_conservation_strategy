@@ -129,12 +129,12 @@ export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit, Af
   }
 
   onTaxonFilterChanged(taxonName) {
-    this.dataSource.setFilterParam('cd-nom', taxonName.cdNom);
+    this.dataSource.setFilterParam('taxon-name-code', taxonName.cdNom);
     this.loadTaxa();
   }
 
   onTaxonFilterDeleted(taxonName) {
-    this.dataSource.removeFilterParam('cd-nom');
+    this.dataSource.removeFilterParam('taxon-name-code');
     this.loadTaxa();
   }
 

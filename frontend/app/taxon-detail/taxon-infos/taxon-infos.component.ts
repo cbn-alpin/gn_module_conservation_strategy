@@ -50,19 +50,18 @@ export class TaxonInfosComponent implements OnInit, OnDestroy {
   }
 
   private loadTaxonInfos() {
-    const territoryCode = this.store.selectedTerritory.code.toLowerCase();
-    const taxonNameCode = this.store.selectedTaxon;
+    const priorityTaxonId = this.store.selectedTaxon;
     const params = {
       "with-taxhub-attributs": true,
       "with-medias": true,
     }
-    this.taxonInfos = this.dataService.getTaxonInfos(territoryCode, taxonNameCode, params);
+    this.taxonInfos = this.dataService.getTaxonInfos(priorityTaxonId, params);
     this.taxonInfos.subscribe((data) => {
       this.taxhubEditFormUrl = this.taxhubBaseUrl;
       if (data.taxhubRecordId) {
         this.taxhubEditFormUrl += `/#!/taxonform/edit/${data.taxhubRecordId}`;
       } else {
-        this.taxhubEditFormUrl += `/#!/taxonform/new/${this.store.selectedTaxon}`;
+        this.taxhubEditFormUrl += `/#!/taxonform/new/${data.refNameCode}`;
       }
     });
   }

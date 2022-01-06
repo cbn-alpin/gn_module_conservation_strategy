@@ -41,8 +41,8 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
 
   private loadAssessments() {
     const params = {
-      territory_code: this.store.selectedTerritory.code.toLowerCase(),
-      taxon_name_code: this.store.selectedTaxon,
+      'territory-code': this.store.selectedTerritory.code.toLowerCase(),
+      'priority-taxon-id': this.store.selectedTaxon,
     }
     this.assessments = this.dataService.getAssessments(params);
   }

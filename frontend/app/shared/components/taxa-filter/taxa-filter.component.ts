@@ -3,8 +3,10 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 
 import { Observable, of } from 'rxjs';
+import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { CommonService } from '@geonature_common/service/common.service';
+
 
 export interface TaxonName {
   cdNom: Number;

@@ -36,8 +36,8 @@
     </mat-card>
   </div>
 
-  <div class="row mb-3">
-    <mat-card class="col" *ngIf="assessment.description">
+  <div class="row mb-3" *ngIf="assessment.description">
+    <mat-card class="col">
       <mat-card-header>
         <mat-icon mat-card-avatar>description</mat-icon>
         <mat-card-title>Description</mat-card-title>
@@ -51,8 +51,8 @@
     </mat-card>
   </div>
 
-  <div class="row mb-3">
-    <mat-card class="col" *ngIf="assessment.threats">
+  <div class="row mb-3" *ngIf="assessment.threats">
+    <mat-card class="col">
       <mat-card-header>
         <mat-icon mat-card-avatar>feedback</mat-icon>
         <mat-card-title>Menaces</mat-card-title>
@@ -67,7 +67,7 @@
   </div>
 
   <div class="row mb-3" *ngIf="assessment.actions ; else noAction">
-    <mat-accordion>
+    <mat-accordion class="col px-0">
       <mat-expansion-panel *ngFor="let action of assessment.actions ; let actionNumber = index">
         <mat-expansion-panel-header
           [ngClass]="{
@@ -159,8 +159,8 @@
           </mat-card>
         </div>
 
-        <div class="row mb-3">
-          <mat-card class="col" *ngIf="action.description">
+        <div class="row mb-3" *ngIf="action.description">
+          <mat-card class="col">
             <mat-card-header>
               <mat-icon mat-card-avatar>description</mat-icon>
               <mat-card-title>Description de l'action</mat-card-title>
@@ -174,8 +174,8 @@
           </mat-card>
         </div>
 
-        <div class="row">
-          <mat-card class="col" *ngIf="action.partners">
+        <div class="row" *ngIf="action.partners">
+          <mat-card class="col">
             <mat-card-header>
               <mat-icon mat-card-avatar>group_work</mat-icon>
               <mat-card-title>Partenaires de l'action</mat-card-title>

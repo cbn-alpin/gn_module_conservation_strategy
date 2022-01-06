@@ -1,5 +1,13 @@
 from uuid import UUID
 
+
+def remove_entries(data, keys_to_remove):
+    cleaned_data = {}
+    for k, v in data.items():
+        if k not in keys_to_remove:
+            cleaned_data[k] = v
+    return cleaned_data
+
 def prepare_output(d, remove_in_key=None):
     if isinstance(d, list):
         new = [] if len(d) > 0 else None
@@ -18,7 +26,7 @@ def prepare_output(d, remove_in_key=None):
                     k = k.replace(remove_in_key, '').strip('_')
                 # Value processing recursively
                 output = prepare_output(v, remove_in_key)
-                if output:
+                if output != None and output != "":
                     new[format_to_camel_case(k)] = output
         return new
     elif isinstance(d, UUID):
@@ -48,3 +56,6 @@ def prepare_input(d):
 def format_to_snake_case(camel_str):
     return ''.join(['_'+char.lower() if char.isupper()
         else char for char in camel_str]).lstrip('_')
+
+def fprint(data):
+    print(json.dumps(data, indent=4, sort_keys=True))

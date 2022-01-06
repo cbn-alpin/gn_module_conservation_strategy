@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { Observable } from "@librairies/rxjs";
 
@@ -33,54 +33,44 @@ export class DataService {
     return this.http.get(path, {responseType: 'text'});
   }
 
-  getPriorityTaxa(params) {
-    const urlPath = `territories/${this.store.selectedTerritory.code.toLowerCase()}/taxons`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
+  getPriorityTaxa(params: HttpParams) {
+    params = params.set('territory-code', this.store.selectedTerritory.code.toLowerCase());
+    const url = `${this.cfg.getModuleBackendUrl()}/taxons`;
     return this.http.get<any>(url, {params});
   }
 
-  getTaxon(territoryCode: string, nameCode: number) {
-    const urlPath = `territories/${territoryCode}/taxons/${nameCode}`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
+  getPriorityTaxon(priorityTaxonId: number) {
+    const url = `${this.cfg.getModuleBackendUrl()}/taxons/${priorityTaxonId}`;
     return this.http.get<any>(url);
   }
 
-  getTaxonInfos(territoryCode: string, nameCode: number, params = {}) {
-    const urlPath = `territories/${territoryCode}/taxons/${nameCode}`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
+  getTaxonInfos(priorityTaxonId: number, params = {}) {
+    const url = `${this.cfg.getModuleBackendUrl()}/taxons/${priorityTaxonId}`;
     return this.http.get<any>(url, {params});
   }
 
-  addAssessment(territoryCode: string, nameCode: number, assessmentData: any): Observable<any> {
-    const urlPath = `territories/${territoryCode}/taxons/${nameCode}/assessments`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
+  addAssessment(assessmentData: any): Observable<any> {
+    const url = `${this.cfg.getModuleBackendUrl()}/assessments`;
     return this.http.post<any>(url, assessmentData);
   }
 
-  updateAssessment(territoryCode: string, nameCode: number, data: any): Observable<any> {
-    const urlPath = `territories/${territoryCode}/taxons/${nameCode}/assessments/${data.assessment.id}`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
+  updateAssessment(data: any): Observable<any> {
+    const url = `${this.cfg.getModuleBackendUrl()}/assessments/${data.assessment.id}`;
     return this.http.put<any>(url, data);
+  }
+
+  getAssessments(params: {} = {}) {
+    const url = `${this.cfg.getModuleBackendUrl()}/assessments`;
+    return this.http.get<any>(url, {params});
+  }
+
+  getAssessment(assessmentId: number, params: {} = {}) {
+    const url = `${this.cfg.getModuleBackendUrl()}/assessments/${assessmentId}`;
+    return this.http.get<any>(url, {params});
   }
 
   getOrganisms(): Observable<IOrganism[]> {
     const url = `${this.cfg.getModuleBackendUrl()}/organisms`;
     return this.http.get<any>(url);
-  }
-
-  getAssessments(params: {} = {}) {
-    const territory = this.store.selectedTerritory.code.toLowerCase();
-    const taxon = this.store.selectedTaxon;
-    const urlPath = `territories/${territory}/taxons/${taxon}/assessments`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
-    return this.http.get<any>(url, {params});
-  }
-
-  getAssessment(assessmentId: number, params: {} = {}) {
-    const territory = this.store.selectedTerritory.code.toLowerCase();
-    const taxon = this.store.selectedTaxon;
-    const urlPath = `territories/${territory}/taxons/${taxon}/assessments/${assessmentId}`;
-    const url = `${this.cfg.getModuleBackendUrl()}/${urlPath}`;
-    return this.http.get<any>(url, {params});
   }
 }

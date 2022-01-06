@@ -91,7 +91,7 @@ export const routes: Routes = [
             },
             children: [
               {
-                path: ':nameCode',
+                path: ':priorityTaxonId',
                 data: {
                   breadcrumb: {
                     label: 'Taxon : :shortName',

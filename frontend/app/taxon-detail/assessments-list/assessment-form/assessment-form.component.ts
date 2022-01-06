@@ -28,7 +28,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
   form!: FormGroup;
   updateMode: BehaviorSubject<boolean> = new BehaviorSubject(false);
   territoryCode: any;
-  taxonNameCode: number;
+  priorityTaxonId: number;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -61,7 +61,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
   private extractRouteParams() {
     const urlParams = this.collectRouteParams();
     this.territoryCode = urlParams['territoryCode'];
-    this.taxonNameCode = +urlParams['nameCode'];
+    this.priorityTaxonId = parseInt(urlParams["priorityTaxonId"]);
   }
 
   private collectRouteParams() {
@@ -184,7 +184,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
     const assessmentData = this.getAssessmentData();
 
     this.dataService
-      .addAssessment(this.territoryCode, this.taxonNameCode, assessmentData)
+      .addAssessment(assessmentData)
       .subscribe(
         () => {
           this.commonService.regularToaster('info', 'Fiche bilan enregistré');
@@ -207,7 +207,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
     const assessmentData = this.getAssessmentData();
 
     this.dataService
-      .updateAssessment(this.territoryCode, this.taxonNameCode, assessmentData)
+      .updateAssessment(assessmentData)
       .subscribe(
         () => {
           this.commonService.regularToaster('info', 'Fiche bilan mise à jour');
@@ -231,13 +231,8 @@ export class AssessmentForm implements OnInit, AfterViewInit {
 
     if (this.updateMode.getValue()) {
       assessmentData['assessment']['id'] = this.assessment.id;
-      assessmentData['assessment']['territoryCode'] = this.assessment.territoryCode;
-      assessmentData['assessment']['taxonNameCode'] = this.assessment.taxonNameCode;
-
-    } else {
-      assessmentData['assessment']['territoryCode'] = this.territoryCode;
-      assessmentData['assessment']['taxonNameCode'] = this.taxonNameCode;
     }
+    assessmentData["assessment"]["idPriorityTaxon"] = this.priorityTaxonId;
 
     return assessmentData;
   }

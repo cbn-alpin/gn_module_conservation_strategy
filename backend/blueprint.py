@@ -114,18 +114,16 @@ def search_taxons_by_territory():
     output = [d._asdict() for d in data]
     return prepare_output(output)
 
-@blueprint.route("/territories/<territory>/taxons", methods=["GET"])
+@blueprint.route("/taxons", methods=["GET"])
 @permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_taxons_by_territory(territory):
+def get_taxons_by_territory():
     """
     Liste des infos des taxons prioritaires pour un territoire donné.
 
-    Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-
     Paramètres de la chaine de requête de l'URL :
-    :query str cd-nom: filtre sur le code du nom d'un taxon.
+    :query territory-code: code du territoire concerné.
+    :query str taxon-name-code: filtre sur le code du nom d'un taxon (=cd_nom).
     :query str with-assessment: filtre sur la présence d'au moins un bilan
         stationnel associé au taxon sur le territoire.
     :query str cpi: filtre sur l'indice de priorité de conservation.
@@ -144,7 +142,8 @@ def get_taxons_by_territory(territory):
         prioritaire.
     """
     # Get request parameters
-    cd_nom = request.args.get("cd-nom")
+    territory = request.args.get("territory-code")
+    cd_nom = request.args.get("taxon-name-code")
     with_assessment = request.args.get("with-assessment")
     cpi = request.args.get("cpi")
     sort = request.args.get("sort")
@@ -157,6 +156,7 @@ def get_taxons_by_territory(territory):
         Taxref.nom_complet.label("full_name"),
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
+        TPriorityTaxon.id,
         TPriorityTaxon.cd_nom.label("name_code"),
         TPriorityTaxon.revised_conservation_priority.label("revised_cpi"),
         TPriorityTaxon.computed_conservation_priority.label("computed_cpi"),
@@ -170,11 +170,21 @@ def get_taxons_by_territory(territory):
             func.count(TAssessment.id).label("assessment_count")
         )
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
-        .filter(func.lower(TTerritory.code) == territory.lower())
-        .group_by(*fields)
     )
+
+    if territory:
+        query = (query
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+            .filter(func.lower(TTerritory.code) == territory.lower())
+        )
+    else:
+        column_to_add = TTerritory.code.label("territory_code")
+        fields.append(column_to_add)
+        query = (query
+            .add_column(column_to_add)
+            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        )
 
     if cd_nom:
         query = query.filter(TPriorityTaxon.cd_nom == cd_nom)
@@ -186,6 +196,7 @@ def get_taxons_by_territory(territory):
                 TPriorityTaxon.computed_conservation_priority == cpi,
             )
         )
+
     if with_assessment:
         query = query.having(func.count(TAssessment.id) > 0)
 
@@ -220,6 +231,7 @@ def get_taxons_by_territory(territory):
             log.error(msg)
             return {"message": msg, "status": "error"}, 400
 
+    query = query.group_by(*fields)
     count = query.count()
     items = (query
         .limit(limit)
@@ -236,16 +248,15 @@ def get_taxons_by_territory(territory):
     return prepare_output(output)
 
 
-@blueprint.route("/territories/<territory>/taxons/<name_code>", methods=["GET"])
+@blueprint.route("/taxons/<int:priority_taxon_id>", methods=["GET"])
 @permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_taxon_infos_by_territory(territory, name_code):
+def get_priority_taxon_infos(priority_taxon_id):
     """
     Fourni les infos d'un taxon prioritaire pour un territoire donné.
 
     Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-    :param name_code: code du nom du taxon (=cd_nom). Obligatoire.
+    :param priority_taxon_id: identifiant du taxon prioritaire. Obligatoire.
 
     :returns: un dictionnaire contenant les infos du taxon prioritaire.
     """
@@ -273,12 +284,11 @@ def get_taxon_infos_by_territory(territory, name_code):
         )
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.taxon_name_code == Taxref.cd_nom)
-        .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
-        .filter(func.lower(TTerritory.code) == territory.lower())
-        .filter(TPriorityTaxon.cd_nom == name_code)
+        .filter(TPriorityTaxon.id == priority_taxon_id)
         .group_by(*fields)
     )
+
     data = query.one()._asdict()
 
     # Manage medias
@@ -296,7 +306,8 @@ def get_taxon_infos_by_territory(territory, name_code):
                 # TODO: get media type value in GN v2.8.0+
             )
             .join(Taxref, Taxref.cd_ref == TMedias.cd_ref)
-            .filter(Taxref.cd_nom == name_code)
+            .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
+            .filter(TPriorityTaxon.id == priority_taxon_id)
             .filter(TMedias.is_public == True)
             .filter(TMedias.supprime == False)
         )
@@ -312,7 +323,8 @@ def get_taxon_infos_by_territory(territory, name_code):
             )
             .join(BibAttributs, BibAttributs.id_attribut == CorTaxonAttribut.id_attribut)
             .join(Taxref, Taxref.cd_ref == CorTaxonAttribut.cd_ref)
-            .filter(Taxref.cd_nom == name_code)
+            .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
+            .filter(TPriorityTaxon.id == priority_taxon_id)
         )
         attributs = query.all()
         data["attributs"] = {}
@@ -360,16 +372,12 @@ def get_organisms():
     return prepare_output(data)
 
 
-@blueprint.route("/territories/<territory>/taxons/<name_code>/assessments", methods=["POST"])
+@blueprint.route("/assessments", methods=["POST"])
 @permissions.check_cruved_scope("C", get_role=True, module_code="CONSERVATION_STRATEGY")
 @json_resp
-def create_assessment(info_role, territory, name_code):
+def create_assessment(info_role):
     """
     Ajouter une fiche bilan stationnel.
-
-    Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-    :param name_code: code du nom du taxon (=cd_nom). Obligatoire.
 
     :returns: un objet réponse contenant un "message" et un "status". Le
         "status" prend la valeur "success" si tout s'est bien passé
@@ -377,11 +385,8 @@ def create_assessment(info_role, territory, name_code):
     """
     # Transform received data
     data = prepare_input(dict(request.get_json()))
-    data["assessment"]["territory_code"] = territory
-    data["assessment"]["taxon_name_code"] = name_code
     data["assessment"]["meta_create_by"] = int(getattr(info_role, 'id_role'))
     exception = None
-    print(json.dumps(data, indent=4, sort_keys=True))
 
     try:
         assessment_repo = AssessmentRepository()
@@ -413,23 +418,19 @@ def create_assessment(info_role, territory, name_code):
     return response, code
 
 
-@blueprint.route("/territories/<territory>/taxons/<name_code>/assessments", methods=["GET"])
+@blueprint.route("/assessments", methods=["GET"])
 @permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_assessments(territory, name_code):
+def get_assessments():
     """
     Liste des infos des fiches bilan stationnel d'un taxon prioritaire
     pour un territoire donné.
 
     Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-    :param name_code: code du nom du taxon (=cd_nom). Obligatoire.
 
     Paramètres de la chaine de requête de l'URL :
-    :query int sort: trie les résultats en fonction d'une colonne.
-        Format : <nom-colonne>:<direction>.
-        <Nom colonne> peut prendre les valeurs : .
-        <direction> peut prendre les valeurs : asc, desc.
+    :query string territory-code: filtre sur le code d'un territoire.
+    :query int priority-taxon-id: filtre sur l'identifiant d'un taxon prioritaire.
     :query int limit: le nombre d'item max à retourner.
     :query int page: premier item à prendre à compte pour le retour.
 
@@ -437,13 +438,14 @@ def get_assessments(territory, name_code):
     bilan stationnel.
     """
     # Get request parameters
-    sort = request.args.get("sort")
+    territory = request.args.get("territory-code")
+    priority_taxon_id = request.args.get("priority-taxon-id")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
     # Find data
     assessment_repo = AssessmentRepository()
-    count, items = assessment_repo.get_all(territory, name_code, limit, page)
+    count, items = assessment_repo.get_all(territory, priority_taxon_id, limit, page)
 
     # Manage output
     output = {
@@ -453,16 +455,14 @@ def get_assessments(territory, name_code):
     }
     return prepare_output(output)
 
-@blueprint.route("/territories/<territory>/taxons/<name_code>/assessments/<assessment_id>", methods=["GET"])
+@blueprint.route("/assessments/<int:assessment_id>", methods=["GET"])
 @permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_assessment_details(territory, name_code, assessment_id):
+def get_assessment_details(assessment_id):
     """
     Fourni les infos d'un rapport de bilan.
 
     Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-    :param name_code: code du nom du taxon (=cd_nom). Obligatoire.
     :param assessment_id: identifiant de la fiche bilan stationnel. Obligatoire.
 
     :returns: un dictionnaire contenant les infos d'un rapport de bilan.
@@ -471,16 +471,14 @@ def get_assessment_details(territory, name_code, assessment_id):
     output = assessment_repo.get_one(assessment_id)
     return prepare_output(output)
 
-@blueprint.route("/territories/<territory>/taxons/<name_code>/assessments/<assessment_id>", methods=["PUT"])
+@blueprint.route("/assessments/<int:assessment_id>", methods=["PUT"])
 @permissions.check_cruved_scope("U", get_role=True, module_code="CONSERVATION_STRATEGY")
 @json_resp
-def update_assessment(info_role, territory, name_code, assessment_id):
+def update_assessment(info_role, assessment_id):
     """
     Mettre à jour une fiche bilan stationnel.
 
     Paramètres du chemin de l'URL :
-    :param territory: code du territoire concerné. Obligatoire.
-    :param name_code: code du nom du taxon (=cd_nom). Obligatoire.
     :param assessment_id: identifiant de la fiche bilan stationnel. Obligatoire.
 
     :returns: un objet réponse contenant un "message" et un "status". Le
@@ -489,11 +487,9 @@ def update_assessment(info_role, territory, name_code, assessment_id):
     """
     # Transform received data
     data = prepare_input(dict(request.get_json()))
-    data["assessment"]["territory_code"] = territory
-    data["assessment"]["taxon_name_code"] = name_code
+    data["assessment"]["id"] = assessment_id
     data["assessment"]["meta_update_by"] = int(getattr(info_role, 'id_role'))
     exception = None
-    print(json.dumps(data, indent=4, sort_keys=True))
 
     try:
         assessment_repo = AssessmentRepository()

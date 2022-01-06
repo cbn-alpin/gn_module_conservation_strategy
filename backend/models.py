@@ -127,7 +127,6 @@ class TTerritory(DB.Model):
         DB.ForeignKey(
             "ref_geo.l_areas.id_area",
             ondelete="NULL",
-            onupdate="CASCADE",
         ),
     )
     id_parent = DB.Column(
@@ -135,7 +134,6 @@ class TTerritory(DB.Model):
         DB.ForeignKey(
             "pr_conservation_strategy.t_territory.id_territory",
             ondelete="CASCADE",
-            onupdate="CASCADE",
         ),
     )
     label = DB.Column(
@@ -168,16 +166,16 @@ class TPriorityTaxon(DB.Model):
         DB.ForeignKey(
             "pr_conservation_strategy.t_territory.id_territory",
             ondelete="CASCADE",
-            onupdate="CASCADE",
         ),
+        nullable=False,
     )
     cd_nom = DB.Column(
         DB.Integer,
         DB.ForeignKey(
             "taxonomie.taxref.cd_nom",
             ondelete="NULL",
-            onupdate="CASCADE",
         ),
+        nullable=False,
     )
     presence_meshes_count = DB.Column(
         DB.Integer,
@@ -228,104 +226,6 @@ class TPriorityTaxon(DB.Model):
 
 
 @serializable
-class CorActionOrganism(DB.Model):
-    __tablename__ = "cor_action_organism"
-    __table_args__ = {"schema": "pr_conservation_strategy"}
-    id_action = DB.Column(
-        DB.Integer,
-        ForeignKey("pr_conservation_strategy.t_action.id_action"),
-        primary_key=True,
-    )
-    id_organism = DB.Column(
-        DB.Integer,
-        ForeignKey("utilisateurs.bib_organismes.id_organisme"),
-        primary_key=True,
-    )
-    # Relationships
-    organism = DB.relationship(
-        "BibOrganisms"
-    )
-
-
-@serializable
-class TAction(DB.Model):
-    __tablename__ = "t_action"
-    __table_args__ = {"schema": "pr_conservation_strategy"}
-    id = DB.Column(
-        "id_action",
-        DB.Integer,
-        primary_key=True,
-    )
-    id_assessment = DB.Column(
-        DB.Integer,
-        DB.ForeignKey(
-            "pr_conservation_strategy.t_assessment.id_assessment",
-            ondelete="CASCADE",
-            onupdate="CASCADE",
-        ),
-    )
-    creation_date = DB.Column(
-        DB.DateTime,
-        server_default=func.now(),
-    )
-    id_action_level = DB.Column(
-        DB.Integer,
-        DB.ForeignKey(
-            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
-            ondelete="NULL",
-            onupdate="CASCADE",
-        ),
-    )
-    id_action_type = DB.Column(
-        DB.Integer,
-        DB.ForeignKey(
-            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
-            ondelete="NULL",
-            onupdate="CASCADE",
-        ),
-    )
-    id_action_progress = DB.Column(
-        DB.Integer,
-        DB.ForeignKey(
-            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
-            ondelete="NULL",
-            onupdate="CASCADE",
-        ),
-    )
-    plan_for = DB.Column(
-        DB.Integer,
-    )
-    starting_date = DB.Column(
-        DB.DateTime,
-        server_default=func.now(),
-    )
-    implementation_date = DB.Column(
-        DB.DateTime,
-        server_default=func.now(),
-    )
-    description = DB.Column(
-        DB.Unicode,
-    )
-    # Relationships
-    action_level = DB.relationship(
-        "TNomenclatures",
-        foreign_keys=[id_action_level],
-    )
-    action_type = DB.relationship(
-        "TNomenclatures",
-        foreign_keys=[id_action_type],
-    )
-    action_progress = DB.relationship(
-        "TNomenclatures",
-        foreign_keys=[id_action_progress],
-    )
-    partners = DB.relationship(
-        "CorActionOrganism",
-        uselist=True,
-    )
-
-
-@serializable
 class TAssessment(DB.Model):
     __tablename__ = "t_assessment"
     __table_args__ = {"schema": "pr_conservation_strategy"}
@@ -339,7 +239,6 @@ class TAssessment(DB.Model):
         DB.ForeignKey(
             "pr_conservation_strategy.t_priority_taxon.id_priority_taxon",
             ondelete="CASCADE",
-            onupdate="CASCADE",
         ),
         nullable=False,
     )
@@ -374,7 +273,6 @@ class TAssessment(DB.Model):
         DB.ForeignKey(
             "utilisateurs.t_roles.id_role",
             ondelete="NULL",
-            onupdate="CASCADE",
         ),
     )
     meta_update_date = DB.Column(
@@ -386,7 +284,6 @@ class TAssessment(DB.Model):
         DB.ForeignKey(
             "utilisateurs.t_roles.id_role",
             ondelete="NULL",
-            onupdate="CASCADE",
         )
     )
     # Relationships
@@ -395,8 +292,10 @@ class TAssessment(DB.Model):
     )
     actions = DB.relationship(
         "TAction",
-        uselist=True,
         lazy="joined",
+        cascade="all,delete-orphan",
+        uselist=True,
+        back_populates="assessment",
     )
     create_by = DB.relationship(
         "TRoles",
@@ -405,4 +304,104 @@ class TAssessment(DB.Model):
     update_by = DB.relationship(
         "TRoles",
         foreign_keys=[meta_update_by],
+    )
+
+@serializable
+class TAction(DB.Model):
+    __tablename__ = "t_action"
+    __table_args__ = {"schema": "pr_conservation_strategy"}
+    id = DB.Column(
+        "id_action",
+        DB.Integer,
+        primary_key=True,
+    )
+    id_assessment = DB.Column(
+        DB.Integer,
+        DB.ForeignKey(
+            "pr_conservation_strategy.t_assessment.id_assessment",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+    creation_date = DB.Column(
+        DB.DateTime,
+        server_default=func.now(),
+    )
+    id_action_level = DB.Column(
+        DB.Integer,
+        DB.ForeignKey(
+            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
+            ondelete="NULL",
+        ),
+    )
+    id_action_type = DB.Column(
+        DB.Integer,
+        DB.ForeignKey(
+            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
+            ondelete="NULL",
+        ),
+    )
+    id_action_progress = DB.Column(
+        DB.Integer,
+        DB.ForeignKey(
+            "ref_nomenclatures.t_nomenclatures.id_nomenclature",
+            ondelete="NULL",
+        ),
+    )
+    plan_for = DB.Column(
+        DB.Integer,
+    )
+    starting_date = DB.Column(
+        DB.DateTime,
+        server_default=func.now(),
+    )
+    implementation_date = DB.Column(
+        DB.DateTime,
+        server_default=func.now(),
+    )
+    description = DB.Column(
+        DB.Unicode,
+    )
+    # Relationships
+    assessment = DB.relationship(
+        "TAssessment",
+        foreign_keys=[id_assessment],
+        back_populates="actions",
+    )
+    action_level = DB.relationship(
+        "TNomenclatures",
+        foreign_keys=[id_action_level],
+    )
+    action_type = DB.relationship(
+        "TNomenclatures",
+        foreign_keys=[id_action_type],
+    )
+    action_progress = DB.relationship(
+        "TNomenclatures",
+        foreign_keys=[id_action_progress],
+    )
+    partners = DB.relationship(
+        "CorActionOrganism",
+        cascade="all,delete-orphan",
+        uselist=True,
+    )
+
+
+@serializable
+class CorActionOrganism(DB.Model):
+    __tablename__ = "cor_action_organism"
+    __table_args__ = {"schema": "pr_conservation_strategy"}
+    id_action = DB.Column(
+        DB.Integer,
+        ForeignKey("pr_conservation_strategy.t_action.id_action"),
+        primary_key=True,
+    )
+    id_organism = DB.Column(
+        DB.Integer,
+        ForeignKey("utilisateurs.bib_organismes.id_organisme"),
+        primary_key=True,
+    )
+    # Relationships
+    organism = DB.relationship(
+        "BibOrganisms"
     )

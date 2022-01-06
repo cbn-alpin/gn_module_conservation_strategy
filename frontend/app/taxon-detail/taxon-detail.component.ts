@@ -10,7 +10,7 @@ import { StoreService } from '../shared/services/store.service';
 })
 export class CsTaxonDetailComponent implements OnInit {
   territoryCode: string;
-  nameCode: number;
+  priorityTaxonId: number;
   displayFullName: string = '...';
   taxon: any;
 
@@ -37,10 +37,10 @@ export class CsTaxonDetailComponent implements OnInit {
         this.displayFullName = urlParams.get('shortName');
       }
 
-      if (urlParams.has('nameCode')) {
-        let nameCode = parseInt(urlParams.get('nameCode'));
-        this.nameCode = nameCode;
-        this.store.selectedTaxon = nameCode;
+      if (urlParams.has('priorityTaxonId')) {
+        let priorityTaxonId = parseInt(urlParams.get('priorityTaxonId'));
+        this.priorityTaxonId = priorityTaxonId;
+        this.store.selectedTaxon = priorityTaxonId;
       }
 
       this.loadTaxon();
@@ -48,7 +48,7 @@ export class CsTaxonDetailComponent implements OnInit {
   }
 
   private loadTaxon() {
-    this.dataService.getTaxon(this.territoryCode, this.nameCode).subscribe(data => {
+    this.dataService.getPriorityTaxon(this.priorityTaxonId).subscribe(data => {
       this.taxon = data;
     });
   }
