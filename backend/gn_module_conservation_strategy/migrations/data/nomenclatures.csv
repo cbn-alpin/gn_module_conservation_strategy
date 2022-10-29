@@ -1,0 +1,21 @@
+type_nomenclature_code,cd_nomenclature,mnemonique,label_default,definition_default,label_fr,definition_fr,cd_nomenclature_broader,hierarchy
+CS_ACTION_GEO_LEVEL,t,territoriale,Territoriale,Action territoriale.,Territoriale,Action territoriale.,0,.001
+CS_ACTION_GEO_LEVEL,l,locale,Locale,Action locale.,Locale,Action locale.,0,.002
+CS_ACTION,rbs,realiserBilanStationnel,Réaliser Bilan Stationnel,Réaliser un bilan stationnel.,Réaliser Bilan Stationnel,Réaliser un bilan stationnel.,0,.001
+CS_ACTION,dfbs,diffuserFicheBilanStationnel,Diffuser Fiche Bilan Stationnel,Diffuser la fiche bilan stationnel.,Diffuser Fiche Bilan Stationnel,Diffuser la fiche bilan stationnel.,0,.002
+CS_ACTION,rss,realiserSuiviStation,Réaliser Suivi Station,Réaliser un suivi station.,Réaliser Suivi Station,Réaliser un suivi station.,0,.003
+CS_ACTION,rst,realiserSuiviTerritoire,Réaliser Suivi Territoire,Réaliser un suivi territoire.,Réaliser Suivi Territoire,Réaliser un suivi territoire.,0,.004
+CS_ACTION,rpc,realiserPlanDeConservation,Réaliser Plan Conservation,Réaliser un plan de conservation.,Réaliser Plan Conservation,Réaliser un plan de conservation.,0,.005
+CS_ACTION,mf,maitriserFoncier,Maitriser Foncier,Maitriser le foncier.,Maitriser Foncier,Maitriser le foncier.,0,.006
+CS_ACTION,pr,protegerReglementairement,Protéger réglementairement,Protéger réglementairement.,Protéger réglementairement,Protéger réglementairement.,0,.007
+CS_ACTION,pac,porterAConnaissance,Porter à Connaissance,Porter à connaissance.,Porter à Connaissance,Porter à connaissance.,0,.008
+CS_ACTION,s,sensibiliser,Sensibiliser,Sensibiliser le public.,Sensibiliser,Sensibiliser le public.,0,.009
+CS_ACTION,emg,etablirMesureGestion,Établir Mesures Gestion,Établir des mesures de gestion.,Établir Mesures Gestion,Établir des mesures de gestion.,0,.010
+CS_ACTION,rp,renforcerPopulation,Renforcer Population,Renforcer les populations.,Renforcer Population,Renforcer les populations.,0,.011
+CS_ACTION,ir,introduireReintroduire,Introduire / Réintroduire,Introduire ou réintroduire le taxon.,Introduire / Réintroduire,Introduire ou réintroduire le taxon.,0,.012
+CS_ACTION,rpr,realiserProgrammeRecherche,Réaliser Programme Recherche,Réaliser un programme de recherche.,Réaliser Programme Recherche,Réaliser un programme de recherche.,0,.013
+CS_ACTION,c,concerter,Concerter,Se concerter.,Concerter,Se concerter.,0,.014
+CS_ACTION,rsic,realiserSuiviIndividuCentre,Réaliser Suivi Individu-Centré,Réaliser un suivi individu-centré.,Réaliser Suivi Individu-Centré,Réaliser un suivi individu-centré.,0,.015
+CS_ACTION_PROGRESS,pr,aPrevoir,À mettre en place,À mettre en place.,À mettre en place,À mettre en place.,0,.001
+CS_ACTION_PROGRESS,c,enCours,En cours de mise en place,En cours de mise en place.,En cours de mise en place,En cours de mise en place.,0,.002
+CS_ACTION_PROGRESS,pl,enPlace,Mise en place,Mise en place.,Mise en place,Mise en place.,0,.003

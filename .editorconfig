@@ -13,14 +13,14 @@ insert_final_newline = true
 # See: https://github.com/editorconfig/editorconfig-vscode/issues/153
 #trim_trailing_whitespace = true
 
-[*.{py,sh}]
+[*.py, *.sh]
 indent_size = 4
 trim_trailing_whitespace = true
 
-[*.{js,ts,scss,css,html}]
+[*.js, *.ts, *.scss, *.css, *.html]
 indent_size = 2
 trim_trailing_whitespace = true
 
-[*.{md,rst}]
+[*.md, *.rst]
 indent_size = 4
 trim_trailing_whitespace = false

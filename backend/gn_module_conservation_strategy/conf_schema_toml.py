@@ -9,5 +9,5 @@ from marshmallow import Schema, fields
 
 
 class GnModuleSchemaConf(Schema):
-   module_code = fields.String(default="cs")
+   module_code = fields.String(default="CS")
    module_title = fields.String(default="Stratégie Conservation")

@@ -1,5 +1,5 @@
 # Fichier listant les paramètres du module et leurs valeurs par défaut
 # Code du module utilisé dans les URL et les commandes GeoNature
-module_code="cs"
+module_code="CS"
 # Titre du module utilisé pour l'affichage
 module_title="Stratégie Conservation"
