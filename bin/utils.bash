@@ -41,8 +41,8 @@ function initScript() {
     # Directories pathes
     readonly bin_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
     readonly root_dir="$(realpath $bin_dir/..)"
-    readonly conf_dir="${root_dir}/config"
-    readonly data_dir="${root_dir}/data"
+    readonly conf_dir="${bin_dir}/config"
+    readonly data_dir="${bin_dir}/data"
     readonly import_dir="${data_dir}/imports"
     readonly sample_dir="${data_dir}/sample"
     readonly var_dir="${root_dir}/var"

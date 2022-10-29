@@ -1,26 +1,21 @@
 -- Create Conservation Strategy schema and tables
-BEGIN;
 
-
-\echo '--------------------------------------------------------------------------------'
-\echo 'Set database variables'
+-- Set database variables
 SET client_encoding = 'UTF8' ;
 
 
-\echo '--------------------------------------------------------------------------------'
-\echo 'Create module schema'
+-- Create module schema
 CREATE SCHEMA pr_conservation_strategy ;
 
 
-\echo '--------------------------------------------------------------------------------'
-\echo 'Set new database variables'
+-- Set new database variables
 SET search_path = pr_conservation_strategy, pg_catalog, public;
 
 
-\echo '--------------------------------------------------------------------------------'
-\echo 'TABLES'
+-- --------------------------------------------------------------------------------
+-- TABLES
 
-\echo 'Table `t_territory`'
+-- Table `t_territory`
 CREATE TABLE t_territory (
     id_territory SERIAL NOT NULL,
     id_area INTEGER,
@@ -53,7 +48,7 @@ COMMENT ON COLUMN t_territory.meshes_total IS
     E'Nombre total de mailles 5x5km INPN présente dans le territoire.' ;
 
 
-\echo 'Table `cor_mesh_taxon`'
+-- Table `cor_mesh_taxon`
 -- TODO: add constraint check on id_area must have an id_type = M5.
 CREATE TABLE cor_mesh_taxon (
     mesh_code VARCHAR(16) NOT NULL,
@@ -73,7 +68,7 @@ COMMENT ON COLUMN cor_mesh_taxon.id_area IS
      'Peut-être NULL si la géométrie n''est pas nécessaire.' ;
 
 
-\echo 'Table `t_priority_taxon`'
+-- Table `t_priority_taxon`
 CREATE TABLE t_priority_taxon (
     id_priority_taxon SERIAL NOT NULL,
     id_territory INTEGER NOT NULL,
@@ -148,7 +143,7 @@ COMMENT ON COLUMN t_priority_taxon.presence_area_count IS
     E'Nombre d''aire de présence total pour ce taxon dans ce territoire.' ;
 
 
-\echo 'Table `t_assessment`'
+-- Table `t_assessment`
 CREATE TABLE t_assessment (
     id_assessment SERIAL NOT NULL,
     id_priority_taxon INTEGER NOT NULL,
@@ -199,7 +194,7 @@ COMMENT ON COLUMN t_assessment.meta_update_by IS
     E'Identifiant de l''utilisateur ayant mis jour cet enregistrement de bilan.' ;
 
 
-\echo 'Table `t_action`'
+-- Table `t_action`
 CREATE TABLE t_action (
     id_action SERIAL NOT NULL,
     id_assessment INTEGER NOT NULL,
@@ -239,7 +234,7 @@ COMMENT ON COLUMN t_action.implementation_date IS
 COMMENT ON COLUMN t_action.description IS
     E'Description de l''action (chantier prévu, détail de la mise en place, …).' ;
 
-\echo 'Add nomenclature constraints on table `t_action`'
+-- Add nomenclature constraints on table `t_action`
 ALTER TABLE t_action ADD CONSTRAINT check_t_action_level
     CHECK (
         ref_nomenclatures.check_nomenclature_type_by_mnemonique(
@@ -265,7 +260,7 @@ ALTER TABLE t_action ADD CONSTRAINT check_t_action_progress
     ) NOT VALID ;
 
 
-\echo 'Table `cor_action_organism`'
+-- Table `cor_action_organism`
 CREATE TABLE cor_action_organism (
     id_organism INTEGER NOT NULL,
     id_action INTEGER NOT NULL,
@@ -279,8 +274,8 @@ COMMENT ON COLUMN cor_action_organism.id_action IS
     E'Identifiant de l''action à laquelle l''organisme est associé.' ;
 
 
-\echo '--------------------------------------------------------------------------------'
-\echo 'FOREING KEYS'
+-- --------------------------------------------------------------------------------
+-- FOREING KEYS
 -- TODO: check if all DELETE CASCADE are necessary
 
 ALTER TABLE ONLY t_territory ADD CONSTRAINT fk_t_territory_id_area
@@ -340,8 +335,8 @@ ALTER TABLE ONLY cor_action_organism ADD CONSTRAINT fk_cor_action_organism_id_ac
     ON UPDATE CASCADE ON DELETE CASCADE ;
 
 
-\echo '--------------------------------------------------------------------------------'
-\echo 'INDEXES'
+-- --------------------------------------------------------------------------------
+-- INDEXES
 
 CREATE UNIQUE INDEX idx_uniq_t_territory_id_area
     ON t_territory USING btree(id_area) ;
@@ -393,8 +388,3 @@ CREATE INDEX idx_cor_action_organism_id_organism
 
 CREATE INDEX idx_cor_action_organism_id_action
     ON cor_action_organism USING btree(id_action) ;
-
-
-\echo '----------------------------------------------------------------------------'
-\echo 'COMMIT if all is ok:'
-COMMIT ;
