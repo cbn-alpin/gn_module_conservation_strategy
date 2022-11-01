@@ -30,7 +30,7 @@ export const routes: Routes = [
           },
           {
             path: 'territories',
-            redirectTo: '/cs',
+            redirectTo: '/conservation_strategy',
             pathMatch: 'full',
           },
           {

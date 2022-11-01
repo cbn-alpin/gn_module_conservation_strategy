@@ -30,7 +30,7 @@
   <div class="card-body">
     <nav mat-tab-nav-bar>
       <a mat-tab-link
-        routerLink="/cs"
+        routerLink="/conservation_strategy"
         routerLinkActive
         [routerLinkActiveOptions]="{exact:true}"
         #rlaHome="routerLinkActive"
@@ -40,7 +40,7 @@
         Accueil
       </a>
       <a mat-tab-link
-        routerLink="/cs/territories/{{store.selectedTerritory?.code | lowercase }}/priority-taxa"
+        routerLink="/conservation_strategy/territories/{{store.selectedTerritory?.code | lowercase }}/priority-taxa"
         routerLinkActive
         #rlaPriorityTaxa="routerLinkActive"
         [active]="rlaPriorityTaxa.isActive"
