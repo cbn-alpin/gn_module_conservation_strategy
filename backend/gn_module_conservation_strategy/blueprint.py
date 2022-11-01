@@ -1,26 +1,18 @@
-import json
 import logging
 
 from flask import Blueprint, request
-from sqlalchemy import desc, func, or_, and_, exc
-from sqlalchemy.orm import Load, load_only
+from sqlalchemy import desc, func, or_, exc
 
 from geonature.core.gn_permissions import decorators as permissions
-from geonature.core.gn_permissions.tools import get_or_fetch_user_cruved
 from geonature.utils.env import DB
-from geonature.utils.utilssqlalchemy import json_resp
+from utils_flask_sqla.response import json_resp
 
-# TODO: must be replace by TaxRef dependency in GN v2.8.0+
-from geonature.core.taxonomie.models import CorTaxonAttribut, Taxref
+from apptax.taxonomie.models import BibNoms, BibAttributs, TMedias, Taxref, CorTaxonAttribut
+from pypnusershub.db.models import Organisme, User
 
 from .models import (
-    BibAttributs, # TODO: replace with apptax dependency in GN v2.8.0+
-    BibNoms, # TODO: replace with apptax dependency in GN v2.8.0+
-    BibOrganisms, # TODO: replace with usershub dependency in GN v2.8.0+
     TPriorityTaxon,
     TAssessment,
-    TAction,
-    TMedias, # TODO: replace with apptax dependency in GN v2.8.0+
     TTerritory,
 )
 from .repositories import AssessmentRepository
@@ -350,16 +342,16 @@ def get_organisms():
 
     # Prepare query
     query = (DB.session
-        .query(BibOrganisms)
-        .filter(BibOrganisms.id > 0)
+        .query(Organisme)
+        .filter(Organisme.id_organisme > 0)
 
     )
     if order_by:
         try:
-            order_column = getattr(BibOrganisms.__table__.columns, order_by)
+            order_column = getattr(Organisme.__table__.columns, order_by)
             query = query.order_by(order_column)
         except AttributeError:
-            columns = ", ".join(list(BibOrganisms.__table__.columns.keys()))
+            columns = ", ".join(list(Organisme.__table__.columns.keys()))
             msg = f"Unknown order-by parameter '{order_by}'. Use only : {columns}"
             log.error(msg)
             return {"message": msg, "status": "error"}, 400

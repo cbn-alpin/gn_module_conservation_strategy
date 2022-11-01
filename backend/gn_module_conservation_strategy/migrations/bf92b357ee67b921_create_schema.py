@@ -14,7 +14,7 @@ from geonature.core.gn_commons.models import TParameters
 
 # revision identifiers, used by Alembic.
 revision = "bf92b357ee67b921"
-down_revision = "858d1ee4778a7135" # add specific data
+down_revision = "858d1ee4778a7135"  # add specific data
 branch_labels = None
 depends_on = None
 

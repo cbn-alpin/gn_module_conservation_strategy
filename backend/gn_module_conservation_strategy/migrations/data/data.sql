@@ -48,7 +48,7 @@ SET
     module_label = 'Strat. Conservation',
     module_desc = 'Module d''aide à la décision des actions de la stratégie de conservation à mettre en place pour les taxons prioritaires d''un territoire.',
     module_doc_url = 'https://github.com/cbn-alpin/gn_module_conservation_strategy'
-WHERE module_code = 'CS' ;
+WHERE module_code = :moduleCode ;
 
 
 -- --------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ INSERT INTO taxonomie.bib_themes (
 ) VALUES (
     'Strat. Conservation',
     'Informations relative à la stratégie de conservation du taxon',
-    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes),
+    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1),
     4 -- TODO : Voir à quoi cela correspond
 ) ;
 
@@ -86,10 +86,10 @@ INSERT INTO taxonomie.bib_attributs (
     'Méthode de suivi préconisé du taxon dans le cadre de la Stratégie de Conservation',
     'text',
     'textarea',
-    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Strat. Conservation'),
+    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Strat. Conservation' LIMIT 1),
     (SELECT COALESCE(MAX(ordre) + 1, 1) FROM taxonomie.bib_attributs WHERE id_theme = (
-        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Strat. Conservation'
-    ))
+        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Strat. Conservation' LIMIT 1
+    ) LIMIT 1)
 ) ;
 
 INSERT INTO taxonomie.bib_attributs(
@@ -110,10 +110,10 @@ INSERT INTO taxonomie.bib_attributs(
     'Texte présentant l''écologie du taxon.',
     'text',
     'textarea',
-    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas'),
+    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas' LIMIT 1),
     (SELECT COALESCE(MAX(ordre) + 1, 1) FROM taxonomie.bib_attributs WHERE id_theme = (
-        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas'
-    ))
+        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas' LIMIT 1
+    ) LIMIT 1)
 ) ;
 
 INSERT INTO taxonomie.bib_attributs(
@@ -134,8 +134,8 @@ INSERT INTO taxonomie.bib_attributs(
     'Texte présentant la chorologie du taxon.',
     'text',
     'textarea',
-    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas'),
+    (SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas' LIMIT 1),
     (SELECT COALESCE(MAX(ordre) + 1, 1) FROM taxonomie.bib_attributs WHERE id_theme = (
-        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas'
-    ))
+        SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas' LIMIT 1
+    ) LIMIT 1)
 ) ;

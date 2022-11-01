@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 
 
@@ -8,6 +9,7 @@ def remove_entries(data, keys_to_remove):
             cleaned_data[k] = v
     return cleaned_data
 
+
 def prepare_output(d, remove_in_key=None):
     if isinstance(d, list):
         new = [] if len(d) > 0 else None
@@ -16,14 +18,14 @@ def prepare_output(d, remove_in_key=None):
             if output:
                 new.append(output)
         return new
-    elif isinstance(d, dict) :
+    elif isinstance(d, dict):
         new = {} if len(d) > 0 else None
         for k, v in d.items():
             # Remove None and empty values
             if v != None and v != "":
                 # Remove substring in key
                 if remove_in_key:
-                    k = k.replace(remove_in_key, '').strip('_')
+                    k = k.replace(remove_in_key, "").strip("_")
                 # Value processing recursively
                 output = prepare_output(v, remove_in_key)
                 if output != None and output != "":
@@ -37,8 +39,8 @@ def prepare_output(d, remove_in_key=None):
 
 
 def format_to_camel_case(snake_str):
-    components = snake_str.split('_')
-    return components[0].lower() + ''.join(x.title() for x in components[1:])
+    components = snake_str.split("_")
+    return components[0].lower() + "".join(x.title() for x in components[1:])
 
 
 def prepare_input(d):
@@ -47,15 +49,17 @@ def prepare_input(d):
         for item in d:
             output.append(prepare_input(item))
         return output
-    elif isinstance(d, dict) :
+    elif isinstance(d, dict):
         return dict((format_to_snake_case(k), prepare_input(v)) for k, v in d.items())
     else:
         return d
 
 
 def format_to_snake_case(camel_str):
-    return ''.join(['_'+char.lower() if char.isupper()
-        else char for char in camel_str]).lstrip('_')
+    return "".join(["_" + char.lower() if char.isupper() else char for char in camel_str]).lstrip(
+        "_"
+    )
+
 
 def fprint(data):
     print(json.dumps(data, indent=4, sort_keys=True))
