@@ -7,24 +7,23 @@ Flore Sentinelle (projet SCALP), piloté par le CBNA.
 ## Installation
 
 * Installez GeoNature (https://github.com/PnX-SI/GeoNature) en
-version 2.4.1 ou supérieure.
+version 2.7.5 ou supérieure.
 * Téléchargez la dernière version stable du module (``wget https://github.com/cbn-alpin/gn_module_conservation_strategy/archive/X.Y.Z.zip``) dans ``/home/${USER}/``
 * Dézippez la dans ``/home/${USER}/`` (``unzip X.Y.Z.zip``)
 * Placez-vous dans le répertoire ``backend`` de GeoNature et lancez
-les commandes suivantes (le nom du module abrégé en "cs" est utilisé
-comme code) :
+les commandes suivantes (le code du module est "CONSERVATION_STRATEGY") :
 
 ```
     source venv/bin/activate
     geonature install_gn_module <mon_chemin_absolu_vers_le_module> <code_du_module>
-    # Exemple geonature install_gn_module /home/`whoami`/gn_module_conservation_strategy-X.Y.Z cs)
+    # Exemple : geonature install_gn_module /home/`whoami`/gn_module_conservation_strategy-X.Y.Z CONSERVATION_STRATEGY
 ```
 
-* L'installation du module doit créer le fichier ``config/settings.ini``
+* Créer le fichier ``bin/config/settings.ini``
 et y stocker le chemin vers le fichier de configuration de GeoNature.
 Vous pouvez maintenant (optionel) surcoucher éventuellement un des
-paramètres présent dans le fichier ``config/settings.default.ini`` en
-le copiant dans ``config/settings.ini`` pour l'y modifier.
+paramètres présent dans le fichier ``bin/config/settings.default.ini`` en
+le copiant dans ``bin/config/settings.ini`` pour l'y modifier.
 * Réaliser les imports nécessaires au fonctionnement du module à l'aide
 des scripts présents dans le dossier `bin/` pour :
   * les territoires
@@ -36,15 +35,10 @@ défaut présentes dans le fichier ``config/conf_gn_module.sample.toml``:
   * Ensuite, relancez la mise à jour de la configuration du module :
     * Se rendre dans le répertoire ``geonature/backend``
     * Activer le venv (si nécessaire) : ``source venv/bin/activate``
-    * Lancer la commande de mise à jour de configuration du module
-    (abrégé ici en "cs")  : ``geonature update_module_configuration cs``
+    * Lancer la commande de mise à jour de configuration du module :
+      ``geonature update-module-configuration CONSERVATION_STRATEGY``
 * Une fois le module installé et configuré, il vous faudra l'activer
-avec : `geonature activate_gn_module cs`
-* Ce module utilise une version récente de la bibliothèque `utils-flask-sqlalchemy`,
-il est donc nécessaire de la mettre à jour avec la commande :
-`pip install utils-flask-sqlalchemy@https://github.com/PnX-SI/Utils-Flask-SQLAlchemy/archive/0.2.4.zip`
-  * Ne pas s'inquiéter des "*warning*", tant que la dernière ligne indique :
-  `Successfully installed utils-flask-sqlalchemy-0.2.4`.
+avec : `geonature activate-gn-module CONSERVATION_STRATEGY`
 * Vous pouvez sortir du venv en lançant la commande ``deactivate``
 
 ### Interaction avec TaxHub
@@ -58,19 +52,27 @@ Enfin, il ajoute aussi son propre thème "Strat. Conservation" qui contient l'at
 
 ## Désinstallation
 
-* Utiliser le script `bin/uninstall.sh` en vous plaçant dans le dossier
-`bin/` puis en éxecutant : `./uninstall.sh`
-* Cette action va supprimer :
-  * dans la base de données toutes les données et structures en lien avec ce module.
-  * supprimer le lien symbolique dans le dossier `external_modules` de GeoNature.
-  * mettre à jour les fichiers de configuration du frontend de GeoNature
-(surtout utile pour le déveoloppement).
-* En "production", vous devrez ensuite appliquer les changements à l'interface
-en la reconstruisant. Pour se faire, lancez les commandes suivantes :
-  * se placer dans le répertoire ``backend`` : `cd ~/geonature/backend/`
-  * charger le *venv* : `source venv/bin/activate`
-  * recontruire l'interface (*frontend*) : `geonature frontend_build`
+**⚠️ ATTENTION :** la désinstallation du module implique la suppression de toutes les données associées.
+Assurez vous d'avoir fait une sauvegarde de votre base de données au préalable.
 
+Suivez la procédure suivante :
+1. Rétrograder la base de données pour y enlever les données spécifiques au module :
+    ```bash
+    geonature db downgrade conservation_strategy@base
+    ```
+1. Désinstaller le package du virtual env :
+    ```
+    pip uninstall gn-module-conservation-strategy
+    ```
+    - Possibilité de voir le nom du module avec : `pip list`
+1. Supprimer la ligne relative au module dans `gn_commons.t_modules`
+1. Supprimer le lien symbolique du module dans les dossiers :
+    - `geonature/external_modules`
+    - `geonature/frontend/src/external_assets/`
+1. Mettre à jour le frontend :
+    ```bash
+    geonature update-configuration --build false && geonature generate-frontend-tsconfig && geonature generate-frontend-tsconfig-app && geonature generate-frontend-modules-route
+    ```
 
 ## Déploiement sur Flore Sentinelle
 
@@ -80,12 +82,15 @@ en la reconstruisant. Pour se faire, lancez les commandes suivantes :
 `rsync -av --exclude-from ./.rsync-exclude.txt ./ geonatureadmin@<ip-serveur>:~/gn_modules_conservation_strategy/ --dry-run`
   * Le fichier `.rsync-exclude.txt` contient les noms des fichiers et dossiers
     qui seront exclus de la synchronisation.
-  * Penser à modifier le chemin du module sur le serveur si votre chemin est différent.
+  * Penser à modifier les chemins du module local et sur le serveur si vos chemins sont différents.
 * Lors du premier déploiement suivre les étapes d'installation du module décrites ci-dessus.
 * Lors des synchronisations suivante :
-  * si la base de données est modifiée, la mettre à jour
+  * si la base de données est modifiée, la mettre à jour avec :
+    ```bash
+    geonature db upgrade conservation_strategy@head
+    ```
   * recompiler le module en relançant sa configuration dans le `venv` du
-    backend de GeoNature : `geonature update_module_configuration cs`
+    backend de GeoNature : `geonature update-module-configuration CONSERVATION_STRATEGY`
 
 ## Licence
 
