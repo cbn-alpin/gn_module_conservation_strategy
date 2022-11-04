@@ -1,5 +1,3 @@
-import { of } from '@librairies/rxjs';
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -30,7 +28,7 @@ export class ConfigService {
   }
 
   getModuleBackendUrl() {
-    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.module_code}`;
+    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.module_code.toLowerCase()}`;
   }
 
   getFrontendModuleUrl() {
