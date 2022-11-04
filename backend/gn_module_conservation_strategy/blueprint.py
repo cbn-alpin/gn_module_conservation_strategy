@@ -47,7 +47,8 @@ def get_territory(territory):
     :returns: un dictionnaire contenant les infos d'un territoire.
     """
     q = DB.session.query(TTerritory).filter(func.lower(TTerritory.code) == territory.lower())
-    output = q.one().as_dict()
+    result = q.first()
+    output = None if not result else result.as_dict()
     return prepare_output(output, remove_in_key="territory")
 
 
