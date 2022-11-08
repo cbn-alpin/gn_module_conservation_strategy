@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey, func
 from sqlalchemy.dialects.postgresql import JSONB
 
 from utils_flask_sqla.serializers import serializable
+from apptax.taxonomie.models import Taxref
 
 from geonature.utils.env import DB
 
@@ -64,7 +65,7 @@ class TPriorityTaxon(DB.Model):
     cd_nom = DB.Column(
         DB.Integer,
         DB.ForeignKey(
-            "taxonomie.taxref.cd_nom",
+            Taxref.cd_nom,
             ondelete="NULL",
         ),
         nullable=False,
