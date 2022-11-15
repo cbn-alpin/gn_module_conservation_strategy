@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, Inject, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
 
@@ -92,7 +92,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
   private initializeFormGroups(): void {
     this.form = this.formBuilder.group({
       assessment: this.formBuilder.group({
-        assessmentDate: [this.assessment.assessmentDate, null],
+        assessmentDate: new FormControl(new Date()),
         threats: [this.assessment.threats, null],
         description: [this.assessment.description, null],
         nextAssessmentYear: [this.assessment.nextAssessmentYear, null],
