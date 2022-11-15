@@ -16,10 +16,19 @@
   </button>
 </div>
 
+
 <div mat-dialog-content>
   <form [formGroup]="form">
     <div class="modal-body mb-auto">
       <div formGroupName="assessment" class="d-flex flex-column">
+
+        <mat-form-field hintLabel="Date du jour par défaut" appearance="outline">
+          <mat-label>Date de création</mat-label>
+          <input matInput [matDatepicker]="picker" placeholder="Choisir une date en cliquant sur le calendrier">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
         <mat-form-field hintLabel="Max {{threats.maxLength}} caractères" appearance="outline">
           <mat-label>Menaces</mat-label>
           <textarea

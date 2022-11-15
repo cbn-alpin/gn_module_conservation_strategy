@@ -92,6 +92,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
   private initializeFormGroups(): void {
     this.form = this.formBuilder.group({
       assessment: this.formBuilder.group({
+        assessmentDate: [this.assessment.assessmentDate, null],
         threats: [this.assessment.threats, null],
         description: [this.assessment.description, null],
         nextAssessmentYear: [this.assessment.nextAssessmentYear, null],
