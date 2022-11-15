@@ -81,12 +81,12 @@ CREATE TABLE t_priority_taxon (
     rarity FLOAT,
     rarity_class VARCHAR(2),
     computed_conservation_priority INTEGER,
-    compute_date TIMESTAMP without time zone,
+    compute_date TIMESTAMP with time zone,
     revised_conservation_priority INTEGER,
-    revision_date TIMESTAMP without time zone,
+    revision_date TIMESTAMP with time zone,
     revision_comment TEXT,
-    min_prospect_zone_date TIMESTAMP without time zone,
-    max_prospect_zone_date TIMESTAMP without time zone,
+    min_prospect_zone_date TIMESTAMP with time zone,
+    max_prospect_zone_date TIMESTAMP with time zone,
     presence_area_count INTEGER,
     PRIMARY KEY (id_priority_taxon)
 ) ;
@@ -147,16 +147,16 @@ COMMENT ON COLUMN t_priority_taxon.presence_area_count IS
 CREATE TABLE t_assessment (
     id_assessment SERIAL NOT NULL,
     id_priority_taxon INTEGER NOT NULL,
-    date_min TIMESTAMP without time zone,
-    date_max TIMESTAMP without time zone,
-    assessment_date TIMESTAMP without time zone DEFAULT NOW(),
+    date_min TIMESTAMP with time zone,
+    date_max TIMESTAMP with time zone,
+    assessment_date TIMESTAMP with time zone DEFAULT NOW(),
     threats TEXT,
     "description" TEXT,
     next_assessment_year INTEGER,
     computed_data JSONB,
-    meta_create_date TIMESTAMP without time zone DEFAULT NOW(),
+    meta_create_date TIMESTAMP with time zone DEFAULT NOW(),
     meta_create_by INTEGER,
-    meta_update_date TIMESTAMP without time zone,
+    meta_update_date TIMESTAMP with time zone,
     meta_update_by INTEGER,
     PRIMARY KEY (id_assessment)
 ) ;
@@ -198,13 +198,13 @@ COMMENT ON COLUMN t_assessment.meta_update_by IS
 CREATE TABLE t_action (
     id_action SERIAL NOT NULL,
     id_assessment INTEGER NOT NULL,
-    creation_date TIMESTAMP without time zone,
+    creation_date TIMESTAMP with time zone,
     id_action_level INTEGER,
     id_action_type INTEGER,
     id_action_progress INTEGER,
     plan_for INTEGER,
-    starting_date TIMESTAMP without time zone,
-    implementation_date TIMESTAMP without time zone,
+    starting_date TIMESTAMP with time zone,
+    implementation_date TIMESTAMP with time zone,
     "description" TEXT,
     PRIMARY KEY (id_action)
 ) ;
