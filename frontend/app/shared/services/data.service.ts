@@ -29,7 +29,7 @@ export class DataService {
   }
 
   getHomePage(): Observable<string> {
-    const path = 'assets/conservation_strategy/templates/home.tpl.html';
+    const path = 'external_assets/conservation_strategy/templates/home.tpl.html';
     return this.http.get(path, {responseType: 'text'});
   }
 

@@ -32,7 +32,7 @@ export class ConfigService {
   }
 
   getFrontendModuleUrl() {
-    return ModuleConfig.module_code;
+    return ModuleConfig.module_code.toLowerCase();
   }
 
   getTaxHubBackendUrl() {
