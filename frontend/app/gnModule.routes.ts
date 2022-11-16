@@ -14,7 +14,7 @@ export const routes: Routes = [
     component: CsRootComponent,
     data: {
       breadcrumb: {
-        label: 'Accueil CS',
+        label: 'Accueil Stratégie Conservation',
         title: "Page d'accueil du module Stratégie Conservation.",
         iconClass: 'fa fa-home',
       }

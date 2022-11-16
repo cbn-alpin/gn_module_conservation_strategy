@@ -116,6 +116,6 @@ export class CsStrategyComponent implements OnInit, OnDestroy {
 
   onTerritoryChanged(event) {
     this.store.selectedTerritory = Object.assign(this.currentTerritory);
-    this.router.navigate(['cs', 'territories', this.currentTerritory.code, 'priority-taxa']);
+    this.router.navigate(['conservation_strategy', 'territories', this.currentTerritory.code, 'priority-taxa']);
   }
 }
