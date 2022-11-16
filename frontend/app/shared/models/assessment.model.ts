@@ -58,13 +58,13 @@ export interface IAssessment {
   metaUpdateBy: string;
 }
 
-export class Assessment implements Partial<IAssessment> {
+export class Assessment implements IAssessment {
   id: number;
   territoryCode: string;
   taxonNameCode: number;
   threats: string;
   description: string;
-  assessmentDate: string;
+  assessmentDate: string = new Date().toISOString();
   nextAssessmentYear: number = ((new Date()).getFullYear() + 10);
   dateMin: string;// TODO: use a better type
   dateMax: string;// TODO: use a better type
