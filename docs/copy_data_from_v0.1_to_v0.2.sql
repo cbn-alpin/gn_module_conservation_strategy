@@ -1,3 +1,5 @@
+BEGIN;
+
 --t_assessment
 
 INSERT INTO pr_conservation_strategy.t_assessment(
@@ -14,7 +16,7 @@ INSERT INTO pr_conservation_strategy.t_assessment(
 	meta_create_by,
 	meta_update_date,
 	meta_update_by 
-	)
+)
 SELECT 
 	o.id_assessment,
 	tpt.id_priority_taxon,
@@ -28,9 +30,7 @@ SELECT
 	o.meta_create_date,
 	o.meta_create_by,
 	o.meta_update_date,
-	o.meta_update_by 
-	
-	
+	o.meta_update_by	
 FROM pr_conservation_strategy_old.t_assessment AS o
 JOIN pr_conservation_strategy.t_priority_taxon AS tpt
 	ON tpt.id_territory = o.id_territory
@@ -49,7 +49,7 @@ INSERT INTO pr_conservation_strategy.t_action(
 	starting_date,
 	implementation_date,
 	description 
-	)
+)
 SELECT 
 	o.id_action,
 	o.id_assessment,
@@ -61,8 +61,6 @@ SELECT
 	o.starting_date,
 	o.implementation_date,
 	o.description 
-	
-	
 FROM pr_conservation_strategy_old.t_action AS o;
 
 --cor_action_organism
@@ -71,10 +69,10 @@ FROM pr_conservation_strategy_old.t_action AS o;
 INSERT INTO pr_conservation_strategy.cor_action_organism (
 	id_organism,
 	id_action
-	)
+)
 SELECT
 	o.id_organism,
 	o.id_action 
-	
-	
 FROM pr_conservation_strategy_old.cor_action_organism AS o;
+
+COMMIT;
