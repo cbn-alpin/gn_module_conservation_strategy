@@ -1,65 +1,86 @@
-# Changelog
-Toutes les modifications notables apportées à ce projet seront documentées dans ce fichier.
+# CHANGELOG
 
-Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project will be documented in this file.
 
-## [Nouveau]
-## [v0.2.0] - 2021-12-16
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Version intégrant les interfaces de base permettant de saisir une fiche bilan stationnel.
+## [New]
 
-### Fonctionnalités
-- Ajout d'une fenêtre modale "Création/Modification d'une fiche bilan stationnel"
-permettant d'accéder au formulaire d'édition d'une fiche bilan stationnel.
-- Ajout d'un onglet "Fiches bilan stationnel" permettant de consulter les informations
-des fiches bilans stationnels préalablement saisies. Des boutons "ajouter une fiche bilan stationnel" et
-"Modifier cette fiche bilan stationnel" permettent d'accès à la fenêtre d'édition d'une fiche.
-- Ajout d'un onglet "Informations générales" permettant d'afficher les photos
-dans un carousel et le contenu de plusieurs attributs provenant de TaxHub.
-Des liens directs vers TaxHub sont disponibles.
-- Ajout d'une page "Fiche détaillée d'un taxon" permettant d'accéder aux onglets
-"Informations générales" et "Fiches bilan stationnel".
-- Ajout d'un onglet "Liste des taxons Prioritaires" affichant un tableau
-paginé côté serveur et ses filtres de recherche.
-- Ajout d'un onglet "Accueil" permettant de décrire le module. Son contenu provient d'un template.
-- Ajout de la page "Stratégie Conservation" permettant de sélectionner le territoire
-de travail et d'accéder aux onglets "Accueil" et "Liste des taxons Prioritaires".
-- Ajout d'un script Bash d'import des taxons prioritaires et sa documentation.
-- Ajout d'un script Bash d'import des territoires et sa documentation.
+## [0.3.0] - 2022-11-16
 
-## [v0.1.0] - 2021-11-09
+### Added
+- Add new nomenclatures in Actions.
+- Add an export file to test the API with Postman.
+- Packaging of the module.
+- Add a "Creation date" field for new assessments.
 
-Première version stable du module compatible avec GeoNature version 2.4.1.
+### Changed
+- Respect the Keepchangelog format.
+- Rename the "cor_territory_taxon" table to "t_priority_taxon".
+- Simplification of the taxon search web service.
+- Simplification all web services URLs.
+- Moved old module installation/uninstallation scripts to "bin" folder.
+- Rename the module code to "CONSERVATION_STRATEGY".
+- Simplification of the "package.json" file.
+- Update the format of the fields containing dates in the module schema creation to consider the time zone.
 
-### Fonctionnalités
-- Ajout d'un fil d'ariane à l'interface via le composant `<breadcrumbs>`
-- Affichage du titre (config) et de la liste des territoires (webservice) sur l'interface.
-- Restructuration du contenu du dossier `frontend/` pour le rendre fonctionnel
-- Ajout du web service `GET /territories`.
-- Rédaction d'une première version du fichier `README.md`.
-- Ajout du script Bash de désinstallation du module (`uninstall.sh`)
-- Ajout du script Bash d'installation de la base de données (`install_db.sh`)
-- Ajout d'une librairie `bin/utils.sh` permettant d'améliorer l'écriture des scripts Bash.
-- Ajout d'un dossier `bin/` contenant tous les scripts Bash du module.
-- Ajout du script SQL de désinstallation de la base de données du module (`data/uninstall.sql`).
-- Ajout du script SQL d'insertion des données par défaut du module (`data/install_default_data.sql`).
-- Ajout du script SQL de création de la base de données du module (`data/install_schema.sql`).
-- Création auto des fichiers de config (`settings.ini` et `conf_gn_module.toml`)
-lors de l'installation du module si nécessaire (`install_gn_module.py`). Le chemin absolu vers GeoNature
-est automatiquement renseigné dans `settings.ini`.
-- Définition des paramètres de config essentiel du module (`/config/conf_schema_toml.py`)
-- Ajout dans `.gitignore` des fichier de config spécifique à une installation du module.
-- Ajout d'un fichier `.editorconfig` permettant de garder une syntaxe plus cohérente.
-- Ajout du fichier `CHANGELOG.md` contenant l'historique des changements de code.
-- Ajout de la licence GNU GPL V3 dans [LICENCE.txt](LICENCE.txt)
-- Création du code de base à partir du template de module GeoNature.
+### Fixed
+- No more error if no territory is found.
+- The reference to Taxref is functional.
 
+## [0.2.0] - 2021-12-16
 
-### Changements
-- Fusion dans `/.gitignore` des lignes de `/frontend/.gitignore`.
+Version integrating the basic interfaces to enter assessments.
 
+### Added
+- Add a modal window "Creation/Modification of an assessment" to access the form to edit an assessment.
+- Add a tab "Station report sheets" allowing to consult the information
+of the assessments previously entered. Buttons "add an assessment" and
+  "Modify this assessment" give access to the editing window of a form.
+- Add a tab "General information" allowing to display the photos
+  in a carousel and the content of several attributes from TaxHub.
+  Direct links to TaxHub are available.
+- Add a "Taxon detail page" allowing to access the tabs
+  "General information" and "Station report" tabs.
+- Add a tab "Priority taxon list" displaying a table and its search filters.
+- Add a tab "Home" allowing to describe the module. Its content comes from a template.
+- Add the "Conservation Strategy" page allowing to select the working territory
+  and to access the "Home" and "Priority taxa list" tabs.
+- Add a Bash script to import priority taxa and its documentation.
+- Add a Bash script to import territories and its documentation.
 
-### Suppressions
-- Suppression du fichier `/frontend/.editorconfig` car le fichier `/.editorconfig` est suffisant.
-- Suppression de nombreux fichiers semblant inutiles dans le dossier `frontend/`
+## [0.1.0] - 2021-11-09
+
+First stable version of the module compatible with GeoNature version 2.4.1.
+
+### Added
+- Add a breadcrumb trail to the interface via the `<breadcrumbs>` component
+- Display the title (config) and the list of territories (webservice) on the interface.
+- Restructure the contents of the `frontend/` folder to make it functional
+- Add the web service `GET /territories`.
+- Writing a first version of the `README.md` file.
+- Add the uninstall Bash script of the module (`uninstall.sh`)
+- Add the Bash script to install the database (`install_db.sh`)
+- Add a `bin/utils.sh` library to improve the writing of Bash scripts.
+- Add a `bin/` folder containing all the Bash scripts of the module.
+- Add SQL script to uninstall the module database (`data/uninstall.sql`).
+- Add SQL script to insert default data for the module (`data/install_default_data.sql`).
+- Add SQL script to create module database (`data/install_schema.sql`).
+- Auto creation of config files (`settings.ini` and `conf_gn_module.toml`)
+  during module installation if necessary (`install_gn_module.py`). The absolute path to GeoNature
+  is automatically filled in `settings.ini`.
+- Definition of the essential config parameters of the module (`/config/conf_schema_toml.py`)
+- Add in `.gitignore` the config files specific to an installation of the module.
+- Add an `.editorconfig` file to keep a more consistent syntax.
+- Add `CHANGELOG.md` file containing the history of code changes.
+- Add GNU GPL V3 license in [LICENCE.txt](LICENCE.txt)
+- Create the base code from the GeoNature module template.
+
+### Changed
+- Merge in `/.gitignore` the lines from `/frontend/.gitignore`.
+
+### Removed
+- Removed the `/frontend/.editorconfig` file because the `/.editorconfig` file is sufficient.
+- Removed many seemingly useless files in the `/frontend/` folder
+
