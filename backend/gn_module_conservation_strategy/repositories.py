@@ -35,7 +35,6 @@ class AssessmentRepository:
 
     def _buildOutput(self, assessment):
         item = assessment.as_dict(exclude=["id_territory", "meta_create_by"])
-        # item['territory_code'] = assessment.territory.code
         item["meta_create_by"] = assessment.create_by.nom_complet
         item["actions"] = []
         organism_repositiory = OrganismRepository()
