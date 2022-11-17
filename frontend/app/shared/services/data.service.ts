@@ -6,6 +6,7 @@ import { Observable } from "@librairies/rxjs";
 import { ConfigService } from "./config.service";
 import { StoreService } from "./store.service";
 import { IOrganism } from "../models/assessment.model";
+import { ITask, ITasks } from "../../strategy/planning/planning.datasource";
 
 
 // TODO: use StoreService to get territory code and taxon name code.
@@ -72,5 +73,10 @@ export class DataService {
   getOrganisms(): Observable<IOrganism[]> {
     const url = `${this.cfg.getModuleBackendUrl()}/organisms`;
     return this.http.get<any>(url);
+  }
+
+  getTasks(params: {} = {}): Observable<ITasks>  {
+    const url = `${this.cfg.getModuleBackendUrl()}/tasks`;
+    return this.http.get<any>(url, {params});
   }
 }

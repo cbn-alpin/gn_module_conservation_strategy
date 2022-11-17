@@ -7,6 +7,7 @@ import { CsStrategyComponent } from './strategy/strategy.component';
 import { CsTaxonDetailComponent } from './taxon-detail/taxon-detail.component';
 import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
+import { CsPlanningComponent } from './strategy/planning/planning.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,27 @@ export const routes: Routes = [
           {
             path: '',
             component: CsHomeComponent,
+          },
+          {
+            path: '',
+            redirectTo: 'planning',
+            pathMatch: 'full',
+          },
+          {
+            path: 'planning',
+            data: {
+              breadcrumb: {
+                label: 'Planning des actions à mener',
+                title: 'Planning des actions à mener pour chaque organisme selon les bilans stationnels effectués',
+                iconClass: 'fa fa-calendar',
+              }
+            },
+            children: [
+              {
+                path: '',
+                component: CsPlanningComponent,
+              },
+            ]
           },
           {
             path: 'territories',
