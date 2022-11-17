@@ -2,6 +2,7 @@ import logging
 
 from flask import Blueprint, request
 from sqlalchemy import desc, func, or_, exc
+from sqlalchemy.orm import aliased
 
 from geonature.core.gn_permissions import decorators as permissions
 from geonature.utils.env import DB
@@ -9,8 +10,10 @@ from utils_flask_sqla.response import json_resp
 
 from apptax.taxonomie.models import BibNoms, BibAttributs, TMedias, Taxref, CorTaxonAttribut
 from pypnusershub.db.models import Organisme, User
+from pypnnomenclature.models import TNomenclatures
 
 from .models import (
+    TAction,
     TPriorityTaxon,
     TAssessment,
     TTerritory,
@@ -512,3 +515,77 @@ def update_assessment(info_role, assessment_id):
         }
         code = 200
     return response, code
+
+@blueprint.route("/tasks", methods=["GET"])
+@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@json_resp
+def get_tasks():
+
+    # q = DB.session.query(TAssessment)
+    # data = q.all()
+    # output = [d.as_dict() for d in data]
+
+    # return prepare_output(output)
+
+    # Get request parameters
+    organism = request.args.get("organism_id")
+    type_task = request.args.get("type_task")
+    sort = request.args.get("sort")
+    limit = int(request.args.get("limit", 20))
+    page = int(request.args.get("page", 0))
+
+    TNomenclaturesT = aliased(TNomenclatures)
+    TNomenclaturesP = aliased(TNomenclatures)
+
+    # Execute query
+    fields = [
+        TAction.id,
+        TAction.id_assessment.label("assessment_id"),
+        # TAction.id_action_progress.label("progress_status"),
+        TAction.plan_for.label("year_action"),
+        TAction.starting_date.label("starting_date"),
+        TAction.implementation_date.label("implementation_date"),
+        # TAction.partners.label("partners"),
+        Taxref.lb_nom.label("short_name"),
+        TTerritory.label.label("territory_name"),
+        TNomenclaturesT.label_default.label("action_label"),
+        TNomenclaturesP.cd_nomenclature.label("progress_code"),
+        TNomenclaturesP.label_default.label("progress_status")
+    ]
+    query = (DB.session
+        .query(
+            *fields
+        )
+        .join(TAssessment, TAssessment.id == TAction.id_assessment)
+        .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
+        .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        .outerjoin(TNomenclaturesT, TNomenclaturesT.id_nomenclature == TAction.id_action_type)
+        .outerjoin(TNomenclaturesP, TNomenclaturesP.id_nomenclature == TAction.id_action_progress)
+        # .alias('last_validation')
+)
+# last_validation = aliased(TValidations, last_validation_query)
+    
+
+    # if organism:
+    #     query = (query
+    #         .filter(func.lower(TTerritory.code) == territory.lower())
+    #     )
+    
+
+
+    query = query.group_by(*fields)
+    count = query.count()
+    items = (query
+        .limit(limit)
+        .offset(page * limit)
+        .all()
+    )
+
+    # Manage output
+    output = {
+        "total_count": count,
+        "incomplete_results": (limit < count),
+        "items": [d._asdict() for d in items],
+    }
+    return prepare_output(output)

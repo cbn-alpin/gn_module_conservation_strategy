@@ -11,12 +11,19 @@ interface Territory {
   meshesTotal?: number;
 }
 
+interface Organism {
+  id: number;
+  label: string;
+}
+
 @Injectable()
 export class StoreService {
   private territory: Territory;
   private selectedTerritoryStatus = new BehaviorSubject(false);
   private taxon: number;
   private selectedTaxonStatus = new BehaviorSubject(false);
+  private organism: Organism;
+  private selectedOrganismStatus = new BehaviorSubject(false);
 
   get selectedTerritory(): Territory {
     return this.territory;
@@ -24,6 +31,10 @@ export class StoreService {
 
   get selectedTaxon(): number {
     return this.taxon;
+  }
+
+  get selectedOrganism(): Organism {
+    return this.organism;
   }
 
   set selectedTerritory(territory: Territory) {
@@ -36,7 +47,15 @@ export class StoreService {
     this.selectedTaxonStatus.next
   }
 
+  set selectedOrganism(organism: Organism) {
+    this.organism = organism;
+    this.selectedOrganismStatus.next(true);
+  }
+
   getSelectedTerritoryStatus: Observable<Boolean> = this.selectedTerritoryStatus.asObservable();
 
   getSelectedTaxonStatus: Observable<Boolean> = this.selectedTaxonStatus.asObservable();
+
+  getSelectedOrganismStatus: Observable<Boolean> = this.selectedOrganismStatus.asObservable();
+
 }

@@ -48,6 +48,16 @@
         <mat-icon fontSet="fa" fontIcon="fa-list"></mat-icon>
         Liste des taxons prioritaires
       </a>
+      <a mat-tab-link
+        routerLink="/conservation_strategy/planning"
+        routerLinkActive
+        #rlaPlanning="routerLinkActive"
+        [active]="rlaPlanning.isActive"
+      >
+        <mat-icon fontSet="fa" fontIcon="fa-calendar"></mat-icon>
+        Planning
+      </a>
+
     </nav>
 
     <router-outlet></router-outlet>

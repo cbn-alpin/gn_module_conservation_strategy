@@ -37,6 +37,7 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { ConfigService } from './shared/services/config.service';
 import { CsAssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
 import { CsHomeComponent } from './strategy/home/home.component';
+import { CsPlanningComponent } from './strategy/planning/planning.component';
 import { CsRootComponent } from './root/root.component';
 import { CsStrategyComponent } from './strategy/strategy.component';
 import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component'
@@ -68,6 +69,7 @@ export const routingConfiguration: ExtraOptions = {
     ConfirmDialogComponent,
     CsAssessmentsListComponent,
     CsHomeComponent,
+    CsPlanningComponent,
     CsRootComponent,
     CsStrategyComponent,
     CsTaxaListComponent,
