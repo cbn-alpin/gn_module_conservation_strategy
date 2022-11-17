@@ -36,7 +36,7 @@ class AssessmentRepository:
     def _buildOutput(self, assessment):
         item = assessment.as_dict(exclude=["id_territory", "meta_create_by"])
         # item['territory_code'] = assessment.territory.code
-        item["meta_create_by"] = assessment.create_by.nom_role
+        item["meta_create_by"] = assessment.create_by.nom_complet
         item["actions"] = []
         for action in assessment.actions:
             action_dict = action.as_dict(
