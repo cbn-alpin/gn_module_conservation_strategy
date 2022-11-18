@@ -1,6 +1,7 @@
 import logging
 
 from sqlalchemy import func
+from werkzeug.exceptions import BadRequest
 
 from geonature.utils.env import DB
 from pypnnomenclature.repository import get_nomenclature_id_term
@@ -38,6 +39,7 @@ class AssessmentRepository:
         # item['territory_code'] = assessment.territory.code
         item["meta_create_by"] = assessment.create_by.nom_complet
         item["actions"] = []
+        organism_repositiory = OrganismRepository()
         for action in assessment.actions:
             action_dict = action.as_dict(
                 exclude=["id_assessment", "id_action_level", "id_action_type", "id_action_progress"]
@@ -54,7 +56,7 @@ class AssessmentRepository:
                 action_dict["progress_code"] = action.action_progress.cd_nomenclature
             action_dict["partners"] = []
             for partner in action.partners:
-                action_dict["partners"].append(partner.organism.as_dict())
+                action_dict["partners"].append(organism_repositiory.buildOutput(partner.organism))
             item["actions"].append(action_dict)
         return item
 
@@ -144,3 +146,46 @@ class AssessmentRepository:
             .filter(Organisme.uuid_organisme.in_(uuid_list))
             .all()
         )
+
+class OrganismRepository:
+
+    def get_all(self, order_by):
+        # Prepare query
+        query = (DB.session
+            .query(Organisme)
+            .filter(Organisme.id_organisme > 0)
+
+        )
+        if order_by:
+            try:
+                order_column = getattr(Organisme.__table__.columns, order_by)
+                query = query.order_by(order_column)
+            except AttributeError:
+                columns = ", ".join(list(Organisme.__table__.columns.keys()))
+                msg = f"Unknown order-by parameter '{order_by}'. Use only : {columns}"
+                log.error(msg)
+                raise BadRequest(msg)
+
+        # Execute query
+        organisms = query.all()
+
+        # Manage output
+        items = []
+        for organism in organisms:
+            item = self.buildOutput(organism)
+            items.append(item)
+        return items
+
+    def buildOutput(self, organism):
+        data = {
+            "id": organism.id_organisme,
+            "uuid": organism.uuid_organisme,
+            "name": organism.nom_organisme,
+            "address": organism.adresse_organisme,
+            "postal_code": organism.cp_organisme,
+            "city": organism.ville_organisme,
+            "url": organism.url_organisme,
+            "logo_url": organism.url_logo,
+        }
+        return data
+
