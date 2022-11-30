@@ -1,8 +1,10 @@
 import logging
 
 from flask import Blueprint, request
-from sqlalchemy import desc, func, or_, exc
+from sqlalchemy import desc, func, or_, exc, case, String
+from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased
+from sqlalchemy.sql import literal_column
 
 from geonature.core.gn_permissions import decorators as permissions
 from geonature.utils.env import DB
@@ -521,50 +523,67 @@ def update_assessment(info_role, assessment_id):
 @json_resp
 def get_tasks():
 
-    # q = DB.session.query(TAssessment)
-    # data = q.all()
-    # output = [d.as_dict() for d in data]
-
-    # return prepare_output(output)
 
     # Get request parameters
-    organism = request.args.get("organism_id")
-    type_task = request.args.get("type_task")
-    sort = request.args.get("sort")
+    # organism = request.args.get("organism_id")
+    # type_task = request.args.get("type_task")
+    # progress_task = request.args.get("progress_task")
+    # sort = request.args.get("sort")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
+
+     # Execute actions query
 
     TNomenclaturesT = aliased(TNomenclatures)
     TNomenclaturesP = aliased(TNomenclatures)
 
-    # Execute query
-    fields = [
-        TAction.id,
-        TAction.id_assessment.label("assessment_id"),
-        # TAction.id_action_progress.label("progress_status"),
-        TAction.plan_for.label("year_action"),
-        TAction.starting_date.label("starting_date"),
-        TAction.implementation_date.label("implementation_date"),
-        # TAction.partners.label("partners"),
-        Taxref.lb_nom.label("short_name"),
+    task_date_action = case([
+                    (TNomenclaturesP.cd_nomenclature == "pl", TAction.implementation_date),
+                    (TNomenclaturesP.cd_nomenclature == "c", TAction.starting_date),
+                    ],
+                    else_= func.to_date(cast(TAction.plan_for, String), 'YYYY')
+                )
+
+    fields_action = [
+        TAction.id.label("id"),
+        Taxref.lb_nom.label("taxon_name"),
         TTerritory.label.label("territory_name"),
-        TNomenclaturesT.label_default.label("action_label"),
-        TNomenclaturesP.cd_nomenclature.label("progress_code"),
-        TNomenclaturesP.label_default.label("progress_status")
+        task_date_action.label("task_date"),
+        literal_column("'Action'").label("task_type"),
+        TNomenclaturesT.label_default.label("task_label"),
+        TNomenclaturesP.label_default.label("progress_status"),
     ]
-    query = (DB.session
-        .query(
-            *fields
-        )
+
+    query_action = (DB.session
+        .query(*fields_action)
         .join(TAssessment, TAssessment.id == TAction.id_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TNomenclaturesT, TNomenclaturesT.id_nomenclature == TAction.id_action_type)
         .outerjoin(TNomenclaturesP, TNomenclaturesP.id_nomenclature == TAction.id_action_progress)
-        # .alias('last_validation')
-)
-# last_validation = aliased(TValidations, last_validation_query)
+    )
+
+# Execute assessments query
+
+    task_date_assessment = func.to_date(cast(TAssessment.next_assessment_year, String), 'YYYY')
+
+    fields_assessment = [
+        TAssessment.id.label("id"),
+        Taxref.lb_nom.label("taxon_Name"),
+        TTerritory.label.label("territory_name"),
+        task_date_assessment.label("task_date"),
+        literal_column("'Assessment'").label("task_type"),
+        literal_column("'Réaliser fiche Bilan Stationnel'").label("task_label"),
+        literal_column("'A mettre en place'").label("progress_status"),
+    ]
+
+    query_assessment = (DB.session
+        .query(*fields_assessment)
+        .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
+        .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+    )
     
 
     # if organism:
@@ -573,8 +592,10 @@ def get_tasks():
     #     )
     
 
-
-    query = query.group_by(*fields)
+# Execute final query
+    query = query_action.union(query_assessment)
+    from sqlalchemy.dialects import postgresql;
+    print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
     count = query.count()
     items = (query
         .limit(limit)
