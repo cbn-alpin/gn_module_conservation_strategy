@@ -32,8 +32,8 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = [
     'taskType',
     'taxonName',
-    'territory',
-    'toDo',
+    'territoryName',
+    'taskLabel',
     'progressStatus',
     'previousDate',
     'taskDate',
