@@ -24,7 +24,7 @@ import { PriorityTaxa, TaxaDataSource } from './taxa.datasource';
   templateUrl: './taxa-list.component.html',
   styleUrls: ['./taxa-list.component.scss']
 })
-export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;
@@ -80,9 +80,13 @@ export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit, Af
           })
       )
       .subscribe();
+    
+    // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
+    // See: https://angular.io/errors/NG0100
+    Promise.resolve(null).then(() => this.recalculateDataTableSize());
   }
 
-  ngAfterViewChecked(): void {
+  private recalculateDataTableSize(): void {
     if (this.dataTableHeight == undefined) {
       this.calculateDataTableHeight();
     }
