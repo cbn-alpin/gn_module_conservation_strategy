@@ -30,11 +30,6 @@ export const routes: Routes = [
             component: CsHomeComponent,
           },
           {
-            path: '',
-            redirectTo: 'planning',
-            pathMatch: 'full',
-          },
-          {
             path: 'planning',
             data: {
               breadcrumb: {
@@ -42,13 +37,7 @@ export const routes: Routes = [
                 title: 'Planning des actions à mener pour chaque organisme selon les bilans stationnels effectués',
                 iconClass: 'fa fa-calendar',
               }
-            },
-            children: [
-              {
-                path: '',
-                component: CsPlanningComponent,
-              },
-            ]
+            }
           },
           {
             path: 'territories',
