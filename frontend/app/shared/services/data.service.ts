@@ -75,7 +75,7 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getTasks(params: {} = {}): Observable<ITasks>  {
+  getTasks(params: HttpParams): Observable<ITasks>  {
     const url = `${this.cfg.getModuleBackendUrl()}/tasks`;
     return this.http.get<any>(url, {params});
   }

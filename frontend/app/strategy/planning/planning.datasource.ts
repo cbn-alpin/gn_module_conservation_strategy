@@ -56,7 +56,7 @@ export class PlanningDataSource implements DataSource<ITask> {
   loadTasks(): void {
     this.loadingSubject.next(true);
 
-    this.dataService.getTasks()
+    this.dataService.getTasks(this.filtersQueryString)
       .pipe(
         catchError(() => of([])),
         finalize(() => this.loadingSubject.next(false))
