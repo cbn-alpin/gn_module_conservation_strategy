@@ -8,6 +8,7 @@ import { CsTaxonDetailComponent } from './taxon-detail/taxon-detail.component';
 import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
 import { CsPlanningComponent } from './strategy/planning/planning.component';
+import { AssessmentDetailComponent } from './taxon-detail/assessments-list/assessment-detail/assessment-detail.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,7 @@ export const routes: Routes = [
           },
           {
             path: 'planning',
+            component: CsPlanningComponent,
             data: {
               breadcrumb: {
                 label: 'Planning des actions à mener',
@@ -134,7 +136,6 @@ export const routes: Routes = [
                       },
                       {
                         path: 'assessments',
-                        component: CsAssessmentsListComponent,
                         data: {
                           breadcrumb: {
                             label: 'Bilans stationnels',
@@ -142,15 +143,33 @@ export const routes: Routes = [
                             iconClass: 'fa fa-heartbeat',
                           }
                         },
+                        children: [
+                          {
+                            path: '',
+                            component: CsAssessmentsListComponent,
+                          },
+                          {
+                            path: ':assessmentId',
+                            component: CsAssessmentsListComponent,
+                            data: {
+                              breadcrumb: {
+                                label: 'Bilan Stationnel : :assessmentId',
+                                title: "Fiche Bilan Stationnel.",
+                                iconClass: 'fa fa-heartbeat',
+                                disable: true,
+                              }
+                            },
+                          },
+                        ]
                       },
                     ]
                   },
                 ]
-              }
+              },
             ]
-          },
+          }
         ]
       },
-    ],
+    ]
   },
 ];

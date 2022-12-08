@@ -147,8 +147,13 @@
                 matRipple
                 matTooltip="Voir la fiche détaillée du bilan stationnel."
                 [routerLink]="[
-                  task.idAssessment,
-                  { shortName: task.shortName }
+                  '/conservation_strategy/territories',
+                  task.territoryCode,
+                  'priority-taxa',
+                  task.priorityTaxonId,
+                  { shortName: task.taxonName },
+                  'assessments',
+                  task.assessmentId
                 ]"
               >
                 <mat-icon>description</mat-icon>
