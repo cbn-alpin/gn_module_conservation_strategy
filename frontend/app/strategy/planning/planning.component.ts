@@ -54,7 +54,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initializeDataSource();
-    this.initializePlanningFiltersForm();
+    // this.initializePlanningFiltersForm();
     this.loadTasks();
 
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -84,7 +84,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
-    
+  
   }
 
   private recalculateDataTableSize(): void {
@@ -108,17 +108,18 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
-        this.paginator.firstPage();
+    this.paginator.firstPage();
   }
 
-  private initializePlanningFiltersForm() {
-    this.baseApiEndpoint = this.cfg.getModuleBackendUrl();
-    this.filtersForm = this.formBuilder.group({
-      organismFilter: null, //organisme de l'utilisateur connecté
-      taskFilter: null,
-      progressFilter: null,
-    });
-  }
+
+  // private initializePlanningFiltersForm() {
+  //   this.baseApiEndpoint = this.cfg.getModuleBackendUrl();
+  //   this.filtersForm = this.formBuilder.group({
+  //     organismFilter: null, //organisme de l'utilisateur connecté
+  //     taskFilter: null,
+  //     progressFilter: null,
+  //   });
+  // }
 
   onTaskFilterChanged(event) {
     if (event.checked) {
