@@ -23,7 +23,7 @@ import { ITask, PlanningDataSource } from './planning.datasource';
   templateUrl: './planning.component.html',
   styleUrls: ['./planning.component.scss']
 })
-export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;
@@ -44,7 +44,6 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatTable) dataTable: MatTable<ITask>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  organismSubcription: Subscription;
 
   constructor(
     private cfg: ConfigService,
@@ -93,10 +92,6 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.organismSubcription.unsubscribe();
-  }
-
   @HostListener("window:resize", ["$event"])
   onWindowResize(event) {
     this.calculateDataTableHeight();
@@ -112,16 +107,7 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
-    this.onOrganismChange();
-  }
-
-  private onOrganismChange() {
-    this.organismSubcription = this.store.getSelectedOrganismStatus.subscribe((status) => {
-      if (status === true) {
         this.paginator.firstPage();
-        this.loadTasks();
-      }
-    });
   }
 
   private initializePlanningFiltersForm() {
@@ -159,9 +145,4 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  getIdOrganism() {
-    let currentUser = localStorage.getItem('current_user');
-    let currentUserJson = JSON.parse(currentUser);
-    return currentUserJson.id_organisme
-  }
 }
