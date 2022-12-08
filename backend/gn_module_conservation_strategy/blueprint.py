@@ -11,7 +11,7 @@ from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
 from apptax.taxonomie.models import BibNoms, BibAttributs, TMedias, Taxref, CorTaxonAttribut
-from pypnusershub.db.models import Organisme, User
+from pypnusershub.db.models import Organisme
 from pypnnomenclature.models import TNomenclatures
 
 from .models import (
@@ -528,7 +528,6 @@ def get_tasks():
     # organism = request.args.get("organism_id")
     # type_task = request.args.get("type_task")
     # progress_task = request.args.get("progress_task")
-    # sort = request.args.get("sort")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -546,12 +545,15 @@ def get_tasks():
 
     fields_action = [
         TAction.id.label("id"),
+        TAction.id_assessment.label("assessment_id"),
         Taxref.lb_nom.label("taxon_name"),
         TTerritory.label.label("territory_name"),
         task_date_action.label("task_date"),
         literal_column("'Action'").label("task_type"),
         TNomenclaturesT.label_default.label("task_label"),
         TNomenclaturesP.label_default.label("progress_status"),
+        TTerritory.code.label("territory_code"),
+        TPriorityTaxon.id.label("priority_taxon_id"),
     ]
 
     query_action = (DB.session
@@ -570,12 +572,15 @@ def get_tasks():
 
     fields_assessment = [
         TAssessment.id.label("id"),
+        TAssessment.id.label("assessment_id"),
         Taxref.lb_nom.label("taxon_Name"),
         TTerritory.label.label("territory_name"),
         task_date_assessment.label("task_date"),
         literal_column("'Assessment'").label("task_type"),
         literal_column("'Réaliser fiche Bilan Stationnel'").label("task_label"),
         literal_column("'A mettre en place'").label("progress_status"),
+        TTerritory.code.label("territory_code"),
+        TAssessment.id_priority_taxon.label("priority_taxon_id"),
     ]
 
     query_assessment = (DB.session
@@ -594,8 +599,6 @@ def get_tasks():
 
 # Execute final query
     query = query_action.union(query_assessment)
-    from sqlalchemy.dialects import postgresql;
-    print(query.statement.compile(dialect=postgresql.dialect(), compile_kwargs={"literal_binds": True}))
     count = query.count()
     items = (query
         .limit(limit)
