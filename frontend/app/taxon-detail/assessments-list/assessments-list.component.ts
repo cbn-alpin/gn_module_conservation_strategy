@@ -3,10 +3,8 @@ import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from '@librairies/rxjs';
 
-
 import { Assessment, IAssessmentList } from '../../shared/models/assessment.model';
 import { AssessmentForm } from './assessment-form/assessment-form.component';
-import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
 import { StoreService } from '../../shared/services/store.service';
 
@@ -20,11 +18,14 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
 
   assessments: Observable<IAssessmentList>;
   territorySubcription: Subscription;
+  activatedRouteSubscription: Subscription;
+  assessmentIdSelected: number;
 
   constructor(
     private dataService: DataService,
     private dialog: MatDialog,
     private store: StoreService,
+    public route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -33,10 +34,21 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
         this.loadAssessments();
       }
     });
+    this.extractRouteParams();
+    //observable pour récupérer l'id de l'assessment. stocker dans variable
+  }
+
+  private extractRouteParams() {
+    this.activatedRouteSubscription = this.route.paramMap.subscribe(urlParams => {
+      if (urlParams.has('assessmentId')) {
+        this.assessmentIdSelected = +urlParams.get('assessmentId');
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.territorySubcription.unsubscribe();
+    this.activatedRouteSubscription.unsubscribe();
   }
 
   private loadAssessments() {

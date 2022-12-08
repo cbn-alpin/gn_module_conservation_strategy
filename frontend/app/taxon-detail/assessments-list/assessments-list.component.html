@@ -10,7 +10,10 @@
   </div>
   <div class="card-body">
     <mat-accordion *ngIf="assessments | async as assessmentList ; else noAssessment">
-      <mat-expansion-panel *ngFor="let assessment of (assessmentList.items | sortBy:'desc':'assessmentDate')">
+      <mat-expansion-panel
+      *ngFor="let assessment of (assessmentList.items | sortBy:'desc':'assessmentDate')"
+      [expanded]="assessment.id == assessmentIdSelected" 
+      >
         <mat-expansion-panel-header>
           <mat-panel-title>
             <h5>Bilan {{ assessment.assessmentDate | date : 'yyyy' }}</h5>
