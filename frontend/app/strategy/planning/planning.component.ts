@@ -56,6 +56,10 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     this.initializeDataSource();
     this.initializePlanningFiltersForm();
     this.loadTasks();
+
+    // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
+    // See: https://angular.io/errors/NG0100
+    Promise.resolve(null).then(() => this.recalculateDataTableSize());
   }
 
   ngAfterViewInit(): void {
@@ -81,9 +85,6 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
       )
       .subscribe();
     
-    // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
-    // See: https://angular.io/errors/NG0100
-    Promise.resolve(null).then(() => this.recalculateDataTableSize());
   }
 
   private recalculateDataTableSize(): void {
@@ -98,7 +99,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   }
 
   private calculateDataTableHeight(): void {
-    const screenHeight: number = document.documentElement.clientHeight;
+    const screenHeight = document.documentElement.clientHeight;
     const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
     // TODO: see why we need to remove 11px !
     const dataTableHeight = screenHeight - dataTableTop - 11;
