@@ -13,7 +13,6 @@ export interface ITask {
     territory: string;
     toDo?: string;
     progressStatus: string;
-    previousDate: string;
     taskDate: number;
     actions: string;
 }

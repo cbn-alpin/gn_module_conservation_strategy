@@ -35,7 +35,6 @@ export class CsPlanningComponent implements OnInit, OnDestroy, AfterViewInit {
     'territoryName',
     'taskLabel',
     'progressStatus',
-    'previousDate',
     'taskDate',
     'actions',
 

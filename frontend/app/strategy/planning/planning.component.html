@@ -126,18 +126,6 @@
           <td mat-cell *matCellDef="let task"> {{task.progressStatus}} </td>
         </ng-container>
 
-        <ng-container matColumnDef="previousDate">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            matTooltip="Date la plus ancienne d'inventaire de zone de prospection pour un taxon dans un territoire."
-          >
-            Date précédente
-          </th>
-          <td mat-cell *matCellDef="let task">  </td>
-        </ng-container>
-
         <ng-container matColumnDef="taskDate">
           <th
             mat-header-cell
