@@ -147,26 +147,26 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   }
 
   onTaskTypeFilterChanged(event) {
-    this.dataSource.setFilterParam('taskType', event.value);
+    this.dataSource.setFilterParam('task-type', event.value);
     this.loadTasks();
   }
 
   onTaskTypeFilterCleared(event) {
     event.stopPropagation();
     this.filtersForm.controls.taskFilter.reset();
-    this.dataSource.removeFilterParam('taskType');
+    this.dataSource.removeFilterParam('task-type');
     this.loadTasks();
   }
 
   onStatusFilterChanged(event) {
-    this.dataSource.setFilterParam('progressStatus', event.value);
+    this.dataSource.setFilterParam('progress-status', event.value);
     this.loadTasks();
   }
 
   onStatusFilterCleared(event) {
     event.stopPropagation();
     this.filtersForm.controls.statusFilter.reset();
-    this.dataSource.removeFilterParam('progressStatus');
+    this.dataSource.removeFilterParam('progress-status');
     this.loadTasks();
   }
 
