@@ -3,67 +3,33 @@
       mode="side"
       opened
   >
-    <!-- <form>
+      <form>
       <fieldset>
         <h4 class="h5">Filtres</h4>
 
-          <cs-organism-filter
-            #organismFilter
-            label="Organismes"
-            [apiEndPoint]="baseApiEndpoint + '/organisms'"
-            [apiParams]="{ 'id-organism': store.connectedOrganism?.id }"
-            [parentFormControl]="filtersForm.controls.planningFilter"
-            [charNumber]="3"
-            [listLength]="20"
-            (onChange)="onOrganismFilterChanged($event)"
+        <mat-form-field>
+          <mat-label>Type de tâche</mat-label>
+          <mat-select
+            name="taskType"
+            [formControl]="filtersForm.controls.taskFilter"
+            (selectionChange)="onTaskTypeFilterChanged($event)"
           >
-          </cs-organism-filter>
-
-          <div
-            class="alert alert-warning taxon-alert"
-            *ngIf="filtersForm.selectedorganismFromComponent.length > 0"
+            <mat-option value="Bilan Stationnel"> Bilans Stationnels </mat-option>
+            <mat-option value="Action"> Actions </mat-option>
+            <mat-option value="2"> Les deux </mat-option>
+          </mat-select>
+          <button
+            mat-button
+            *ngIf="filtersForm.controls.taskFilter.value"
+            matSuffix mat-icon-button aria-label="Clear"
+            (click)="onTaskTypeFilterCleared($event)"
           >
-            <p class="organism-list">
-              <b> Organisme(s) recherché(s):</b>
-            </p>
-            <ul class="organism-list">
-              <li
-                *ngFor="let organism of filtersForm.selectedorganismFromComponent; let i = index"
-                class="d-flex justify-content-between align-items-center"
-              >
-                {{organism.nom_organisme}}
-                <i
-                  (click)="filtersForm.removeOrganism(i, filtersForm.selectedorganismFromComponent)"
-                  class="fa fa-times clickable"
-                  matTooltip="Retirer « {{organism.nom_organisme}} » des filtres de recherche"
-                ></i>
-              </li>
-            </ul>
-          </div>
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
 
-
-        <mat-label>Etat d'avancement</mat-label>
-        <mat-select
-          name="progress"
-          [formControl]="filtersForm.controls.progressFilter"
-          (selectionChange)="onProgressFilterChanged($event)"
-        >
-          <mat-checkbox value="687"> A mettre en place</mat-checkbox>
-          <mat-checkbox value="688"> En cours</mat-checkbox>
-          <mat-checkbox value="689"> Mis en place</mat-checkbox>
-        </mat-select>
-
-        <mat-label>Tâches</mat-label>
-        <mat-select
-          name="task"
-          [formControl]="filtersForm.controls.taskFilter"
-          (change)="onTaskFilterChanged($event)"
-        >
-          <mat-checkbox value="1"> Actions</mat-checkbox>
-          <mat-checkbox value="2"> Bilans Stationnels</mat-checkbox>
-        </mat-select>
       </fieldset>
-    </form> -->
+    </form>
   </mat-drawer>
 
   <mat-drawer-content>

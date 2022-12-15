@@ -53,7 +53,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initializeDataSource();
-    // this.initializePlanningFiltersForm();
+    this.initializePlanningFiltersForm();
     this.loadTasks();
 
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
@@ -137,32 +137,24 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     }
   }
 
+  private initializePlanningFiltersForm() {
+    this.baseApiEndpoint = this.cfg.getModuleBackendUrl();
+    this.filtersForm = this.formBuilder.group({
+      organismFilter: null, //organisme de l'utilisateur connecté
+      taskFilter: null,
+      progressFilter: null,
+    });
+  }
 
-
-  // private initializePlanningFiltersForm() {
-  //   this.baseApiEndpoint = this.cfg.getModuleBackendUrl();
-  //   this.filtersForm = this.formBuilder.group({
-  //     organismFilter: null, //organisme de l'utilisateur connecté
-  //     taskFilter: null,
-  //     progressFilter: null,
-  //   });
-  // }
-
-  onTaskFilterChanged(event) {
-    if (event.checked) {
-      this.dataSource.setFilterParam('with-task', 'true');
-    } else {
-      this.dataSource.removeFilterParam('with-task');
-    }
+  onTaskTypeFilterChanged(event) {
+    this.dataSource.setFilterParam('taskType', event.value);
     this.loadTasks();
   }
 
-  onProgressFilterChanged(event) {
-    if (event.checked) {
-      this.dataSource.setFilterParam('with-progress', 'true');
-    } else {
-      this.dataSource.removeFilterParam('with-progress');
-    }
+  onTaskTypeFilterCleared(event) {
+    event.stopPropagation();
+    this.filtersForm.controls.taskFilter.reset();
+    this.dataSource.removeFilterParam('taskType');
     this.loadTasks();
   }
 

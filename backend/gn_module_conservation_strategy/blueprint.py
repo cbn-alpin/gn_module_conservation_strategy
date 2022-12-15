@@ -526,8 +526,8 @@ def get_tasks():
 
     # Get request parameters
     # organism = request.args.get("organism_id")
-    # type_task = request.args.get("type_task")
     # progress_task = request.args.get("progress_task")
+    task_type = request.args.get("task_type")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -576,7 +576,7 @@ def get_tasks():
         Taxref.lb_nom.label("taxon_Name"),
         TTerritory.label.label("territory_name"),
         task_date_assessment.label("task_date"),
-        literal_column("'Assessment'").label("task_type"),
+        literal_column("'Bilan Stationnel'").label("task_type"),
         literal_column("'Réaliser fiche Bilan Stationnel'").label("task_label"),
         literal_column("'A mettre en place'").label("progress_status"),
         TTerritory.code.label("territory_code"),
@@ -589,16 +589,18 @@ def get_tasks():
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
     )
-    
-
-    # if organism:
-    #     query = (query
-    #         .filter(func.lower(TTerritory.code) == territory.lower())
-    #     )
-    
 
 # Execute final query
     query = query_action.union(query_assessment)
+
+    if task_type == "Bilan Stationnel":
+        query = query_assessment
+    elif task_type == "Action":
+        query = query_action
+    else: query
+
+
+# for pagination
     count = query.count()
     items = (query
         .limit(limit)
