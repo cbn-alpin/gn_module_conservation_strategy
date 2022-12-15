@@ -37,7 +37,6 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     'progressStatus',
     'taskDate',
     'actions',
-
   ];
   dataSource: PlanningDataSource;
   @ViewChild('dataTableContainer') dataTableContainer: ElementRef;
@@ -110,6 +109,34 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     this.dataSource = new PlanningDataSource(this.dataService);
     this.paginator.firstPage();
   }
+
+
+  detectTypeOfTask(task) {
+    if (task.actionId) {
+      return [
+        '/conservation_strategy/territories',
+        task.territoryCode,
+        'priority-taxa',
+        task.priorityTaxonId,
+        { shortName: task.taxonName },
+        'assessments',
+        task.assessmentId,
+        'actions',
+        task.actionId
+      ];
+    } else {
+      return [
+        '/conservation_strategy/territories',
+        task.territoryCode,
+        'priority-taxa',
+        task.priorityTaxonId,
+        { shortName: task.taxonName },
+        'assessments',
+        task.assessmentId
+      ];
+    }
+  }
+
 
 
   // private initializePlanningFiltersForm() {

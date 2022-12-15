@@ -22,7 +22,10 @@
             {{ assessment.description }}
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <cs-assessment-detail [assessmentId]="assessment.id"></cs-assessment-detail>
+        <cs-assessment-detail
+        [assessmentId]="assessment.id"
+        [actionIdSelected]="actionIdSelected"
+        ></cs-assessment-detail>
 
         <mat-action-row>
           <button mat-raised-button (click)="openAssessmentEditModal(assessment)">
