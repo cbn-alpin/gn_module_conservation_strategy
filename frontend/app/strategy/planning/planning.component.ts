@@ -142,7 +142,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     this.filtersForm = this.formBuilder.group({
       organismFilter: null, //organisme de l'utilisateur connecté
       taskFilter: null,
-      progressFilter: null,
+      statusFilter: null,
     });
   }
 
@@ -155,6 +155,18 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
     this.filtersForm.controls.taskFilter.reset();
     this.dataSource.removeFilterParam('taskType');
+    this.loadTasks();
+  }
+
+  onStatusFilterChanged(event) {
+    this.dataSource.setFilterParam('progressStatus', event.value);
+    this.loadTasks();
+  }
+
+  onStatusFilterCleared(event) {
+    event.stopPropagation();
+    this.filtersForm.controls.statusFilter.reset();
+    this.dataSource.removeFilterParam('progressStatus');
     this.loadTasks();
   }
 

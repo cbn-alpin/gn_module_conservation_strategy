@@ -28,6 +28,27 @@
           </button>
         </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Etat d'avancement</mat-label>
+          <mat-select
+            name="progressStatus"
+            [formControl]="filtersForm.controls.statusFilter"
+            (selectionChange)="onStatusFilterChanged($event)"
+          >
+            <mat-option value="En cours de mise en place"> En cours </mat-option>
+            <mat-option value="À mettre en place"> À mettre en place </mat-option>
+            <mat-option value="Mis en place"> Mis en place </mat-option>
+          </mat-select>
+          <button
+            mat-button
+            *ngIf="filtersForm.controls.statusFilter.value"
+            matSuffix mat-icon-button aria-label="Clear"
+            (click)="onStatusFilterCleared($event)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
       </fieldset>
     </form>
   </mat-drawer>
