@@ -20,6 +20,7 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
   territorySubcription: Subscription;
   activatedRouteSubscription: Subscription;
   assessmentIdSelected: number;
+  actionIdSelected: number;
 
   constructor(
     private dataService: DataService,
@@ -43,8 +44,12 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
       if (urlParams.has('assessmentId')) {
         this.assessmentIdSelected = +urlParams.get('assessmentId');
       }
+      if (urlParams.has('actionId')) {
+        this.actionIdSelected = +urlParams.get('actionId');
+      }
     });
   }
+
 
   ngOnDestroy(): void {
     this.territorySubcription.unsubscribe();

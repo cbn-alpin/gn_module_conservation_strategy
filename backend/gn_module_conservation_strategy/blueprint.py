@@ -544,7 +544,7 @@ def get_tasks():
                 )
 
     fields_action = [
-        TAction.id.label("id"),
+        TAction.id.label("action_id"),
         TAction.id_assessment.label("assessment_id"),
         Taxref.lb_nom.label("taxon_name"),
         TTerritory.label.label("territory_name"),
@@ -571,7 +571,7 @@ def get_tasks():
     task_date_assessment = func.to_date(cast(TAssessment.next_assessment_year, String), 'YYYY')
 
     fields_assessment = [
-        TAssessment.id.label("id"),
+        literal_column("NULL").label("action_id"),
         TAssessment.id.label("assessment_id"),
         Taxref.lb_nom.label("taxon_Name"),
         TTerritory.label.label("territory_name"),

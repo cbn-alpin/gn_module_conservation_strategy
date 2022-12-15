@@ -150,7 +150,6 @@ export const routes: Routes = [
                           },
                           {
                             path: ':assessmentId',
-                            component: CsAssessmentsListComponent,
                             data: {
                               breadcrumb: {
                                 label: 'Bilan Stationnel : :assessmentId',
@@ -159,6 +158,24 @@ export const routes: Routes = [
                                 disable: true,
                               }
                             },
+                            children: [
+                              {
+                                path: '',
+                                component: CsAssessmentsListComponent,
+                              },
+                              {
+                                path: 'actions/:actionId',
+                                component: CsAssessmentsListComponent,
+                                data: {
+                                  breadcrumb: {
+                                    label: 'Action : :actionId',
+                                    title: "Action à mener",
+                                    iconClass: 'fa fa-bolt',
+                                    disable: true,
+                                  }
+                                },
+                              },
+                            ],
                           },
                         ]
                       },

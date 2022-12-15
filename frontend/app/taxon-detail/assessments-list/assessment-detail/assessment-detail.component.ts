@@ -15,6 +15,7 @@ import { StoreService } from '../../../shared/services/store.service';
 export class AssessmentDetailComponent implements OnInit {
   /** Identifiant du rapport de bilan stationel. */
   @Input() assessmentId: number;
+  @Input() actionIdSelected: number;
   assessmentDetail!: Observable<Assessment>;
 
   constructor(
