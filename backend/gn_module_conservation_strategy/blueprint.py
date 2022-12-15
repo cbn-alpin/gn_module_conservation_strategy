@@ -526,7 +526,7 @@ def get_tasks():
 
     # Get request parameters
     # organism = request.args.get("organism_id")
-    # progress_task = request.args.get("progress_task")
+    progress_status = request.args.get("progress_status")
     task_type = request.args.get("task_type")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
@@ -598,6 +598,9 @@ def get_tasks():
     elif task_type == "Action":
         query = query_action
     else: query
+
+    if progress_status:
+        query = query.filter(progress_status == progress_status)
 
 
 # for pagination
