@@ -578,7 +578,7 @@ def get_tasks():
         task_date_assessment.label("task_date"),
         literal_column("'Bilan Stationnel'").label("task_type"),
         literal_column("'Réaliser fiche Bilan Stationnel'").label("task_label"),
-        literal_column("'A mettre en place'").label("progress_status"),
+        literal_column("'À mettre en place'").label("progress_status"),
         TTerritory.code.label("territory_code"),
         TAssessment.id_priority_taxon.label("priority_taxon_id"),
     ]
@@ -595,12 +595,14 @@ def get_tasks():
 
     if task_type == "Bilan Stationnel":
         query = query_assessment
+        if progress_status : 
+            query = query_assessment.filter(literal_column("'À mettre en place'").label("progress_status") == progress_status)
     elif task_type == "Action":
         query = query_action
-    else: query
-
-    if progress_status:
-        query = query.filter(literal_column("progress_status") == progress_status)
+        if progress_status : 
+            query = query_action.filter(TNomenclaturesP.label_default == progress_status)
+    else:
+        query
 
 
 # for pagination
