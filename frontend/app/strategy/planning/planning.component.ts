@@ -11,7 +11,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
 import { Subscription } from '@librairies/rxjs';
 
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
@@ -29,6 +29,8 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   baseApiEndpoint;
   firstLoad: Boolean = true;
   dataTableHeight: number;
+  organismList: any[] = [];
+  $organisms;
   displayedColumns = [
     'taskType',
     'taxonName',
@@ -55,6 +57,8 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     this.initializeDataSource();
     this.initializePlanningFiltersForm();
     this.loadTasks();
+    this.loadOrganisms();
+    // rajouter fonction qui récupère label nomenclatures depuis cd_nomenclature
 
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     // See: https://angular.io/errors/NG0100
@@ -140,7 +144,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   private initializePlanningFiltersForm() {
     this.baseApiEndpoint = this.cfg.getModuleBackendUrl();
     this.filtersForm = this.formBuilder.group({
-      organismFilter: null, //organisme de l'utilisateur connecté
+      organismFilter: null,
       taskFilter: null,
       statusFilter: null,
     });
@@ -176,6 +180,27 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
       this.calculateDataTableHeight();
       this.firstLoad = false;
     }
+  }
+
+  loadOrganisms() {
+    this.$organisms = this.dataService.getOrganisms().pipe(
+      map(organisms => {
+        organisms.forEach((item) => {
+          this.organismList.push(item);
+        })
+        return this.organismList;
+      })
+    );
+  }
+
+  onOrganismChanged(event) {
+    let organismIds = event.value;
+    if (organismIds && organismIds.length > 0) {
+      this.dataSource.setFilterParam('organisms', organismIds.join(','));
+    } else {
+      this.dataSource.removeFilterParam('organisms');
+    }
+    this.loadTasks();
   }
 
 }

@@ -37,9 +37,7 @@ export class StoreService {
     this.selectedTaxonStatus.next
   }
 
-
   getSelectedTerritoryStatus: Observable<Boolean> = this.selectedTerritoryStatus.asObservable();
 
   getSelectedTaxonStatus: Observable<Boolean> = this.selectedTaxonStatus.asObservable();
-
 }
