@@ -15,6 +15,7 @@ from pypnusershub.db.models import Organisme
 from pypnnomenclature.models import TNomenclatures
 
 from .models import (
+    CorActionOrganism,
     TAction,
     TPriorityTaxon,
     TAssessment,
@@ -525,7 +526,7 @@ def get_tasks():
 
 
     # Get request parameters
-    # organism = request.args.get("organism_id")
+    organisms = request.args.getlist("organisms")
     progress_status = request.args.get("progress-status")
     task_type = request.args.get("task-type")
     limit = int(request.args.get("limit", 20))
@@ -554,17 +555,20 @@ def get_tasks():
         TNomenclaturesP.label_default.label("progress_status"),
         TTerritory.code.label("territory_code"),
         TPriorityTaxon.id.label("priority_taxon_id"),
+        CorActionOrganism.id_organism.label("organism_id"),
     ]
 
     query_action = (DB.session
         .query(*fields_action)
-        .join(TAssessment, TAssessment.id == TAction.id_assessment)
+        .outerjoin(TAssessment, TAssessment.id == TAction.id_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TNomenclaturesT, TNomenclaturesT.id_nomenclature == TAction.id_action_type)
         .outerjoin(TNomenclaturesP, TNomenclaturesP.id_nomenclature == TAction.id_action_progress)
+        .outerjoin(CorActionOrganism, CorActionOrganism.id_action == TAction.id)
     )
+
 
 # Execute assessments query
 
@@ -581,6 +585,7 @@ def get_tasks():
         literal_column("'À mettre en place'").label("progress_status"),
         TTerritory.code.label("territory_code"),
         TAssessment.id_priority_taxon.label("priority_taxon_id"),
+        CorActionOrganism.id_organism.label("organism_id"),
     ]
 
     query_assessment = (DB.session
@@ -588,21 +593,34 @@ def get_tasks():
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        .outerjoin(TAction, TAction.id_assessment == TAssessment.id)
+        .outerjoin(CorActionOrganism, CorActionOrganism.id_action == TAction.id)
     )
 
-# Execute final query
-    query = query_action.union(query_assessment)
-
-    if task_type == "Bilan Stationnel":
-        query = query_assessment
+    if task_type == "Action":
+        query = query_action.distinct(TAction.id)
         if progress_status : 
-            query = query_assessment.filter(literal_column("'À mettre en place'").label("progress_status") == progress_status)
-    elif task_type == "Action":
-        query = query_action
+            query = query.filter(TNomenclaturesP.label_default == progress_status)
+        if organisms :
+            query = (query
+                .filter(CorActionOrganism.id_organism.in_(organisms))
+                )
+    elif task_type == "Bilan Stationnel":
+        query = query_assessment.distinct(TAssessment.id)
         if progress_status : 
-            query = query_action.filter(TNomenclaturesP.label_default == progress_status)
+            query = query.filter(literal_column("'À mettre en place'").label("progress_status") == progress_status)
+        if organisms :
+            query = (query
+                .filter(CorActionOrganism.id_organism.in_(organisms))
+                )
     else:
-        query
+        query = query_action.union(query_assessment).distinct(TAssessment.id, TAction.id)
+        if progress_status :
+            query = query.filter(literal_column("progress_status") == progress_status)
+        if organisms :
+            query = (query
+                .filter(CorActionOrganism.id_organism.in_(organisms))
+                )
 
 
 # for pagination
