@@ -54,11 +54,12 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+    // WARNING: respect order of methods call
     this.initializeDataSource();
     this.initializePlanningFiltersForm();
-    this.loadTasks();
     this.loadOrganisms();
-    // rajouter fonction qui récupère label nomenclatures depuis cd_nomenclature
+    this.loadCurrentUserOrganismId();
+    this.loadTasks();
 
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     // See: https://angular.io/errors/NG0100
@@ -148,6 +149,13 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
       taskFilter: null,
       statusFilter: null,
     });
+  }
+
+  private loadCurrentUserOrganismId() {
+    let currentUser = localStorage.getItem('current_user');
+    let currentUserJson = JSON.parse(currentUser);
+    this.filtersForm.controls['organismFilter'].patchValue([currentUserJson.id_organisme])
+    this.dataSource.setFilterParam('organisms', currentUserJson.id_organisme);
   }
 
   onTaskTypeFilterChanged(event) {
