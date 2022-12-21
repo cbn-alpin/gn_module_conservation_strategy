@@ -88,7 +88,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
-  
+
   }
 
   private recalculateDataTableSize(): void {

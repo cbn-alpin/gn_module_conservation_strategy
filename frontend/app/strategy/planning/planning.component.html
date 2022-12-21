@@ -1,9 +1,6 @@
 <mat-drawer-container>
-  <mat-drawer
-      mode="side"
-      opened
-  >
-      <form>
+  <mat-drawer mode="side" opened>
+    <form>
       <fieldset>
         <h5>Filtres</h5>
 
@@ -14,14 +11,18 @@
             [formControl]="filtersForm.controls.taskFilter"
             (selectionChange)="onTaskTypeFilterChanged($event)"
           >
-            <mat-option value="Bilan Stationnel"> Bilans Stationnels </mat-option>
+            <mat-option value="Bilan Stationnel">
+              Bilans Stationnels
+            </mat-option>
             <mat-option value="Action"> Actions </mat-option>
             <mat-option value="2"> Les deux </mat-option>
           </mat-select>
           <button
             mat-button
             *ngIf="filtersForm.controls.taskFilter.value"
-            matSuffix mat-icon-button aria-label="Clear"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
             (click)="onTaskTypeFilterCleared($event)"
           >
             <mat-icon>close</mat-icon>
@@ -37,12 +38,14 @@
           >
             <mat-option value="En cours de mise en place"> En cours </mat-option>
             <mat-option value="À mettre en place"> À mettre en place </mat-option>
-            <mat-option value="Mis en place"> Mis en place </mat-option>
+            <mat-option value="Mise en place"> Mis en place </mat-option>
           </mat-select>
           <button
             mat-button
             *ngIf="filtersForm.controls.statusFilter.value"
-            matSuffix mat-icon-button aria-label="Clear"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
             (click)="onStatusFilterCleared($event)"
           >
             <mat-icon>close</mat-icon>
@@ -50,34 +53,41 @@
         </mat-form-field>
 
         <mat-form-field
-          *ngIf="$organisms | async as organisms; else noOrganisms">
+          *ngIf="$organisms | async as organisms; else noOrganisms"
+        >
           <mat-label>Organismes</mat-label>
           <mat-select
-            [formControl]=filtersForm.controls.organismFilter
+            [formControl]="filtersForm.controls.organismFilter"
             (selectionChange)="onOrganismChanged($event)"
             multiple
           >
             <mat-option
-            *ngFor="let organism of organisms"
-            [value]="organism.idOrganisme"
+              *ngFor="let organism of organisms"
+              [value]="organism.idOrganisme"
             >
-            {{organism.nomOrganisme}}
+              {{ organism.nomOrganisme }}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <ng-template #noOrganisms>
           <p>Aucun organisme</p>
         </ng-template>
-
       </fieldset>
     </form>
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="cs-tasks-datatable-progress-bar-container" >
-      <mat-progress-bar mode="query" *ngIf="dataSource.loading$ | async"></mat-progress-bar>
+    <div class="cs-tasks-datatable-progress-bar-container">
+      <mat-progress-bar
+        mode="query"
+        *ngIf="dataSource.loading$ | async"
+      ></mat-progress-bar>
     </div>
-    <div #dataTableContainer class="mat-elevation-z8" [ngStyle]="{ 'height': dataTableHeight + 'px' }">
+    <div
+      #dataTableContainer
+      class="mat-elevation-z8"
+      [ngStyle]="{ height: dataTableHeight + 'px' }"
+    >
       <table
         mat-table
         [dataSource]="dataSource"
@@ -87,50 +97,40 @@
         matSortDisableClear
       >
         <ng-container matColumnDef="taskType">
-          <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          > Type de tâche
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Type de tâche
           </th>
-          <td
-          mat-cell
-          *matCellDef="let task"> {{task.taskType}}
-          </td>
+          <td mat-cell *matCellDef="let task">{{ task.taskType }}</td>
         </ng-container>
 
         <ng-container matColumnDef="taxonName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Taxon prioritaire </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Taxon prioritaire
+          </th>
           <td mat-cell *matCellDef="let task">
-            <i>{{task.taxonName}}</i>
+            <i>{{ task.taxonName }}</i>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="territoryName">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-          >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Territoire
           </th>
-          <td mat-cell *matCellDef="let task"> {{task.territoryName}}
-          </td>
+          <td mat-cell *matCellDef="let task">{{ task.territoryName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="taskLabel">
-          <th
-            mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-          > Tâche à réaliser
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Tâche à réaliser
           </th>
-          <td mat-cell *matCellDef="let task"> {{task.taskLabel}} </td>
+          <td mat-cell *matCellDef="let task">{{ task.taskLabel }}</td>
         </ng-container>
 
         <ng-container matColumnDef="progressStatus">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Etat d'avancement </th>
-          <td mat-cell *matCellDef="let task"> {{task.progressStatus}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Etat d'avancement
+          </th>
+          <td mat-cell *matCellDef="let task">{{ task.progressStatus }}</td>
         </ng-container>
 
         <ng-container matColumnDef="taskDate">
@@ -139,14 +139,16 @@
             *matHeaderCellDef
             mat-sort-header
             matTooltip="Date la plus récente d'inventaire de zone de prospection pour un taxon dans un territoire."
-          > Date
+          >
+            Date
           </th>
-          <td mat-cell *matCellDef="let task"> {{task.taskDate | date : 'mediumDate' : null : 'fr'}}  </td>
+          <td mat-cell *matCellDef="let task">
+            {{ task.taskDate | date: "mediumDate":null:"fr" }}
+          </td>
         </ng-container>
 
-
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let task">
             <div class="d-flex justify-content-end flex-wrap">
               <button
@@ -161,7 +163,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 
