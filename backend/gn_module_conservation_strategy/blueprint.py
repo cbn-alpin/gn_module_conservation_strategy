@@ -10,7 +10,13 @@ from geonature.core.gn_permissions import decorators as permissions
 from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
-from apptax.taxonomie.models import BibNoms, BibAttributs, TMedias, Taxref, CorTaxonAttribut
+from apptax.taxonomie.models import (
+    BibNoms,
+    BibAttributs,
+    TMedias,
+    Taxref,
+    CorTaxonAttribut,
+)
 from pypnusershub.db.models import Organisme
 from pypnnomenclature.models import TNomenclatures
 
@@ -28,8 +34,9 @@ from .utils import prepare_input, prepare_output
 blueprint = Blueprint("pr_conservation_strategy", __name__)
 log = logging.getLogger(__name__)
 
+
 @blueprint.route("/territories", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_territories():
     """
@@ -44,7 +51,7 @@ def get_territories():
 
 
 @blueprint.route("/territories/<territory>", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_territory(territory):
     """
@@ -52,14 +59,16 @@ def get_territory(territory):
 
     :returns: un dictionnaire contenant les infos d'un territoire.
     """
-    q = DB.session.query(TTerritory).filter(func.lower(TTerritory.code) == territory.lower())
+    q = DB.session.query(TTerritory).filter(
+        func.lower(TTerritory.code) == territory.lower()
+    )
     result = q.first()
     output = None if not result else result.as_dict()
     return prepare_output(output, remove_in_key="territory")
 
 
 @blueprint.route("/taxons/search", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def search_taxons_by_territory():
     """
@@ -80,41 +89,34 @@ def search_taxons_by_territory():
     page = int(request.args.get("page", 0))
 
     # Execute query
-    query = (DB.session
-        .query(
-            TPriorityTaxon.cd_nom,
-            Taxref.cd_ref,
-            Taxref.lb_nom.label("search_name"),
-            Taxref.nom_valide,
-        )
-        .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-    )
+    query = DB.session.query(
+        TPriorityTaxon.cd_nom,
+        Taxref.cd_ref,
+        Taxref.lb_nom.label("search_name"),
+        Taxref.nom_valide,
+    ).join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
     if territory:
-        query = (query
-            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
-            .filter(func.lower(TTerritory.code) == territory.lower())
-        )
+        query = query.join(
+            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
+        ).filter(func.lower(TTerritory.code) == territory.lower())
 
     if search_name:
         ilike_search_name = f"%{search_name.replace(' ', '%')}%"
-        query = (query
-            .filter(Taxref.lb_nom.ilike(ilike_search_name))
+        query = (
+            query.filter(Taxref.lb_nom.ilike(ilike_search_name))
             .add_columns(func.similarity(Taxref.lb_nom, search_name).label("idx_trgm"))
             .order_by(desc("idx_trgm"))
         )
 
-    data = (query
-        .limit(limit)
-        .offset(page * limit)
-        .all()
-    )
+    data = query.limit(limit).offset(page * limit).all()
 
     # Manage output
     output = [d._asdict() for d in data]
     return prepare_output(output)
 
+
 @blueprint.route("/taxons", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_taxons_by_territory():
     """
@@ -163,26 +165,21 @@ def get_taxons_by_territory():
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
     ]
-    query = (DB.session
-        .query(
-            *fields,
-            func.count(TAssessment.id).label("assessment_count")
-        )
+    query = (
+        DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
     )
 
     if territory:
-        query = (query
-            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
-            .filter(func.lower(TTerritory.code) == territory.lower())
-        )
+        query = query.join(
+            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
+        ).filter(func.lower(TTerritory.code) == territory.lower())
     else:
         column_to_add = TTerritory.code.label("territory_code")
         fields.append(column_to_add)
-        query = (query
-            .add_column(column_to_add)
-            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        query = query.add_column(column_to_add).join(
+            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
         )
 
     if cd_nom:
@@ -201,42 +198,38 @@ def get_taxons_by_territory():
 
     if sort:
         try:
-            (column, direction) = sort.split(':')
+            (column, direction) = sort.split(":")
 
             available_sort = {
-                'fullName': [Taxref.nom_complet],
-                'cpi': [
+                "fullName": [Taxref.nom_complet],
+                "cpi": [
                     TPriorityTaxon.revised_conservation_priority,
-                    TPriorityTaxon.computed_conservation_priority
+                    TPriorityTaxon.computed_conservation_priority,
                 ],
-                'dateMin': [TPriorityTaxon.min_prospect_zone_date],
-                'dateMax': [TPriorityTaxon.max_prospect_zone_date],
-                'areaPresenceCount': [TPriorityTaxon.presence_area_count],
-                'assessmentCount': [func.count(TAssessment.id)],
+                "dateMin": [TPriorityTaxon.min_prospect_zone_date],
+                "dateMax": [TPriorityTaxon.max_prospect_zone_date],
+                "areaPresenceCount": [TPriorityTaxon.presence_area_count],
+                "assessmentCount": [func.count(TAssessment.id)],
             }
             order_fields = available_sort.get(column, Taxref.nom_valide)
-            if direction == 'desc':
+            if direction == "desc":
                 desc_fieds = map(desc, order_fields)
                 query = query.order_by(*desc_fieds)
-            elif direction == 'asc':
+            elif direction == "asc":
                 query = query.order_by(*order_fields)
             else:
                 msg = f"Unknown sort direction '{direction}'. Use only: asc, desc."
                 log.error(msg)
                 return {"message": msg, "status": "error"}, 400
         except NotImplementedError:
-            values = ', '.join(list(available_sort.keys()))
+            values = ", ".join(list(available_sort.keys()))
             msg = f"Unknown sort column '{column}'. Use only: {values}."
             log.error(msg)
             return {"message": msg, "status": "error"}, 400
 
     query = query.group_by(*fields)
     count = query.count()
-    items = (query
-        .limit(limit)
-        .offset(page * limit)
-        .all()
-    )
+    items = query.limit(limit).offset(page * limit).all()
 
     # Manage output
     output = {
@@ -248,7 +241,7 @@ def get_taxons_by_territory():
 
 
 @blueprint.route("/taxons/<int:priority_taxon_id>", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_priority_taxon_infos(priority_taxon_id):
     """
@@ -276,11 +269,8 @@ def get_priority_taxon_infos(priority_taxon_id):
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
     ]
-    query = (DB.session
-        .query(
-            *fields,
-            func.count(TAssessment.id).label("assessment_count")
-        )
+    query = (
+        DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.cd_nom == Taxref.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
@@ -292,14 +282,14 @@ def get_priority_taxon_infos(priority_taxon_id):
 
     # Manage medias
     if with_medias:
-        query = (DB.session
-            .query(
+        query = (
+            DB.session.query(
                 TMedias.titre.label("title"),
                 TMedias.url,
                 TMedias.chemin.label("path"),
                 TMedias.auteur.label("author"),
                 TMedias.desc_media.label("description"),
-                #TMedias.date_media.label("date"),
+                # TMedias.date_media.label("date"),
                 TMedias.source,
                 TMedias.licence,
                 # TODO: get media type value in GN v2.8.0+
@@ -315,12 +305,14 @@ def get_priority_taxon_infos(priority_taxon_id):
 
     # Manage TaxHub Attributs
     if with_taxhub_attributs:
-        query = (DB.session
-            .query(
+        query = (
+            DB.session.query(
                 CorTaxonAttribut.valeur_attribut.label("content"),
                 BibAttributs.nom_attribut.label("code"),
             )
-            .join(BibAttributs, BibAttributs.id_attribut == CorTaxonAttribut.id_attribut)
+            .join(
+                BibAttributs, BibAttributs.id_attribut == CorTaxonAttribut.id_attribut
+            )
             .join(Taxref, Taxref.cd_ref == CorTaxonAttribut.cd_ref)
             .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
             .filter(TPriorityTaxon.id == priority_taxon_id)
@@ -335,7 +327,7 @@ def get_priority_taxon_infos(priority_taxon_id):
 
 
 @blueprint.route("/organisms", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_organisms():
     """
@@ -348,11 +340,7 @@ def get_organisms():
     order_by = request.args.get("order-by", "nom_organisme")
 
     # Prepare query
-    query = (DB.session
-        .query(Organisme)
-        .filter(Organisme.id_organisme > 0)
-
-    )
+    query = DB.session.query(Organisme).filter(Organisme.id_organisme > 0)
     if order_by:
         try:
             order_column = getattr(Organisme.__table__.columns, order_by)
@@ -384,7 +372,7 @@ def create_assessment(info_role):
     """
     # Transform received data
     data = prepare_input(dict(request.get_json()))
-    data["assessment"]["meta_create_by"] = int(getattr(info_role, 'id_role'))
+    data["assessment"]["meta_create_by"] = int(getattr(info_role, "id_role"))
     exception = None
 
     try:
@@ -405,20 +393,17 @@ def create_assessment(info_role):
     if exception:
         response = {
             "message": f"An error occurred while adding the assessment : {exception} .",
-            "status": "error"
+            "status": "error",
         }
         code = 500
     else:
-        response = {
-            "message": "Success of adding the assessment.",
-            "status": "success"
-        }
+        response = {"message": "Success of adding the assessment.", "status": "success"}
         code = 200
     return response, code
 
 
 @blueprint.route("/assessments", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_assessments():
     """
@@ -454,8 +439,9 @@ def get_assessments():
     }
     return prepare_output(output)
 
+
 @blueprint.route("/assessments/<int:assessment_id>", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_assessment_details(assessment_id):
     """
@@ -469,6 +455,7 @@ def get_assessment_details(assessment_id):
     assessment_repo = AssessmentRepository()
     output = assessment_repo.get_one(assessment_id)
     return prepare_output(output)
+
 
 @blueprint.route("/assessments/<int:assessment_id>", methods=["PUT"])
 @permissions.check_cruved_scope("U", get_role=True, module_code="CONSERVATION_STRATEGY")
@@ -487,7 +474,7 @@ def update_assessment(info_role, assessment_id):
     # Transform received data
     data = prepare_input(dict(request.get_json()))
     data["assessment"]["id"] = assessment_id
-    data["assessment"]["meta_update_by"] = int(getattr(info_role, 'id_role'))
+    data["assessment"]["meta_update_by"] = int(getattr(info_role, "id_role"))
     exception = None
 
     try:
@@ -508,41 +495,42 @@ def update_assessment(info_role, assessment_id):
     if exception:
         response = {
             "message": f"An error occurred while updating the assessment : {exception} .",
-            "status": "error"
+            "status": "error",
         }
         code = 500
     else:
         response = {
             "message": "Success of updating the assessment.",
-            "status": "success"
+            "status": "success",
         }
         code = 200
     return response, code
 
+
 @blueprint.route("/tasks", methods=["GET"])
-@permissions.check_cruved_scope('R', module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_tasks():
 
-
     # Get request parameters
-    organisms = request.args.getlist("organisms")
+    organisms = request.args.get("organisms").split(",") if "organisms" in request.args and request.args["organisms"] != "" else None
     progress_status = request.args.get("progress-status")
     task_type = request.args.get("task-type")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
-     # Execute actions query
+    # Execute actions query
 
     TNomenclaturesT = aliased(TNomenclatures)
     TNomenclaturesP = aliased(TNomenclatures)
 
-    task_date_action = case([
-                    (TNomenclaturesP.cd_nomenclature == "pl", TAction.implementation_date),
-                    (TNomenclaturesP.cd_nomenclature == "c", TAction.starting_date),
-                    ],
-                    else_= func.to_date(cast(TAction.plan_for, String), 'YYYY')
-                )
+    task_date_action = case(
+        [
+            (TNomenclaturesP.cd_nomenclature == "pl", TAction.implementation_date),
+            (TNomenclaturesP.cd_nomenclature == "c", TAction.starting_date),
+        ],
+        else_=func.to_date(cast(TAction.plan_for, String), "YYYY"),
+    )
 
     fields_action = [
         TAction.id.label("action_id"),
@@ -558,21 +546,27 @@ def get_tasks():
         CorActionOrganism.id_organism.label("organism_id"),
     ]
 
-    query_action = (DB.session
-        .query(*fields_action)
+    query_action = (
+        DB.session.query(*fields_action)
         .outerjoin(TAssessment, TAssessment.id == TAction.id_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
-        .outerjoin(TNomenclaturesT, TNomenclaturesT.id_nomenclature == TAction.id_action_type)
-        .outerjoin(TNomenclaturesP, TNomenclaturesP.id_nomenclature == TAction.id_action_progress)
+        .outerjoin(
+            TNomenclaturesT, TNomenclaturesT.id_nomenclature == TAction.id_action_type
+        )
+        .outerjoin(
+            TNomenclaturesP,
+            TNomenclaturesP.id_nomenclature == TAction.id_action_progress,
+        )
         .outerjoin(CorActionOrganism, CorActionOrganism.id_action == TAction.id)
     )
 
+    # Execute assessments query
 
-# Execute assessments query
-
-    task_date_assessment = func.to_date(cast(TAssessment.next_assessment_year, String), 'YYYY')
+    task_date_assessment = func.to_date(
+        cast(TAssessment.next_assessment_year, String), "YYYY"
+    )
 
     fields_assessment = [
         literal_column("NULL").label("action_id"),
@@ -588,8 +582,8 @@ def get_tasks():
         CorActionOrganism.id_organism.label("organism_id"),
     ]
 
-    query_assessment = (DB.session
-        .query(*fields_assessment)
+    query_assessment = (
+        DB.session.query(*fields_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
@@ -599,37 +593,30 @@ def get_tasks():
 
     if task_type == "Action":
         query = query_action.distinct(TAction.id)
-        if progress_status : 
+        if progress_status:
             query = query.filter(TNomenclaturesP.label_default == progress_status)
-        if organisms :
-            query = (query
-                .filter(CorActionOrganism.id_organism.in_(organisms))
-                )
+
     elif task_type == "Bilan Stationnel":
         query = query_assessment.distinct(TAssessment.id)
-        if progress_status : 
-            query = query.filter(literal_column("'À mettre en place'").label("progress_status") == progress_status)
-        if organisms :
-            query = (query
-                .filter(CorActionOrganism.id_organism.in_(organisms))
-                )
+        if progress_status:
+            query = query.filter(
+                literal_column("'À mettre en place'").label("progress_status")
+                == progress_status
+            )
+
     else:
-        query = query_action.union(query_assessment).distinct(TAssessment.id, TAction.id)
-        if progress_status :
+        query = query_action.union(query_assessment).distinct(
+            TAssessment.id, TAction.id
+        )
+        if progress_status:
             query = query.filter(literal_column("progress_status") == progress_status)
-        if organisms :
-            query = (query
-                .filter(CorActionOrganism.id_organism.in_(organisms))
-                )
 
+    if organisms:
+        query = query.filter(CorActionOrganism.id_organism.in_(organisms))
 
-# for pagination
+    # for pagination
     count = query.count()
-    items = (query
-        .limit(limit)
-        .offset(page * limit)
-        .all()
-    )
+    items = query.limit(limit).offset(page * limit).all()
 
     # Manage output
     output = {
