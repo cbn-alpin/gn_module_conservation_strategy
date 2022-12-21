@@ -8,13 +8,13 @@ import { catchError, finalize } from 'rxjs/operators'
 import { DataService } from '../../shared/services/data.service';
 
 export interface ITask {
-    taskType: string;
-    taxonName: string;
-    territory: string;
-    toDo?: string;
-    progressStatus: string;
-    taskDate: number;
-    actions: string;
+  taskType: string;
+  taxonName: string;
+  territory: string;
+  toDo?: string;
+  progressStatus: string;
+  taskDate: number;
+  actions: string;
 }
 
 export interface ITasks {
@@ -41,8 +41,8 @@ export class PlanningDataSource implements DataSource<ITask> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-      this.taskSubject.complete();
-      this.loadingSubject.complete();
+    this.taskSubject.complete();
+    this.loadingSubject.complete();
   }
 
   setFilterParam(param: string, value: string): void {

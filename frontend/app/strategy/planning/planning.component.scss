@@ -1,11 +1,11 @@
 mat-drawer-container {
-    flex: 1 1 auto;
-    min-height: 300px;
+  flex: 1 1 auto;
+  min-height: 300px;
 }
 mat-drawer {
-    width: 250px;
-    // Allow the drop-down list to display its contents over mat-drawer
-    overflow-y: unset !important;
+  width: 250px;
+  // Allow the drop-down list to display its contents over mat-drawer
+  overflow-y: unset !important;
 }
 .mat-paginator-sticky {
   bottom: 0;
@@ -13,10 +13,10 @@ mat-drawer {
   z-index: 10;
 }
 :host ::ng-deep .mat-drawer-inner-container {
-    // Allow the drop-down list to display its contents over mat-drawer
-    overflow: unset !important;
+  // Allow the drop-down list to display its contents over mat-drawer
+  overflow: unset !important;
 }
 
 table {
-    width: 100%;
+  width: 100%;
 }
