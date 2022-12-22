@@ -11,11 +11,8 @@
             [formControl]="filtersForm.controls.taskFilter"
             (selectionChange)="onTaskTypeFilterChanged($event)"
           >
-            <mat-option value="Bilan Stationnel">
-              Bilans Stationnels
-            </mat-option>
-            <mat-option value="Action"> Actions </mat-option>
-            <mat-option value="2"> Les deux </mat-option>
+            <mat-option value="assessment">Bilans Stationnels</mat-option>
+            <mat-option value="action">Actions</mat-option>
           </mat-select>
           <button
             mat-button
@@ -29,16 +26,23 @@
           </button>
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Etat d'avancement</mat-label>
+        <mat-form-field
+          *ngIf="
+            $progressStatus | async as progressStatusList;
+            else noProgressStatus
+          "
+        >
+          <mat-label>État d'avancement</mat-label>
           <mat-select
             name="progressStatus"
             [formControl]="filtersForm.controls.statusFilter"
             (selectionChange)="onStatusFilterChanged($event)"
           >
-            <mat-option value="En cours de mise en place"> En cours </mat-option>
-            <mat-option value="À mettre en place"> À mettre en place </mat-option>
-            <mat-option value="Mise en place"> Mis en place </mat-option>
+            <mat-option
+              *ngFor="let progressStatus of progressStatusList"
+              [value]="progressStatus.code"
+              >{{ progressStatus.label }}</mat-option
+            >
           </mat-select>
           <button
             mat-button
@@ -51,6 +55,9 @@
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
+        <ng-template #noProgressStatus>
+          <p>Aucun état d'avancement</p>
+        </ng-template>
 
         <mat-form-field
           *ngIf="$organisms | async as organisms; else noOrganisms"
@@ -100,7 +107,15 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Type de tâche
           </th>
-          <td mat-cell *matCellDef="let task">{{ task.taskType }}</td>
+          <td mat-cell *matCellDef="let task">
+            <span [ngSwitch]="task.taskType">
+              <ng-container *ngSwitchCase="'action'">Action</ng-container>
+              <ng-container *ngSwitchCase="'assessment'"
+                >Bilan Stationnel</ng-container
+              >
+              <ng-container *ngSwitchDefault>{{ task.taskType }}</ng-container>
+            </span>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="taxonName">
@@ -121,14 +136,14 @@
 
         <ng-container matColumnDef="taskLabel">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Tâche à réaliser
+            Actions à mener
           </th>
           <td mat-cell *matCellDef="let task">{{ task.taskLabel }}</td>
         </ng-container>
 
         <ng-container matColumnDef="progressStatus">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
-            Etat d'avancement
+            État d'avancement
           </th>
           <td mat-cell *matCellDef="let task">{{ task.progressStatus }}</td>
         </ng-container>
