@@ -79,4 +79,9 @@ export class DataService {
     const url = `${this.cfg.getModuleBackendUrl()}/tasks`;
     return this.http.get<any>(url, {params});
   }
+
+  getNomenclatures(type): Observable<any> {
+    const url = `${this.cfg.getBackendUrl()}/nomenclatures/nomenclature/${type}`;
+    return this.http.get<any>(url);
+  }
 }

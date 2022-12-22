@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
-import { Subscription } from '@librairies/rxjs';
+import { Subscription, Observable } from '@librairies/rxjs';
 
 import { tap, map } from 'rxjs/operators';
+import { IOrganism } from '../../shared/models/assessment.model';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
@@ -29,8 +30,8 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   baseApiEndpoint;
   firstLoad: Boolean = true;
   dataTableHeight: number;
-  organismList: any[] = [];
-  $organisms;
+  $organisms: Observable<IOrganism[]>;
+  $progressStatus: Observable<any>;
   displayedColumns = [
     'taskType',
     'taxonName',
@@ -60,6 +61,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
     this.loadOrganisms();
     this.loadCurrentUserOrganismId();
     this.loadTasks();
+    this.loadProgressStatus();
 
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     // See: https://angular.io/errors/NG0100
@@ -193,10 +195,11 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   loadOrganisms() {
     this.$organisms = this.dataService.getOrganisms().pipe(
       map(organisms => {
+        let organismList = [];
         organisms.forEach((item) => {
-          this.organismList.push(item);
+          organismList.push(item);
         })
-        return this.organismList;
+        return organismList;
       })
     );
   }
@@ -209,6 +212,18 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
       this.dataSource.removeFilterParam('organisms');
     }
     this.loadTasks();
+  }
+
+  loadProgressStatus() {
+    this.$progressStatus = this.dataService.getNomenclatures('CS_ACTION_PROGRESS').pipe(
+      map(nomenclatures => {
+        let nomenclaturesList = [];
+        nomenclatures.values.forEach((item) => {
+          nomenclaturesList.push({ code: item.cd_nomenclature, label: item.label_default });
+        })
+        return nomenclaturesList;
+      })
+    );
   }
 
 }

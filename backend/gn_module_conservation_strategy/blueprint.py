@@ -1,7 +1,7 @@
 import logging
 
 from flask import Blueprint, request
-from sqlalchemy import desc, func, or_, exc, case, String
+from sqlalchemy import and_, desc, func, or_, exc, case, String
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql import literal_column
@@ -513,7 +513,11 @@ def update_assessment(info_role, assessment_id):
 def get_tasks():
 
     # Get request parameters
-    organisms = request.args.get("organisms").split(",") if "organisms" in request.args and request.args["organisms"] != "" else None
+    organisms = (
+        request.args.get("organisms").split(",")
+        if "organisms" in request.args
+        else None
+    )
     progress_status = request.args.get("progress-status")
     task_type = request.args.get("task-type")
     limit = int(request.args.get("limit", 20))
@@ -538,7 +542,7 @@ def get_tasks():
         Taxref.lb_nom.label("taxon_name"),
         TTerritory.label.label("territory_name"),
         task_date_action.label("task_date"),
-        literal_column("'Action'").label("task_type"),
+        literal_column("'action'").label("task_type"),
         TNomenclaturesT.label_default.label("task_label"),
         TNomenclaturesP.label_default.label("progress_status"),
         TTerritory.code.label("territory_code"),
@@ -574,9 +578,9 @@ def get_tasks():
         Taxref.lb_nom.label("taxon_Name"),
         TTerritory.label.label("territory_name"),
         task_date_assessment.label("task_date"),
-        literal_column("'Bilan Stationnel'").label("task_type"),
-        literal_column("'Réaliser fiche Bilan Stationnel'").label("task_label"),
-        literal_column("'À mettre en place'").label("progress_status"),
+        literal_column("'assessment'").label("task_type"),
+        TNomenclaturesT.label_default.label("task_label"),
+        TNomenclaturesP.label_default.label("progress_status"),
         TTerritory.code.label("territory_code"),
         TAssessment.id_priority_taxon.label("priority_taxon_id"),
         CorActionOrganism.id_organism.label("organism_id"),
@@ -589,27 +593,42 @@ def get_tasks():
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TAction, TAction.id_assessment == TAssessment.id)
         .outerjoin(CorActionOrganism, CorActionOrganism.id_action == TAction.id)
+        .outerjoin(
+            TNomenclaturesT,
+            and_(
+                TNomenclaturesT.cd_nomenclature == "rfbs",
+                TNomenclaturesT.id_type
+                == func.ref_nomenclatures.get_id_nomenclature_type("CS_ACTION"),
+            ),
+        )
+        .outerjoin(
+            TNomenclaturesP,
+            and_(
+                TNomenclaturesP.cd_nomenclature == "pr",
+                TNomenclaturesP.id_type
+                == func.ref_nomenclatures.get_id_nomenclature_type(
+                    "CS_ACTION_PROGRESS"
+                ),
+            ),
+        )
     )
 
-    if task_type == "Action":
+    if progress_status:
+        query_action = query_action.filter(
+            TNomenclaturesP.cd_nomenclature == progress_status
+        )
+        query_assessment = query_assessment.filter(
+            TNomenclaturesP.cd_nomenclature == progress_status
+        )
+
+    if task_type == "action":
         query = query_action.distinct(TAction.id)
-        if progress_status:
-            query = query.filter(TNomenclaturesP.label_default == progress_status)
-
-    elif task_type == "Bilan Stationnel":
+    elif task_type == "assessment":
         query = query_assessment.distinct(TAssessment.id)
-        if progress_status:
-            query = query.filter(
-                literal_column("'À mettre en place'").label("progress_status")
-                == progress_status
-            )
-
     else:
         query = query_action.union(query_assessment).distinct(
             TAssessment.id, TAction.id
         )
-        if progress_status:
-            query = query.filter(literal_column("progress_status") == progress_status)
 
     if organisms:
         query = query.filter(CorActionOrganism.id_organism.in_(organisms))
