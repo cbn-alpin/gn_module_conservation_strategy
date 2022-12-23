@@ -182,7 +182,15 @@
           mat-header-row
           *matHeaderRowDef="displayedColumns; sticky: true"
         ></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [ngClass]="{
+            'bg-success': row.progressStatus == 'Mise en place',
+            'bg-warning': row.progressStatus == 'En cours de mise en place',
+            'bg-danger': row.progressStatus == 'À mettre en place'
+          }"
+        ></tr>
       </table>
 
       <mat-paginator
