@@ -520,6 +520,7 @@ def get_tasks():
     )
     progress_status = request.args.get("progress-status")
     task_type = request.args.get("task-type")
+    sort = request.args.get("sort")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -632,6 +633,31 @@ def get_tasks():
 
     if organisms:
         query = query.filter(CorActionOrganism.id_organism.in_(organisms))
+
+    if sort:
+        subquery = query.subquery()
+        query = DB.session.query(subquery) # enable orderby on task_date
+        try:
+            (column, direction) = sort.split(":")
+
+            available_sort = {
+                "taskDate": ["task_date"]
+            }
+            order_fields = available_sort.get(column, "taskDate")
+            if direction == "desc":
+                desc_fields = map(desc, order_fields)
+                query = query.order_by(*desc_fields)
+            elif direction == "asc":
+                query = query.order_by(*order_fields)
+            else:
+                msg = f"Unknown sort direction '{direction}'. Use only: asc, desc."
+                log.error(msg)
+                return {"message": msg, "status": "error"}, 400
+        except NotImplementedError:
+            values = ", ".join(list(available_sort.keys()))
+            msg = f"Unknown sort column '{column}'. Use only: {values}."
+            log.error(msg)
+            return {"message": msg, "status": "error"}, 400
 
     # for pagination
     count = query.count()
