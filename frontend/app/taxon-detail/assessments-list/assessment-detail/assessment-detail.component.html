@@ -7,9 +7,9 @@
       </mat-card-header>
       <mat-card-content
         class="text-center"
-        [matTooltip]="assessment.assessmentDate | date:'medium':undefined:'fr'"
+        [matTooltip]="assessment.assessmentDate | date: 'medium':undefined:'fr'"
       >
-        {{ assessment.assessmentDate  | date:'longDate':undefined:'fr' }}
+        {{ assessment.assessmentDate | date: "longDate":undefined:"fr" }}
       </mat-card-content>
     </mat-card>
 
@@ -30,8 +30,9 @@
       </mat-card-header>
       <mat-card-content class="cs-small-text">
         Édité par <b>{{ assessment.metaCreateBy }}</b>
-        <br/>
-        le <b>{{ assessment.metaCreateDate | date:'medium':undefined:'fr' }}</b>
+        <br />
+        le
+        <b>{{ assessment.metaCreateDate | date: "medium":undefined:"fr" }}</b>
       </mat-card-content>
     </mat-card>
   </div>
@@ -66,11 +67,13 @@
     </mat-card>
   </div>
 
-  <div class="row mb-3" *ngIf="assessment.actions ; else noAction">
+  <div class="row mb-3" *ngIf="assessment.actions; else noAction">
     <mat-accordion class="col px-0">
       <mat-expansion-panel
-      *ngFor="let action of assessment.actions ; let actionNumber = index"
-      [expanded]="action.id == actionIdSelected"
+        *ngFor="let action of assessment.actions; let actionNumber = index"
+        [expanded]="action.id == actionIdSelected"
+        (opened)="goToAction(action.id)"
+        (closed)="resetActionList(action.id)"
       >
         <mat-expansion-panel-header
           [ngClass]="{
@@ -88,18 +91,22 @@
               <span *ngIf="action.level && action.type">&nbsp;-&nbsp;</span>
               <span>{{ action.type }}</span>
               <span *ngIf="action.type">&nbsp;</span>
-              <span *ngIf="action.progress && action.level || action.type">&nbsp;-&nbsp;</span>
+              <span *ngIf="(action.progress && action.level) || action.type"
+                >&nbsp;-&nbsp;</span
+              >
               <span>{{ action.progress }}</span>
             </span>
 
             <mat-icon *ngIf="action.progressCode == 'pr'">event_busy</mat-icon>
             <mat-icon *ngIf="action.progressCode == 'c'">event</mat-icon>
-            <mat-icon *ngIf="action.progressCode == 'pl'">event_available</mat-icon>
+            <mat-icon *ngIf="action.progressCode == 'pl'"
+              >event_available</mat-icon
+            >
           </mat-panel-description>
         </mat-expansion-panel-header>
 
         <div class="row my-3">
-          <mat-card class="col mr-3" >
+          <mat-card class="col mr-3">
             <mat-card-header>
               <mat-icon mat-card-avatar>public</mat-icon>
               <mat-card-title>Niveau géographique</mat-card-title>
@@ -147,7 +154,7 @@
               <mat-card-title>Début le ...</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              {{ action.startingDate | date:'longDate':undefined:'fr' }}
+              {{ action.startingDate | date: "longDate":undefined:"fr" }}
             </mat-card-content>
           </mat-card>
 
@@ -157,7 +164,7 @@
               <mat-card-title>Mis en place le ...</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              {{ action.implementationDate | date:'longDate':undefined:'fr' }}
+              {{ action.implementationDate | date: "longDate":undefined:"fr" }}
             </mat-card-content>
           </mat-card>
         </div>
@@ -184,11 +191,10 @@
               <mat-card-title>Partenaires de l'action</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-              {{ action.partners | pluck:'name' | join:', ' }}
+              {{ action.partners | pluck: "name" | join: ", " }}
             </mat-card-content>
           </mat-card>
         </div>
-
       </mat-expansion-panel>
     </mat-accordion>
   </div>

@@ -155,7 +155,6 @@ export const routes: Routes = [
                                 label: 'Bilan Stationnel : :assessmentId',
                                 title: "Fiche Bilan Stationnel.",
                                 iconClass: 'fa fa-heartbeat',
-                                disable: true,
                               }
                             },
                             children: [
@@ -171,7 +170,6 @@ export const routes: Routes = [
                                     label: 'Action : :actionId',
                                     title: "Action à mener",
                                     iconClass: 'fa fa-bolt',
-                                    disable: true,
                                   }
                                 },
                               },

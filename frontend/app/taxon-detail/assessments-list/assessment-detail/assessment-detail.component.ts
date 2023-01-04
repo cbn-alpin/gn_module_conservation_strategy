@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
@@ -13,17 +15,36 @@ import { StoreService } from '../../../shared/services/store.service';
   styleUrls: ['./assessment-detail.component.scss']
 })
 export class AssessmentDetailComponent implements OnInit {
-  /** Identifiant du rapport de bilan stationel. */
+
   @Input() assessmentId: number;
   @Input() actionIdSelected: number;
   assessmentDetail!: Observable<Assessment>;
+  @Input() goingToNewAction: boolean;
 
   constructor(
     public dataService: DataService,
     public storeService: StoreService,
-  ) {}
+    public router: Router,
+    public location: Location,
+  ) { }
 
   ngOnInit() {
     this.assessmentDetail = this.dataService.getAssessment(this.assessmentId);
+  }
+
+  goToAction(id) {
+    if (!this.actionIdSelected || this.actionIdSelected !== id) { // prevent for looping twice because of expanded
+      this.goingToNewAction = true;
+      let url = this.router.url.replace(/\/actions\/[0-9]+$/, '');
+      this.router.navigateByUrl(decodeURIComponent(url) + '/actions/' + id);
+    }
+  }
+
+  resetActionList(id) {
+    if (!this.goingToNewAction && this.actionIdSelected == id) {
+      let url = this.router.url.replace(/\/actions\/[0-9]+$/, '');
+      this.router.navigateByUrl(decodeURIComponent(url));
+    }
+    this.goingToNewAction = false;
   }
 }
