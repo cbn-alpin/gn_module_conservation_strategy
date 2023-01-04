@@ -2,33 +2,48 @@
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <span class="mr-auto"></span>
-      <button mat-flat-button color="primary" (click)="openAssessmentEditModal()">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="openAssessmentEditModal()"
+      >
         <mat-icon>add_circle</mat-icon>
         Ajouter une fiche bilan stationnel
       </button>
     </div>
   </div>
   <div class="card-body">
-    <mat-accordion *ngIf="assessments | async as assessmentList ; else noAssessment">
+    <mat-accordion
+      *ngIf="assessments | async as assessmentList; else noAssessment"
+    >
       <mat-expansion-panel
-      *ngFor="let assessment of (assessmentList.items | sortBy:'desc':'assessmentDate')"
-      [expanded]="assessment.id == assessmentIdSelected" 
+        *ngFor="
+          let assessment of assessmentList.items
+            | sortBy: 'desc':'assessmentDate'
+        "
+        [expanded]="assessment.id == assessmentIdSelected"
+        (opened)="goToAssessment(assessment.id)"
+        (closed)="resetAssessmentList(assessment.id)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h5>Bilan {{ assessment.assessmentDate | date : 'yyyy' }}</h5>
+            <h5>Bilan {{ assessment.assessmentDate | date: "yyyy" }}</h5>
           </mat-panel-title>
           <mat-panel-description>
             {{ assessment.description }}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <cs-assessment-detail
-        [assessmentId]="assessment.id"
-        [actionIdSelected]="actionIdSelected"
+          [assessmentId]="assessment.id"
+          [actionIdSelected]="actionIdSelected"
+          [goingToNewAction]="goingToNewAction"
         ></cs-assessment-detail>
 
         <mat-action-row>
-          <button mat-raised-button (click)="openAssessmentEditModal(assessment)">
+          <button
+            mat-raised-button
+            (click)="openAssessmentEditModal(assessment)"
+          >
             <mat-icon>edit</mat-icon>
             Modifier cette fiche bilan stationnel
           </button>
