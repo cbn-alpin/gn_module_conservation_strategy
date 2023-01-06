@@ -641,9 +641,14 @@ def get_tasks():
             (column, direction) = sort.split(":")
 
             available_sort = {
-                "taskDate": ["task_date"]
+                "taskDate": ["task_date"],
+                "progressStatus": ["progress_status"],
+                "taxonName": ["taxon_name"],
+                "taskType": ["task_type"],
+                "territoryName" : ["territory_name"],
+                "taskLabel": ["task_label"],
             }
-            order_fields = available_sort.get(column, "taskDate")
+            order_fields = available_sort.get(column, "task_date")
             if direction == "desc":
                 desc_fields = map(desc, order_fields)
                 query = query.order_by(*desc_fields)
