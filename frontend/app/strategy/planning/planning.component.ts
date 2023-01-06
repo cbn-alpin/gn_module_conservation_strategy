@@ -90,7 +90,6 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
         })
       )
       .subscribe();
-
   }
 
   private recalculateDataTableSize(): void {
@@ -114,6 +113,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
+    this.dataSource.setFilterParam('sort', `taskDate:desc`);
     this.paginator.firstPage();
   }
 
