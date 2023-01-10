@@ -116,29 +116,19 @@ export class PlanningComponent implements OnInit, AfterViewInit {
   }
 
   detectTypeOfTask(task) {
+    let url = [
+      '/conservation_strategy/territories',
+      task.territoryCode,
+      'priority-taxa',
+      task.priorityTaxonId,
+      { shortName: task.taxonName },
+      'assessments',
+      task.assessmentId
+    ];
     if (task.actionId) {
-      return [
-        '/conservation_strategy/territories',
-        task.territoryCode,
-        'priority-taxa',
-        task.priorityTaxonId,
-        { shortName: task.taxonName },
-        'assessments',
-        task.assessmentId,
-        'actions',
-        task.actionId
-      ];
-    } else {
-      return [
-        '/conservation_strategy/territories',
-        task.territoryCode,
-        'priority-taxa',
-        task.priorityTaxonId,
-        { shortName: task.taxonName },
-        'assessments',
-        task.assessmentId
-      ];
+      url.push('actions', task.actionId);
     }
+    return url;
   }
 
   private initializePlanningFiltersForm() {
