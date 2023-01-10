@@ -8,12 +8,12 @@ import { catchError, finalize } from 'rxjs/operators'
 import { DataService } from '../../shared/services/data.service';
 
 export interface ITask {
-  taskType: string;
+  type: string;
   taxonName: string;
   territory: string;
   toDo?: string;
   progressStatus: string;
-  taskDate: number;
+  date: number;
   actions: string;
 }
 

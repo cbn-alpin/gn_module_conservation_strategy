@@ -7,8 +7,7 @@ import { CsStrategyComponent } from './strategy/strategy.component';
 import { CsTaxonDetailComponent } from './taxon-detail/taxon-detail.component';
 import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
-import { CsPlanningComponent } from './strategy/planning/planning.component';
-import { AssessmentDetailComponent } from './taxon-detail/assessments-list/assessment-detail/assessment-detail.component';
+import { PlanningComponent } from './strategy/planning/planning.component';
 
 export const routes: Routes = [
   {
@@ -32,7 +31,7 @@ export const routes: Routes = [
           },
           {
             path: 'planning',
-            component: CsPlanningComponent,
+            component: PlanningComponent,
             data: {
               breadcrumb: {
                 label: 'Planning des actions à mener',
