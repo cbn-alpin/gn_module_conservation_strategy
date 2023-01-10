@@ -33,7 +33,8 @@ export class AssessmentDetailComponent implements OnInit {
   }
 
   goToAction(id) {
-    if (!this.actionIdSelected || this.actionIdSelected !== id) { // prevent for looping twice because of expanded
+    // Prevent for looping twice because of expanded
+    if (!this.actionIdSelected || this.actionIdSelected !== id) {
       this.goingToNewAction = true;
       let url = this.router.url.replace(/\/actions\/[0-9]+$/, '');
       this.router.navigateByUrl(decodeURIComponent(url) + '/actions/' + id);
