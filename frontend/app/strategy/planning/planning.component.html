@@ -7,7 +7,7 @@
         <mat-form-field>
           <mat-label>Type de tâche</mat-label>
           <mat-select
-            name="taskType"
+            name="type"
             [formControl]="filtersForm.controls.taskFilter"
             (selectionChange)="onTaskTypeFilterChanged($event)"
           >
@@ -41,8 +41,9 @@
             <mat-option
               *ngFor="let progressStatus of progressStatusList"
               [value]="progressStatus.code"
-              >{{ progressStatus.label }}</mat-option
             >
+              {{ progressStatus.label }}
+            </mat-option>
           </mat-select>
           <button
             mat-button
@@ -99,21 +100,21 @@
         mat-table
         [dataSource]="dataSource"
         matSort
-        matSortActive="taskDate"
+        matSortActive="date"
         matSortDirection="desc"
         matSortDisableClear
       >
-        <ng-container matColumnDef="taskType">
+        <ng-container matColumnDef="type">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Type de tâche
           </th>
           <td mat-cell *matCellDef="let task">
-            <span [ngSwitch]="task.taskType">
+            <span [ngSwitch]="task.type">
               <ng-container *ngSwitchCase="'action'">Action</ng-container>
               <ng-container *ngSwitchCase="'assessment'"
                 >Bilan Stationnel</ng-container
               >
-              <ng-container *ngSwitchDefault>{{ task.taskType }}</ng-container>
+              <ng-container *ngSwitchDefault>{{ task.type }}</ng-container>
             </span>
           </td>
         </ng-container>
@@ -134,11 +135,11 @@
           <td mat-cell *matCellDef="let task">{{ task.territoryName }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="taskLabel">
+        <ng-container matColumnDef="label">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             Actions à mener
           </th>
-          <td mat-cell *matCellDef="let task">{{ task.taskLabel }}</td>
+          <td mat-cell *matCellDef="let task">{{ task.label }}</td>
         </ng-container>
 
         <ng-container matColumnDef="progressStatus">
@@ -148,17 +149,16 @@
           <td mat-cell *matCellDef="let task">{{ task.progressStatus }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="taskDate">
+        <ng-container matColumnDef="date">
           <th
             mat-header-cell
             *matHeaderCellDef
             mat-sort-header
-            matTooltip="Date la plus récente d'inventaire de zone de prospection pour un taxon dans un territoire."
           >
             Date
           </th>
           <td mat-cell *matCellDef="let task">
-            {{ task.taskDate | date: "mediumDate":null:"fr" }}
+            {{ task.date | date: "mediumDate":null:"fr" }}
           </td>
         </ng-container>
 
@@ -184,7 +184,7 @@
         ></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: displayedColumns"
+          *matRowDef="let row ; columns: displayedColumns"
           [ngClass]="{
             'bg-success': row.progressStatus == 'Mise en place',
             'bg-warning': row.progressStatus == 'En cours de mise en place',

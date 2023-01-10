@@ -519,7 +519,7 @@ def get_tasks():
         else None
     )
     progress_status = request.args.get("progress-status")
-    task_type = request.args.get("task-type")
+    type = request.args.get("type")
     sort = request.args.get("sort")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
@@ -529,7 +529,7 @@ def get_tasks():
     TNomenclaturesT = aliased(TNomenclatures)
     TNomenclaturesP = aliased(TNomenclatures)
 
-    task_date_action = case(
+    date_action = case(
         [
             (TNomenclaturesP.cd_nomenclature == "pl", TAction.implementation_date),
             (TNomenclaturesP.cd_nomenclature == "c", TAction.starting_date),
@@ -542,9 +542,9 @@ def get_tasks():
         TAction.id_assessment.label("assessment_id"),
         Taxref.lb_nom.label("taxon_name"),
         TTerritory.label.label("territory_name"),
-        task_date_action.label("task_date"),
-        literal_column("'action'").label("task_type"),
-        TNomenclaturesT.label_default.label("task_label"),
+        date_action.label("date"),
+        literal_column("'action'").label("type"),
+        TNomenclaturesT.label_default.label("label"),
         TNomenclaturesP.label_default.label("progress_status"),
         TTerritory.code.label("territory_code"),
         TPriorityTaxon.id.label("priority_taxon_id"),
@@ -569,7 +569,7 @@ def get_tasks():
 
     # Execute assessments query
 
-    task_date_assessment = func.to_date(
+    date_assessment = func.to_date(
         cast(TAssessment.next_assessment_year, String), "YYYY"
     )
 
@@ -578,9 +578,9 @@ def get_tasks():
         TAssessment.id.label("assessment_id"),
         Taxref.lb_nom.label("taxon_Name"),
         TTerritory.label.label("territory_name"),
-        task_date_assessment.label("task_date"),
-        literal_column("'assessment'").label("task_type"),
-        TNomenclaturesT.label_default.label("task_label"),
+        date_assessment.label("date"),
+        literal_column("'assessment'").label("type"),
+        TNomenclaturesT.label_default.label("label"),
         TNomenclaturesP.label_default.label("progress_status"),
         TTerritory.code.label("territory_code"),
         TAssessment.id_priority_taxon.label("priority_taxon_id"),
@@ -622,9 +622,9 @@ def get_tasks():
             TNomenclaturesP.cd_nomenclature == progress_status
         )
 
-    if task_type == "action":
+    if type == "action":
         query = query_action.distinct(TAction.id)
-    elif task_type == "assessment":
+    elif type == "assessment":
         query = query_assessment.distinct(TAssessment.id)
     else:
         query = query_action.union(query_assessment).distinct(
@@ -636,19 +636,19 @@ def get_tasks():
 
     if sort:
         subquery = query.subquery()
-        query = DB.session.query(subquery) # enable orderby on task_date
+        query = DB.session.query(subquery) # enable orderby on date
         try:
             (column, direction) = sort.split(":")
 
             available_sort = {
-                "taskDate": ["task_date"],
+                "date": ["date"],
                 "progressStatus": ["progress_status"],
                 "taxonName": ["taxon_name"],
-                "taskType": ["task_type"],
+                "type": ["type"],
                 "territoryName" : ["territory_name"],
-                "taskLabel": ["task_label"],
+                "label": ["label"],
             }
-            order_fields = available_sort.get(column, "task_date")
+            order_fields = available_sort.get(column, "date")
             if direction == "desc":
                 desc_fields = map(desc, order_fields)
                 query = query.order_by(*desc_fields)

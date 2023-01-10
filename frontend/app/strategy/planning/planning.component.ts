@@ -5,15 +5,14 @@ import {
   HostListener,
   OnInit,
   ViewChild,
-  OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
-import { Subscription, Observable } from '@librairies/rxjs';
 
+import { Observable } from '@librairies/rxjs';
 import { tap, map } from 'rxjs/operators';
-import { IOrganism } from '../../shared/models/assessment.model';
 
+import { IOrganism } from '../../shared/models/assessment.model';
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
 import { StoreService } from '../../shared/services/store.service';
@@ -24,7 +23,7 @@ import { ITask, PlanningDataSource } from './planning.datasource';
   templateUrl: './planning.component.html',
   styleUrls: ['./planning.component.scss']
 })
-export class CsPlanningComponent implements OnInit, AfterViewInit {
+export class PlanningComponent implements OnInit, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;
@@ -33,12 +32,12 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   $organisms: Observable<IOrganism[]>;
   $progressStatus: Observable<any>;
   displayedColumns = [
-    'taskType',
+    'type',
     'taxonName',
     'territoryName',
-    'taskLabel',
+    'label',
     'progressStatus',
-    'taskDate',
+    'date',
     'actions',
   ];
   dataSource: PlanningDataSource;
@@ -88,8 +87,7 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
           this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
           this.loadTasks();
         })
-      )
-      .subscribe();
+      ).subscribe();
   }
 
   private recalculateDataTableSize(): void {
@@ -113,10 +111,9 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
-    this.dataSource.setFilterParam('sort', `taskDate:desc`);
+    this.dataSource.setFilterParam('sort', `date:desc`);
     this.paginator.firstPage();
   }
-
 
   detectTypeOfTask(task) {
     if (task.actionId) {
@@ -161,14 +158,14 @@ export class CsPlanningComponent implements OnInit, AfterViewInit {
   }
 
   onTaskTypeFilterChanged(event) {
-    this.dataSource.setFilterParam('task-type', event.value);
+    this.dataSource.setFilterParam('type', event.value);
     this.loadTasks();
   }
 
   onTaskTypeFilterCleared(event) {
     event.stopPropagation();
     this.filtersForm.controls.taskFilter.reset();
-    this.dataSource.removeFilterParam('task-type');
+    this.dataSource.removeFilterParam('type');
     this.loadTasks();
   }
 
