@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'gn-cs-root',
   templateUrl: './root.component.html',
 })
-export class CsRootComponent implements OnInit {
+export class RootComponent implements OnInit {
 
   constructor() {}
 

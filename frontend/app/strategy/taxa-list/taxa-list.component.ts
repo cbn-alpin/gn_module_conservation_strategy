@@ -24,7 +24,7 @@ import { PriorityTaxa, TaxaDataSource } from './taxa.datasource';
   templateUrl: './taxa-list.component.html',
   styleUrls: ['./taxa-list.component.scss']
 })
-export class CsTaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;

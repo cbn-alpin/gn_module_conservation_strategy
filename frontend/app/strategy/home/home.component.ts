@@ -11,7 +11,7 @@ import { StoreService } from '../../shared/services/store.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class CsHomeComponent implements OnInit {
+export class HomeComponent implements OnInit {
 
   homeContent: Observable<string>;
 

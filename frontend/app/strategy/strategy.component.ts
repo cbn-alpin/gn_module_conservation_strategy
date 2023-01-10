@@ -13,7 +13,7 @@ import { StoreService } from '../shared/services/store.service';
   templateUrl: './strategy.component.html',
   styleUrls: ['./strategy.component.scss']
 })
-export class CsStrategyComponent implements OnInit, OnDestroy {
+export class StrategyComponent implements OnInit, OnDestroy {
   title: String;
   currentTerritory;
   $territories;
