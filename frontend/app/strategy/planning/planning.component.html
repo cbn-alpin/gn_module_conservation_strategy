@@ -186,9 +186,9 @@
           mat-row
           *matRowDef="let row ; columns: displayedColumns"
           [ngClass]="{
-            'bg-success': row.progressStatus == 'Mise en place',
-            'bg-warning': row.progressStatus == 'En cours de mise en place',
-            'bg-danger': row.progressStatus == 'À mettre en place'
+            'bg-success': row.code == 'pl',
+            'bg-warning': row.code == 'c',
+            'bg-danger': row.code == 'pr'
           }"
         ></tr>
       </table>
