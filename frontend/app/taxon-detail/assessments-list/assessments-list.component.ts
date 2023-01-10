@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from '@librairies/rxjs';
 
@@ -15,7 +14,7 @@ import { StoreService } from '../../shared/services/store.service';
   templateUrl: './assessments-list.component.html',
   styleUrls: ['./assessments-list.component.scss']
 })
-export class CsAssessmentsListComponent implements OnInit, OnDestroy {
+export class AssessmentsListComponent implements OnInit, OnDestroy {
 
   assessments: Observable<IAssessmentList>;
   territorySubcription: Subscription;
@@ -31,7 +30,6 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
     private store: StoreService,
     public route: ActivatedRoute,
     private router: Router,
-    private location: Location,
   ) { }
 
   ngOnInit() {

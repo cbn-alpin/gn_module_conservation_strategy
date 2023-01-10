@@ -35,13 +35,13 @@ import { CustomPaginator } from './shared/services/custom-paginator.intl';
 import { BreadcrumbsComponent } from './shared/components/breadcrumbs/breadcrumbs.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfigService } from './shared/services/config.service';
-import { CsAssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
-import { CsHomeComponent } from './strategy/home/home.component';
+import { AssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
+import { HomeComponent } from './strategy/home/home.component';
 import { PlanningComponent } from './strategy/planning/planning.component';
-import { CsRootComponent } from './root/root.component';
-import { CsStrategyComponent } from './strategy/strategy.component';
-import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component'
-import { CsTaxonDetailComponent } from './taxon-detail/taxon-detail.component'
+import { RootComponent } from './root/root.component';
+import { StrategyComponent } from './strategy/strategy.component';
+import { TaxaListComponent } from './strategy/taxa-list/taxa-list.component'
+import { TaxonDetailComponent } from './taxon-detail/taxon-detail.component'
 import { DataService } from './shared/services/data.service';
 import { DialogService } from './shared/components/confirm-dialog/confirm-dialog.service';
 import { ReplaceTagsPipe } from './shared/pipes/replace-tags.pipe';
@@ -67,13 +67,13 @@ export const routingConfiguration: ExtraOptions = {
     AssessmentForm,
     BreadcrumbsComponent,
     ConfirmDialogComponent,
-    CsAssessmentsListComponent,
-    CsHomeComponent,
+    AssessmentsListComponent,
+    HomeComponent,
     PlanningComponent,
-    CsRootComponent,
-    CsStrategyComponent,
-    CsTaxaListComponent,
-    CsTaxonDetailComponent,
+    RootComponent,
+    StrategyComponent,
+    TaxaListComponent,
+    TaxonDetailComponent,
     JoinPipe,
     PluckPipe,
     ReplaceTagsPipe,

@@ -8,7 +8,7 @@ import { StoreService } from '../shared/services/store.service';
   templateUrl: './taxon-detail.component.html',
   styleUrls: ['./taxon-detail.component.scss']
 })
-export class CsTaxonDetailComponent implements OnInit {
+export class TaxonDetailComponent implements OnInit {
   territoryCode: string;
   priorityTaxonId: number;
   displayFullName: string = '...';

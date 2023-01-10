@@ -1,18 +1,18 @@
 import { Routes } from '@angular/router';
 
-import { CsRootComponent } from './root/root.component';
-import { CsAssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
-import { CsHomeComponent } from './strategy/home/home.component';
-import { CsStrategyComponent } from './strategy/strategy.component';
-import { CsTaxonDetailComponent } from './taxon-detail/taxon-detail.component';
-import { CsTaxaListComponent } from './strategy/taxa-list/taxa-list.component';
+import { RootComponent } from './root/root.component';
+import { AssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
+import { HomeComponent } from './strategy/home/home.component';
+import { StrategyComponent } from './strategy/strategy.component';
+import { TaxonDetailComponent } from './taxon-detail/taxon-detail.component';
+import { TaxaListComponent } from './strategy/taxa-list/taxa-list.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
 import { PlanningComponent } from './strategy/planning/planning.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: CsRootComponent,
+    component: RootComponent,
     data: {
       breadcrumb: {
         label: 'Accueil Stratégie Conservation',
@@ -23,11 +23,11 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: CsStrategyComponent,
+        component: StrategyComponent,
         children: [
           {
             path: '',
-            component: CsHomeComponent,
+            component: HomeComponent,
           },
           {
             path: 'planning',
@@ -73,7 +73,7 @@ export const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    component: CsTaxaListComponent,
+                    component: TaxaListComponent,
                   },
                 ]
               }
@@ -115,7 +115,7 @@ export const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    component: CsTaxonDetailComponent,
+                    component: TaxonDetailComponent,
                     children: [
                       {
                         path: '',
@@ -145,7 +145,7 @@ export const routes: Routes = [
                         children: [
                           {
                             path: '',
-                            component: CsAssessmentsListComponent,
+                            component: AssessmentsListComponent,
                           },
                           {
                             path: ':assessmentId',
@@ -159,11 +159,11 @@ export const routes: Routes = [
                             children: [
                               {
                                 path: '',
-                                component: CsAssessmentsListComponent,
+                                component: AssessmentsListComponent,
                               },
                               {
                                 path: 'actions/:actionId',
-                                component: CsAssessmentsListComponent,
+                                component: AssessmentsListComponent,
                                 data: {
                                   breadcrumb: {
                                     label: 'Action : :actionId',
