@@ -71,10 +71,8 @@ export class CsAssessmentsListComponent implements OnInit, OnDestroy {
   }
 
   goToAssessment(id) {
-    // console.log(this.goingToNewAssessment);
-    // console.log(id);
-    // console.log(this.assessmentIdSelected);
-    if (!this.assessmentIdSelected || this.assessmentIdSelected !== id) { // prevent for looping twice because of expanded
+    // Prevent for looping twice because of expanded
+    if (!this.assessmentIdSelected || this.assessmentIdSelected !== id) {
       this.goingToNewAssessment = true;
       let url = this.router.url.replace(/assessments\/[0-9]+$/, 'assessments');
       this.router.navigateByUrl(decodeURIComponent(url) + '/' + id);
