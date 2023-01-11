@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  AfterViewChecked,
   Component,
   ElementRef,
   HostListener,
@@ -10,14 +9,16 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
-import { Subscription } from '@librairies/rxjs';
 
-import { tap } from 'rxjs/operators';
+import { Subscription } from '@librairies/rxjs';
+import { Observable } from '@librairies/rxjs';
+import { tap, map } from 'rxjs/operators';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
 import { StoreService } from '../../shared/services/store.service';
 import { PriorityTaxa, TaxaDataSource } from './taxa.datasource';
+import { ITerritory } from "../../shared/models/assessment.model";
 
 @Component({
   selector: 'cs-taxa-list',
@@ -30,9 +31,11 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
   baseApiEndpoint;
   firstLoad: Boolean = true;
   dataTableHeight: number;
+  $territories: Observable<ITerritory[]>;
   displayedColumns = [
     'fullName',
     'cpi',
+    'territoryName',
     'dateMin',
     'dateMax',
     'areaPresenceCount',
@@ -170,4 +173,5 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.firstLoad = false;
     }
   }
+
 }

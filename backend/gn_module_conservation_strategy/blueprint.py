@@ -164,23 +164,18 @@ def get_taxons_by_territory():
         TPriorityTaxon.min_prospect_zone_date.label("date_min"),
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
+        TTerritory.code.label("territory_code"),
+        TTerritory.label.label("territory_name"),
     ]
     query = (
         DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
     )
 
     if territory:
-        query = query.join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        ).filter(func.lower(TTerritory.code) == territory.lower())
-    else:
-        column_to_add = TTerritory.code.label("territory_code")
-        fields.append(column_to_add)
-        query = query.add_column(column_to_add).join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        )
+        query = query.filter(func.lower(TTerritory.code) == territory.lower())
 
     if cd_nom:
         query = query.filter(TPriorityTaxon.cd_nom == cd_nom)
@@ -206,6 +201,7 @@ def get_taxons_by_territory():
                     TPriorityTaxon.revised_conservation_priority,
                     TPriorityTaxon.computed_conservation_priority,
                 ],
+                "territoryName": [TTerritory.label],
                 "dateMin": [TPriorityTaxon.min_prospect_zone_date],
                 "dateMax": [TPriorityTaxon.max_prospect_zone_date],
                 "areaPresenceCount": [TPriorityTaxon.presence_area_count],

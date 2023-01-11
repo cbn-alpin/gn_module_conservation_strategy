@@ -97,6 +97,11 @@
           </td>
         </ng-container>
 
+        <ng-container matColumnDef="territoryName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Territoire </th>
+          <td mat-cell *matCellDef="let taxon">{{ taxon.territoryName }}</td>
+        </ng-container>
+
         <ng-container matColumnDef="dateMin">
           <th
             mat-header-cell

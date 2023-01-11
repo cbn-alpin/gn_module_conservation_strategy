@@ -2,24 +2,17 @@ import { Injectable } from "@angular/core";
 
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Assessment } from "../models/assessment.model";
+import { ITerritory } from "../models/assessment.model";
 
-interface Territory {
-  id: number;
-  label: string;
-  code: string;
-  surface?: number;
-  meshesTotal?: number;
-}
 
 @Injectable()
 export class StoreService {
-  private territory: Territory;
+  private territory: ITerritory;
   private selectedTerritoryStatus = new BehaviorSubject(false);
   private taxon: number;
   private selectedTaxonStatus = new BehaviorSubject(false);
 
-  get selectedTerritory(): Territory {
+  get selectedTerritory(): ITerritory {
     return this.territory;
   }
 
@@ -27,7 +20,7 @@ export class StoreService {
     return this.taxon;
   }
 
-  set selectedTerritory(territory: Territory) {
+  set selectedTerritory(territory: ITerritory) {
     this.territory = territory;
     this.selectedTerritoryStatus.next(true);
   }
