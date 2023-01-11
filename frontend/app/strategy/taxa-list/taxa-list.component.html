@@ -7,6 +7,40 @@
       <fieldset>
         <h4 class="h5">Filtres</h4>
 
+        <mat-form-field
+          *ngIf="
+            $territories | async as territoriesList;
+            else noProgressStatus
+          "
+        >
+          <mat-label>Territoire</mat-label>
+          <mat-select
+            name="territoryName"
+            [formControl]="filtersForm.controls.territoryFilter"
+            (selectionChange)="onTerritoryFilterChanged($event)"
+          >
+            <mat-option
+              *ngFor="let territory of territoriesList"
+              [value]="territory.code"
+            >
+              {{ territory.label }}
+            </mat-option>
+          </mat-select>
+          <button
+            mat-button
+            *ngIf="filtersForm.controls.territoryFilter.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            (click)="onTerritoryFilterCleared($event)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <ng-template #noProgressStatus>
+          <p>Aucun territoire</p>
+        </ng-template>
+
         <div class="pb-3">
           <cs-taxa-filter
             #taxonFilter

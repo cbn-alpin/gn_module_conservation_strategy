@@ -59,6 +59,7 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.initializeDataSource();
     this.initializeTaxaFiltersForm();
+    this.loadTerritories();
   }
 
   ngAfterViewInit(): void {
@@ -131,6 +132,7 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filtersForm = this.formBuilder.group({
       taxaFilter: null,
       cpiFilter: null,
+      territoryFilter: null,
       assessmentFilter: null,
     });
   }
@@ -157,6 +159,18 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadTaxa();
   }
 
+  onTerritoryFilterChanged(territoryName) {
+    this.dataSource.setFilterParam('territory-code', territoryName.code);
+    this.loadTaxa();
+  }
+
+  onTerritoryFilterCleared(event) {
+    event.stopPropagation();
+    this.filtersForm.controls.territoryFilter.reset();
+    this.dataSource.removeFilterParam('territory-code');
+    this.loadTaxa();
+  }
+
   onAssessmentFilterChanged(event) {
     if (event.checked) {
       this.dataSource.setFilterParam('with-assessment', 'true');
@@ -172,6 +186,18 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.calculateDataTableHeight();
       this.firstLoad = false;
     }
+  }
+
+  loadTerritories() {
+    this.$territories = this.dataService.getTerritories().pipe(
+      map(territories => {
+        let territoriesList = [];
+        territories.forEach((item) => {
+          territoriesList.push({ code: item.code, label: item.label });
+        })
+        return territoriesList;
+      })
+    );
   }
 
 }
