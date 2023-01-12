@@ -35,42 +35,10 @@ blueprint = Blueprint("pr_conservation_strategy", __name__)
 log = logging.getLogger(__name__)
 
 
-@blueprint.route("/territories", methods=["GET"])
-@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
-@json_resp
-def get_territories():
-    """
-    Liste des territoires.
-
-    :returns: une liste de dictionnaires contenant les infos d'un territoire.
-    """
-    q = DB.session.query(TTerritory)
-    data = q.all()
-    output = [d.as_dict() for d in data]
-    return prepare_output(output, remove_in_key="territory")
-
-
-@blueprint.route("/territories/<territory>", methods=["GET"])
-@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
-@json_resp
-def get_territory(territory):
-    """
-    Fourni les infos d'un territoire.
-
-    :returns: un dictionnaire contenant les infos d'un territoire.
-    """
-    q = DB.session.query(TTerritory).filter(
-        func.lower(TTerritory.code) == territory.lower()
-    )
-    result = q.first()
-    output = None if not result else result.as_dict()
-    return prepare_output(output, remove_in_key="territory")
-
-
 @blueprint.route("/taxons/search", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def search_taxons_by_territory():
+def search_taxons():
     """
     Liste des noms de taxons pour un territoire donné.
 
@@ -84,7 +52,6 @@ def search_taxons_by_territory():
     """
     # Get request parameters
     search_name = request.args.get("q")
-    territory = request.args.get("territory-code")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -95,10 +62,6 @@ def search_taxons_by_territory():
         Taxref.lb_nom.label("search_name"),
         Taxref.nom_valide,
     ).join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-    if territory:
-        query = query.join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        ).filter(func.lower(TTerritory.code) == territory.lower())
 
     if search_name:
         ilike_search_name = f"%{search_name.replace(' ', '%')}%"
@@ -118,7 +81,7 @@ def search_taxons_by_territory():
 @blueprint.route("/taxons", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_taxons_by_territory():
+def get_taxons():
     """
     Liste des infos des taxons prioritaires pour un territoire donné.
 
