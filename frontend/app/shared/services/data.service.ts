@@ -35,7 +35,6 @@ export class DataService {
   }
 
   getPriorityTaxa(params: HttpParams) {
-    params = params.set('territory-code', this.store.selectedTerritory.code.toLowerCase());
     const url = `${this.cfg.getModuleBackendUrl()}/taxons`;
     return this.http.get<any>(url, {params});
   }

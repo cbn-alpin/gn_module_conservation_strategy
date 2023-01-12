@@ -46,7 +46,6 @@
             #taxonFilter
             label="Taxon"
             [apiEndPoint]="baseApiEndpoint + '/taxons/search'"
-            [apiParams]="{ 'territory-code': store.selectedTerritory?.code }"
             [parentFormControl]="filtersForm.controls.taxaFilter"
             [charNumber]="3"
             [listLength]="20"

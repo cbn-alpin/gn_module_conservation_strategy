@@ -5,12 +5,10 @@ import {
   HostListener,
   OnInit,
   ViewChild,
-  OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
 
-import { Subscription } from '@librairies/rxjs';
 import { Observable } from '@librairies/rxjs';
 import { tap, map } from 'rxjs/operators';
 
@@ -25,7 +23,7 @@ import { ITerritory } from "../../shared/models/assessment.model";
   templateUrl: './taxa-list.component.html',
   styleUrls: ['./taxa-list.component.scss']
 })
-export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TaxaListComponent implements OnInit, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;
@@ -47,7 +45,6 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatTable) dataTable: MatTable<PriorityTaxa>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  territorySubcription: Subscription;
 
   constructor(
     private cfg: ConfigService,
@@ -60,6 +57,7 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initializeDataSource();
     this.initializeTaxaFiltersForm();
     this.loadTerritories();
+    this.loadTaxa();
   }
 
   ngAfterViewInit(): void {
@@ -96,10 +94,6 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.territorySubcription.unsubscribe();
-  }
-
   @HostListener("window:resize", ["$event"])
   onWindowResize(event) {
     this.calculateDataTableHeight();
@@ -115,16 +109,6 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new TaxaDataSource(this.dataService);
-    this.onTerritoryChange();
-  }
-
-  private onTerritoryChange() {
-    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
-      if (status === true) {
-        this.paginator.firstPage();
-        this.loadTaxa();
-      }
-    });
   }
 
   private initializeTaxaFiltersForm() {
@@ -159,8 +143,8 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadTaxa();
   }
 
-  onTerritoryFilterChanged(territoryName) {
-    this.dataSource.setFilterParam('territory-code', territoryName.code);
+  onTerritoryFilterChanged(territory) {
+    this.dataSource.setFilterParam('territory-code', territory.value);
     this.loadTaxa();
   }
 
