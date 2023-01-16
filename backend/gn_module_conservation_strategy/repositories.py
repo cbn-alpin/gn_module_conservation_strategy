@@ -25,7 +25,6 @@ class AssessmentRepository:
         query = (
             DB.session.query(TAssessment)
             .join(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
-            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
             .filter(TAssessment.id == assessment_id)
         )
         # Execute query
@@ -34,8 +33,7 @@ class AssessmentRepository:
         return self._buildOutput(results) if results != None else {}
 
     def _buildOutput(self, assessment):
-        item = assessment.as_dict(exclude=["id_territory", "meta_create_by"])
-        # item['territory_code'] = assessment.territory.code
+        item = assessment.as_dict(exclude=["meta_create_by"])
         item["meta_create_by"] = assessment.create_by.nom_role
         item["actions"] = []
         for action in assessment.actions:
@@ -58,16 +56,12 @@ class AssessmentRepository:
             item["actions"].append(action_dict)
         return item
 
-    def get_all(self, territory_code, priority_taxon_id, limit, page):
+    def get_all(self, priority_taxon_id, limit, page):
         # Build query
         query = (
-            DB.session.query(TAssessment, TTerritory.code.label("territory_code"))
+            DB.session.query(TAssessment)
             .join(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
-            .join(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         )
-
-        if territory_code:
-            query = query.filter(func.lower(TTerritory.code) == territory_code.lower())
 
         if priority_taxon_id:
             query = query.filter(TPriorityTaxon.id == priority_taxon_id)
@@ -77,9 +71,8 @@ class AssessmentRepository:
         results = query.limit(limit).offset(page * limit).all()
         # Manage output
         items = []
-        for (assessment, territory_code) in results:
-            item = assessment.as_dict(exclude=["id_territory", "meta_create_by"])
-            item["territory_code"] = territory_code
+        for (assessment) in results:
+            item = assessment.as_dict(exclude=["meta_create_by"])
             item["meta_create_by"] = assessment.create_by.nom_role
             items.append(item)
         return (count, items)

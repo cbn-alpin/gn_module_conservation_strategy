@@ -35,6 +35,21 @@ blueprint = Blueprint("pr_conservation_strategy", __name__)
 log = logging.getLogger(__name__)
 
 
+@blueprint.route("/territories", methods=["GET"])
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
+@json_resp
+def get_territories():
+    """
+    Liste des territoires.
+
+    :returns: une liste de dictionnaires contenant les infos d'un territoire.
+    """
+    q = DB.session.query(TTerritory)
+    data = q.all()
+    output = [d.as_dict() for d in data]
+    return prepare_output(output, remove_in_key="territory")
+
+
 @blueprint.route("/taxons/search", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
@@ -381,14 +396,13 @@ def get_assessments():
     bilan stationnel.
     """
     # Get request parameters
-    territory = request.args.get("territory-code")
     priority_taxon_id = request.args.get("priority-taxon-id")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
     # Find data
     assessment_repo = AssessmentRepository()
-    count, items = assessment_repo.get_all(territory, priority_taxon_id, limit, page)
+    count, items = assessment_repo.get_all(priority_taxon_id, limit, page)
 
     # Manage output
     output = {
