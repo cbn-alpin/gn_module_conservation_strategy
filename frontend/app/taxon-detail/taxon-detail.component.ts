@@ -26,23 +26,11 @@ export class TaxonDetailComponent implements OnInit {
 
   private extractRouteParams() {
     this.route.paramMap.subscribe(urlParams => {
-      if (urlParams.has('territoryCode')) {
-        this.territoryCode = urlParams.get('territoryCode');
-        this.dataService.getTerritory(this.territoryCode).subscribe(territory => {
-          this.store.selectedTerritory = territory;
-        });
-      }
-
-      if (urlParams.has('shortName')) {
-        this.displayFullName = urlParams.get('shortName');
-      }
-
       if (urlParams.has('priorityTaxonId')) {
         let priorityTaxonId = parseInt(urlParams.get('priorityTaxonId'));
         this.priorityTaxonId = priorityTaxonId;
         this.store.selectedTaxon = priorityTaxonId;
       }
-
       this.loadTaxon();
     });
   }

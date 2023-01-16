@@ -27,7 +27,6 @@ export class AssessmentForm implements OnInit, AfterViewInit {
   currentYear: number;
   form!: FormGroup;
   updateMode: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  territoryCode: any;
   priorityTaxonId: number;
 
   constructor(
@@ -60,7 +59,6 @@ export class AssessmentForm implements OnInit, AfterViewInit {
 
   private extractRouteParams() {
     const urlParams = this.collectRouteParams();
-    this.territoryCode = urlParams['territoryCode'];
     this.priorityTaxonId = parseInt(urlParams["priorityTaxonId"]);
   }
 

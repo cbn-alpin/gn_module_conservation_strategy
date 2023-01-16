@@ -191,10 +191,7 @@
                 mat-icon-button
                 matRipple
                 matTooltip="Voir la fiche détaillée du taxon prioritaire."
-                [routerLink]="[
-                  taxon.id,
-                  { shortName: taxon.shortName }
-                ]"
+                [routerLink]="[taxon.id]"
               >
                 <mat-icon>description</mat-icon>
               </button>
