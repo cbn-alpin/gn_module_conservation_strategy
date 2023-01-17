@@ -4,6 +4,10 @@
       <mat-icon fontSet="fa" fontIcon="fa-leaf"></mat-icon>
       Fiche détaillée du taxon :
       <span [innerHTML]="taxon?.displayFullName ? taxon?.displayFullName : displayFullName"></span>
+      <div class="territory">
+        Territoire :
+        <span [innerHTML]="taxon?.territoryName"></span>
+      </div>
     </h3>
   </div>
   <div class="card-body">

@@ -242,12 +242,14 @@ def get_priority_taxon_infos(priority_taxon_id):
         TPriorityTaxon.min_prospect_zone_date.label("date_min"),
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
+        TTerritory.label.label("territory_name"),
     ]
     query = (
         DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.cd_nom == Taxref.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .filter(TPriorityTaxon.id == priority_taxon_id)
         .group_by(*fields)
     )
