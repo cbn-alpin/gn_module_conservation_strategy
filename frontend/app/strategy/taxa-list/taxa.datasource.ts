@@ -11,6 +11,7 @@ export interface PriorityTaxa {
   refNameCode: number;
   fullName: string;
   displayFullName: string;
+  territoryName: string;
   shortName: string;
   nameCode: number;
   revisedCpi?: number;

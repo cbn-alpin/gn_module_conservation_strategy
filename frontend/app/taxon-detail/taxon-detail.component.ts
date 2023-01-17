@@ -9,7 +9,6 @@ import { StoreService } from '../shared/services/store.service';
   styleUrls: ['./taxon-detail.component.scss']
 })
 export class TaxonDetailComponent implements OnInit {
-  territoryCode: string;
   priorityTaxonId: number;
   displayFullName: string = '...';
   taxon: any;
