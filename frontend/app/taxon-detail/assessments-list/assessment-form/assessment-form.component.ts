@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, ComponentRef, Inject, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { ActivatedRoute, ActivatedRouteSnapshot, Router } from "@angular/router";
 
@@ -67,7 +67,7 @@ export class AssessmentForm implements OnInit, AfterViewInit {
     let stack: ActivatedRouteSnapshot[] = [this.router.routerState.snapshot.root];
     while (stack.length > 0) {
       const route = stack.pop()!;
-      params = {...params, ...route.params};
+      params = { ...params, ...route.params };
       stack.push(...route.children);
     }
     return params;

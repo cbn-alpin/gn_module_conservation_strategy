@@ -6,9 +6,7 @@
       'bg-danger': progressValue == 'pr'
     }"
   >
-    <mat-panel-title>
-      Action #{{ actionNumber }}
-    </mat-panel-title>
+    <mat-panel-title> Action #{{ actionNumber }} </mat-panel-title>
     <mat-panel-description class="d-flex justify-content-between">
       <div class="truncate">
         <span>{{ level }}</span>
@@ -80,7 +78,9 @@
           [min]="currentYear"
           [max]="currentYear + 10"
           [value]="planForCtrl.value"
-          (change)="onPlanForSliderChange($event, parentFormGroup.controls.planFor)"
+          (change)="
+            onPlanForSliderChange($event, parentFormGroup.controls.planFor)
+          "
         ></mat-slider>
       </mat-form-field>
 
@@ -117,7 +117,10 @@
       </mat-form-field>
     </div>
 
-    <mat-form-field hintLabel="Max {{descriptionCtrl.maxLength}} caractères" appearance="outline">
+    <mat-form-field
+      hintLabel="Max {{ descriptionCtrl.maxLength }} caractères"
+      appearance="outline"
+    >
       <mat-label>Description</mat-label>
       <textarea
         #descriptionCtrl
@@ -128,7 +131,7 @@
         maxlength="10000"
       ></textarea>
       <mat-hint align="end">
-        {{ descriptionCtrl.value?.length || 0 }}/{{descriptionCtrl.maxLength}}
+        {{ descriptionCtrl.value?.length || 0 }}/{{ descriptionCtrl.maxLength }}
       </mat-hint>
     </mat-form-field>
 
@@ -139,7 +142,10 @@
         [formControl]="parentFormGroup.controls.partners"
         [multiple]="true"
       >
-        <mat-option *ngFor="let partner of partners | async" [value]="partner.uuid">
+        <mat-option
+          *ngFor="let partner of partners | async"
+          [value]="partner.uuid"
+        >
           {{ partner.name }}
         </mat-option>
       </mat-select>

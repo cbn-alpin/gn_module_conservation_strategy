@@ -6,7 +6,7 @@ import { Observable } from "@librairies/rxjs";
 import { ConfigService } from "./config.service";
 import { StoreService } from "./store.service";
 import { IOrganism } from "../models/assessment.model";
-import { ITask, ITasks } from "../../strategy/planning/planning.datasource";
+import { ITasks } from "../../strategy/planning/planning.datasource";
 
 
 // TODO: use StoreService to get territory code and taxon name code.
@@ -17,7 +17,7 @@ export class DataService {
     private cfg: ConfigService,
     private http: HttpClient,
     private store: StoreService,
-  ) {}
+  ) { }
 
   getTerritories() {
     const url = `${this.cfg.getModuleBackendUrl()}/territories`;
@@ -26,12 +26,12 @@ export class DataService {
 
   getHomePage(): Observable<string> {
     const path = 'external_assets/conservation_strategy/templates/home.tpl.html';
-    return this.http.get(path, {responseType: 'text'});
+    return this.http.get(path, { responseType: 'text' });
   }
 
   getPriorityTaxa(params: HttpParams) {
     const url = `${this.cfg.getModuleBackendUrl()}/taxons`;
-    return this.http.get<any>(url, {params});
+    return this.http.get<any>(url, { params });
   }
 
   getPriorityTaxon(priorityTaxonId: number) {
@@ -41,7 +41,7 @@ export class DataService {
 
   getTaxonInfos(priorityTaxonId: number, params = {}) {
     const url = `${this.cfg.getModuleBackendUrl()}/taxons/${priorityTaxonId}`;
-    return this.http.get<any>(url, {params});
+    return this.http.get<any>(url, { params });
   }
 
   addAssessment(assessmentData: any): Observable<any> {
@@ -56,12 +56,12 @@ export class DataService {
 
   getAssessments(params: {} = {}) {
     const url = `${this.cfg.getModuleBackendUrl()}/assessments`;
-    return this.http.get<any>(url, {params});
+    return this.http.get<any>(url, { params });
   }
 
   getAssessment(assessmentId: number, params: {} = {}) {
     const url = `${this.cfg.getModuleBackendUrl()}/assessments/${assessmentId}`;
-    return this.http.get<any>(url, {params});
+    return this.http.get<any>(url, { params });
   }
 
   getOrganisms(): Observable<IOrganism[]> {
@@ -69,9 +69,9 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getTasks(params: HttpParams): Observable<ITasks>  {
+  getTasks(params: HttpParams): Observable<ITasks> {
     const url = `${this.cfg.getModuleBackendUrl()}/tasks`;
-    return this.http.get<any>(url, {params});
+    return this.http.get<any>(url, { params });
   }
 
   getNomenclatures(type): Observable<any> {

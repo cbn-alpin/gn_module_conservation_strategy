@@ -10,13 +10,13 @@
 mat-card,
 mat-expansion-panel-header {
   &.bg-success {
-    background-color: #BDE7BD !important;
+    background-color: #bde7bd !important;
   }
   &.bg-warning {
-    background-color: #FFE08E !important;
+    background-color: #ffe08e !important;
   }
   &.bg-danger {
-    background-color: #FFB6B3 !important;
+    background-color: #ffb6b3 !important;
   }
 }
 
@@ -25,13 +25,16 @@ mat-expansion-panel-header {
 .cs-big-text {
   font-size: 20px;
 }
+
 :host ::ng-deep .mat-card-header-text {
   margin-left: 0;
 }
+
 .mat-card-header .mat-card-title,
 .cs-small-text {
   font-size: 14px;
 }
+
 .cs-text {
   white-space: pre-wrap;
 }

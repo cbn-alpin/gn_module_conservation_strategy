@@ -2,8 +2,6 @@ import { Injectable } from "@angular/core";
 
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { ITerritory } from "../models/assessment.model";
-
 
 @Injectable()
 export class StoreService {

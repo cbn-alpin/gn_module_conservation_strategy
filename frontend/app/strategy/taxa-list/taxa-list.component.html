@@ -1,17 +1,11 @@
 <mat-drawer-container>
-  <mat-drawer
-      mode="side"
-      opened
-  >
+  <mat-drawer mode="side" opened>
     <form>
       <fieldset>
         <h4 class="h5">Filtres</h4>
 
         <mat-form-field
-          *ngIf="
-            $territories | async as territoriesList;
-            else noProgressStatus
-          "
+          *ngIf="$territories | async as territoriesList; else noProgressStatus"
         >
           <mat-label>Territoire</mat-label>
           <mat-select
@@ -69,7 +63,9 @@
           <button
             mat-button
             *ngIf="filtersForm.controls.cpiFilter.value"
-            matSuffix mat-icon-button aria-label="Clear"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
             (click)="onCpiFilterCleared($event)"
           >
             <mat-icon>close</mat-icon>
@@ -88,10 +84,17 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="cs-taxa-datatable-progress-bar-container" >
-      <mat-progress-bar mode="query" *ngIf="dataSource.loading$ | async"></mat-progress-bar>
+    <div class="cs-taxa-datatable-progress-bar-container">
+      <mat-progress-bar
+        mode="query"
+        *ngIf="dataSource.loading$ | async"
+      ></mat-progress-bar>
     </div>
-    <div #dataTableContainer class="mat-elevation-z8" [ngStyle]="{ 'height': dataTableHeight + 'px' }">
+    <div
+      #dataTableContainer
+      class="mat-elevation-z8"
+      [ngStyle]="{ height: dataTableHeight + 'px' }"
+    >
       <table
         mat-table
         [dataSource]="dataSource"
@@ -101,14 +104,18 @@
         matSortDisableClear
       >
         <ng-container matColumnDef="fullName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom taxon </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom taxon</th>
           <td mat-cell *matCellDef="let taxon">
-            <i matTooltip="{{taxon.fullName}} [{{taxon.nameCode}}]">{{taxon.shortName}}</i>
+            <i matTooltip="{{ taxon.fullName }} [{{ taxon.nameCode }}]">{{
+              taxon.shortName
+            }}</i>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="cpi">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Indice de priorité </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Indice de priorité
+          </th>
           <td mat-cell *matCellDef="let taxon">
             <span *ngIf="taxon?.revisedCpi && !taxon?.computedCpi">
               {{ taxon.revisedCpi }} (révisé)
@@ -116,22 +123,30 @@
             <span *ngIf="!taxon?.revisedCpi && taxon?.computedCpi">
               {{ taxon.computedCpi }} (calculé)
             </span>
-            <span *ngIf="
-              taxon?.computedCpi && taxon?.revisedCpi && taxon?.computedCpi != taxon?.revisedCpi
-            ">
+            <span
+              *ngIf="
+                taxon?.computedCpi &&
+                taxon?.revisedCpi &&
+                taxon?.computedCpi != taxon?.revisedCpi
+              "
+            >
               {{ taxon.revisedCpi }} / {{ taxon.computedCpi }}
               (révisé / calculé)
             </span>
-            <span *ngIf="
-            taxon?.computedCpi && taxon?.revisedCpi && taxon?.computedCpi == taxon?.revisedCpi
-            ">
+            <span
+              *ngIf="
+                taxon?.computedCpi &&
+                taxon?.revisedCpi &&
+                taxon?.computedCpi == taxon?.revisedCpi
+              "
+            >
               {{ taxon.revisedCpi }} (révisé = calculé)
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="territoryName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Territoire </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Territoire</th>
           <td mat-cell *matCellDef="let taxon">{{ taxon.territoryName }}</td>
         </ng-container>
 
@@ -144,7 +159,7 @@
           >
             Date min prospection
           </th>
-          <td mat-cell *matCellDef="let taxon"> {{taxon.dateMin | date}} </td>
+          <td mat-cell *matCellDef="let taxon">{{ taxon.dateMin | date }}</td>
         </ng-container>
 
         <ng-container matColumnDef="dateMax">
@@ -156,7 +171,7 @@
           >
             Date max prospection
           </th>
-          <td mat-cell *matCellDef="let taxon"> {{taxon.dateMax | date}} </td>
+          <td mat-cell *matCellDef="let taxon">{{ taxon.dateMax | date }}</td>
         </ng-container>
 
         <ng-container matColumnDef="areaPresenceCount">
@@ -168,7 +183,9 @@
           >
             Nombre stations
           </th>
-          <td mat-cell class="text-center" *matCellDef="let taxon"> {{taxon.presenceAreaCount}} </td>
+          <td mat-cell class="text-center" *matCellDef="let taxon">
+            {{ taxon.presenceAreaCount }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="assessmentCount">
@@ -180,11 +197,13 @@
           >
             Nombre de bilan
           </th>
-          <td mat-cell class="text-center" *matCellDef="let taxon"> {{taxon.assessmentCount}} </td>
+          <td mat-cell class="text-center" *matCellDef="let taxon">
+            {{ taxon.assessmentCount }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let taxon">
             <div class="d-flex justify-content-end flex-wrap">
               <button
@@ -199,7 +218,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
 

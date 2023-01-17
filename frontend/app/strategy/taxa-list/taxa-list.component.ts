@@ -51,7 +51,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
     private dataService: DataService,
     private formBuilder: FormBuilder,
     public store: StoreService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializeDataSource();
@@ -76,13 +76,13 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
 
     this.sort.sortChange
       .pipe(
-          tap((event) => {
-            this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
-            this.loadTaxa();
-          })
+        tap((event) => {
+          this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
+          this.loadTaxa();
+        })
       )
       .subscribe();
-    
+
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     // See: https://angular.io/errors/NG0100
     Promise.resolve(null).then(() => this.recalculateDataTableSize());
@@ -103,7 +103,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
     const screenHeight: number = document.documentElement.clientHeight;
     const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
     // TODO: see why we need to remove 11px !
-    const dataTableHeight = screenHeight - dataTableTop - 11 ;
+    const dataTableHeight = screenHeight - dataTableTop - 11;
     this.dataTableHeight = dataTableHeight;
   }
 

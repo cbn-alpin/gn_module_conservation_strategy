@@ -17,7 +17,7 @@ export class TaxonDetailComponent implements OnInit {
     public route: ActivatedRoute,
     private dataService: DataService,
     public store: StoreService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.extractRouteParams();

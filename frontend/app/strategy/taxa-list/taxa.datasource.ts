@@ -39,8 +39,8 @@ export class TaxaDataSource implements DataSource<PriorityTaxa> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-      this.taxaSubject.complete();
-      this.loadingSubject.complete();
+    this.taxaSubject.complete();
+    this.loadingSubject.complete();
   }
 
   setFilterParam(param: string, value: string): void {

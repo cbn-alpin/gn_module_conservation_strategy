@@ -1,18 +1,19 @@
 <div class="card">
-
   <div class="card-body">
     <nav mat-tab-nav-bar>
-      <a mat-tab-link
+      <a
+        mat-tab-link
         routerLink="/conservation_strategy"
         routerLinkActive
-        [routerLinkActiveOptions]="{exact:true}"
+        [routerLinkActiveOptions]="{ exact: true }"
         #rlaHome="routerLinkActive"
         [active]="rlaHome.isActive"
       >
         <mat-icon fontSet="fa" fontIcon="fa-home"></mat-icon>
         Accueil
       </a>
-      <a mat-tab-link
+      <a
+        mat-tab-link
         routerLink="/conservation_strategy/priority-taxa"
         routerLinkActive
         #rlaPriorityTaxa="routerLinkActive"
@@ -21,7 +22,8 @@
         <mat-icon fontSet="fa" fontIcon="fa-list"></mat-icon>
         Liste des taxons prioritaires
       </a>
-      <a mat-tab-link
+      <a
+        mat-tab-link
         routerLink="/conservation_strategy/planning"
         routerLinkActive
         #rlaPlanning="routerLinkActive"
@@ -30,7 +32,6 @@
         <mat-icon fontSet="fa" fontIcon="fa-calendar"></mat-icon>
         Planning
       </a>
-
     </nav>
 
     <router-outlet></router-outlet>

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs/internal/Observable';
 
-import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
 import { StoreService } from '../../shared/services/store.service';
 
