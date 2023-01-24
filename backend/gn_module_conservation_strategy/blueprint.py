@@ -50,27 +50,10 @@ def get_territories():
     return prepare_output(output, remove_in_key="territory")
 
 
-@blueprint.route("/territories/<territory>", methods=["GET"])
-@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
-@json_resp
-def get_territory(territory):
-    """
-    Fourni les infos d'un territoire.
-
-    :returns: un dictionnaire contenant les infos d'un territoire.
-    """
-    q = DB.session.query(TTerritory).filter(
-        func.lower(TTerritory.code) == territory.lower()
-    )
-    result = q.first()
-    output = None if not result else result.as_dict()
-    return prepare_output(output, remove_in_key="territory")
-
-
 @blueprint.route("/taxons/search", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def search_taxons_by_territory():
+def search_taxons():
     """
     Liste des noms de taxons pour un territoire donné.
 
@@ -84,7 +67,6 @@ def search_taxons_by_territory():
     """
     # Get request parameters
     search_name = request.args.get("q")
-    territory = request.args.get("territory-code")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
@@ -95,10 +77,6 @@ def search_taxons_by_territory():
         Taxref.lb_nom.label("search_name"),
         Taxref.nom_valide,
     ).join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-    if territory:
-        query = query.join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        ).filter(func.lower(TTerritory.code) == territory.lower())
 
     if search_name:
         ilike_search_name = f"%{search_name.replace(' ', '%')}%"
@@ -118,7 +96,7 @@ def search_taxons_by_territory():
 @blueprint.route("/taxons", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def get_taxons_by_territory():
+def get_taxons():
     """
     Liste des infos des taxons prioritaires pour un territoire donné.
 
@@ -164,23 +142,18 @@ def get_taxons_by_territory():
         TPriorityTaxon.min_prospect_zone_date.label("date_min"),
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
+        TTerritory.code.label("territory_code"),
+        TTerritory.label.label("territory_name"),
     ]
     query = (
         DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
     )
 
     if territory:
-        query = query.join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        ).filter(func.lower(TTerritory.code) == territory.lower())
-    else:
-        column_to_add = TTerritory.code.label("territory_code")
-        fields.append(column_to_add)
-        query = query.add_column(column_to_add).join(
-            TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory
-        )
+        query = query.filter(func.lower(TTerritory.code) == territory.lower())
 
     if cd_nom:
         query = query.filter(TPriorityTaxon.cd_nom == cd_nom)
@@ -206,6 +179,7 @@ def get_taxons_by_territory():
                     TPriorityTaxon.revised_conservation_priority,
                     TPriorityTaxon.computed_conservation_priority,
                 ],
+                "territoryName": [TTerritory.label],
                 "dateMin": [TPriorityTaxon.min_prospect_zone_date],
                 "dateMax": [TPriorityTaxon.max_prospect_zone_date],
                 "areaPresenceCount": [TPriorityTaxon.presence_area_count],
@@ -268,12 +242,14 @@ def get_priority_taxon_infos(priority_taxon_id):
         TPriorityTaxon.min_prospect_zone_date.label("date_min"),
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
+        TTerritory.label.label("territory_name"),
     ]
     query = (
         DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.cd_nom == Taxref.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
+        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .filter(TPriorityTaxon.id == priority_taxon_id)
         .group_by(*fields)
     )
@@ -422,14 +398,13 @@ def get_assessments():
     bilan stationnel.
     """
     # Get request parameters
-    territory = request.args.get("territory-code")
     priority_taxon_id = request.args.get("priority-taxon-id")
     limit = int(request.args.get("limit", 20))
     page = int(request.args.get("page", 0))
 
     # Find data
     assessment_repo = AssessmentRepository()
-    count, items = assessment_repo.get_all(territory, priority_taxon_id, limit, page)
+    count, items = assessment_repo.get_all(priority_taxon_id, limit, page)
 
     # Manage output
     output = {

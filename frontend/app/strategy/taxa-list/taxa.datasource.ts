@@ -11,6 +11,7 @@ export interface PriorityTaxa {
   refNameCode: number;
   fullName: string;
   displayFullName: string;
+  territoryName: string;
   shortName: string;
   nameCode: number;
   revisedCpi?: number;
@@ -38,8 +39,8 @@ export class TaxaDataSource implements DataSource<PriorityTaxa> {
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-      this.taxaSubject.complete();
-      this.loadingSubject.complete();
+    this.taxaSubject.complete();
+    this.loadingSubject.complete();
   }
 
   setFilterParam(param: string, value: string): void {

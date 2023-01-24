@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { Assessment } from '../../../shared/models/assessment.model';

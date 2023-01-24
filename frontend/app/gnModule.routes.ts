@@ -41,104 +41,80 @@ export const routes: Routes = [
             }
           },
           {
-            path: 'territories',
-            redirectTo: '/conservation_strategy',
+            path: 'priority-taxa',
             pathMatch: 'full',
-          },
-          {
-            path: 'territories/:territoryCode',
+            component: TaxaListComponent,
             data: {
               breadcrumb: {
-                label: 'Territoire : :territoryCode',
+                label: 'Taxons prioritaires',
                 title: "Liste des taxons prioritaires du module Stratégie Conservation.",
-                iconClass: 'fa fa-globe',
+                iconClass: 'fa fa-list',
+              }
+            }
+          }
+        ],
+      },
+      {
+        path: 'priority-taxa',
+        data: {
+          breadcrumb: {
+            label: 'Taxons prioritaires',
+            title: "Liste des taxons prioritaires du module Stratégie Conservation.",
+            iconClass: 'fa fa-list',
+          }
+        },
+        children: [
+          {
+            path: ':priorityTaxonId',
+            data: {
+              breadcrumb: {
+                label: 'Taxon : :priorityTaxonId',
+                title: 'Détail d\'un taxon prioritaire du module Stratégie Conservation.',
+                iconClass: 'fa fa-leaf',
                 disable: true,
               }
             },
             children: [
               {
                 path: '',
-                redirectTo: 'priority-taxa',
-                pathMatch: 'full',
-              },
-              {
-                path: 'priority-taxa',
-                data: {
-                  breadcrumb: {
-                    label: 'Taxons prioritaires',
-                    title: "Liste des taxons prioritaires du module Stratégie Conservation.",
-                    iconClass: 'fa fa-list',
-                  }
-                },
+                component: TaxonDetailComponent,
                 children: [
                   {
                     path: '',
-                    component: TaxaListComponent,
+                    redirectTo: 'infos',
+                    pathMatch: 'full',
                   },
-                ]
-              }
-            ]
-          }
-        ],
-      },
-      {
-        path: 'territories/:territoryCode',
-        data: {
-          breadcrumb: {
-            label: 'Territoire : :territoryCode',
-            title: "Liste des taxons prioritaires du module Stratégie Conservation.",
-            iconClass: 'fa fa-globe',
-            disable: true,
-          }
-        },
-        children: [
-          {
-            path: 'priority-taxa',
-            data: {
-              breadcrumb: {
-                label: 'Taxons prioritaires ',
-                title: "Liste des taxons prioritaires du module Stratégie Conservation.",
-                iconClass: 'fa fa-list',
-              }
-            },
-            children: [
-              {
-                path: ':priorityTaxonId',
-                data: {
-                  breadcrumb: {
-                    label: 'Taxon : :shortName',
-                    title: 'Détail d\'un taxon prioritaire du module Stratégie Conservation.',
-                    iconClass: 'fa fa-leaf',
-                    disable: true,
-                  }
-                },
-                children: [
                   {
-                    path: '',
-                    component: TaxonDetailComponent,
+                    path: 'infos',
+                    component: TaxonInfosComponent,
+                    data: {
+                      breadcrumb: {
+                        label: 'Infos générales',
+                        title: 'Informations générales sur le taxon prioritaire.',
+                        iconClass: 'fa fa-info-circle',
+                      }
+                    },
+                  },
+                  {
+                    path: 'assessments',
+                    data: {
+                      breadcrumb: {
+                        label: 'Bilans stationnels',
+                        title: 'Liste des bilans stationnels d\'un taxon prioritaire du module Stratégie Conservation.',
+                        iconClass: 'fa fa-heartbeat',
+                      }
+                    },
                     children: [
                       {
                         path: '',
-                        redirectTo: 'infos',
-                        pathMatch: 'full',
+                        component: AssessmentsListComponent,
                       },
                       {
-                        path: 'infos',
-                        component: TaxonInfosComponent,
+                        path: ':assessmentId',
                         data: {
                           breadcrumb: {
-                            label: 'Infos générales',
-                            title: 'Informations générales sur le taxon prioritaire.',
-                            iconClass: 'fa fa-info-circle',
-                          }
-                        },
-                      },
-                      {
-                        path: 'assessments',
-                        data: {
-                          breadcrumb: {
-                            label: 'Bilans stationnels',
-                            title: 'Liste des bilans stationnels d\'un taxon prioritaire du module Stratégie Conservation.',
+                            label: 'Bilan Stationnel : :assessmentId',
+                            title: "Fiche Bilan Stationnel.",
                             iconClass: 'fa fa-heartbeat',
                           }
                         },
@@ -148,40 +124,24 @@ export const routes: Routes = [
                             component: AssessmentsListComponent,
                           },
                           {
-                            path: ':assessmentId',
+                            path: 'actions/:actionId',
+                            component: AssessmentsListComponent,
                             data: {
                               breadcrumb: {
-                                label: 'Bilan Stationnel : :assessmentId',
-                                title: "Fiche Bilan Stationnel.",
-                                iconClass: 'fa fa-heartbeat',
+                                label: 'Action : :actionId',
+                                title: "Action à mener",
+                                iconClass: 'fa fa-bolt',
                               }
                             },
-                            children: [
-                              {
-                                path: '',
-                                component: AssessmentsListComponent,
-                              },
-                              {
-                                path: 'actions/:actionId',
-                                component: AssessmentsListComponent,
-                                data: {
-                                  breadcrumb: {
-                                    label: 'Action : :actionId',
-                                    title: "Action à mener",
-                                    iconClass: 'fa fa-bolt',
-                                  }
-                                },
-                              },
-                            ],
                           },
-                        ]
+                        ],
                       },
                     ]
                   },
-                ]
+                ],
               },
-            ]
-          }
+            ],
+          },
         ]
       },
     ]

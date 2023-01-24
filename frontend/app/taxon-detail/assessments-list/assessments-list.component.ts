@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Observable, Subscription } from '@librairies/rxjs';
 
 import { Assessment, IAssessmentList } from '../../shared/models/assessment.model';
@@ -17,7 +18,6 @@ import { StoreService } from '../../shared/services/store.service';
 export class AssessmentsListComponent implements OnInit, OnDestroy {
 
   assessments: Observable<IAssessmentList>;
-  territorySubcription: Subscription;
   activatedRouteSubscription: Subscription;
   assessmentIdSelected: number;
   actionIdSelected: number;
@@ -33,11 +33,7 @@ export class AssessmentsListComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
-      if (status) {
-        this.loadAssessments();
-      }
-    });
+    this.loadAssessments();
     this.extractRouteParams();
   }
 
@@ -56,13 +52,11 @@ export class AssessmentsListComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-    this.territorySubcription.unsubscribe();
     this.activatedRouteSubscription.unsubscribe();
   }
 
   private loadAssessments() {
     const params = {
-      'territory-code': this.store.selectedTerritory.code.toLowerCase(),
       'priority-taxon-id': this.store.selectedTaxon,
     }
     this.assessments = this.dataService.getAssessments(params);

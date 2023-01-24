@@ -4,7 +4,23 @@ Toutes les modifications notables apportées à ce projet seront documentées da
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Nouveau]
+## [0.4.0] - 2023-01-17
+
+### Fonctionnalités
+- Ajout de nouvelles nomenclatures dans les Actions (docs/update_nomenclatures.sql).
+- Ajout d'un onglet Planning qui recense toutes les actions à mener vis-à-vis des taxons prioritaires.
+- Ajout du fil d'Ariane lorsqu'une fiche Bilan Stationnel ou une Action est sélectionnée.
+- Ajout du territoire d'appartenance sur la fiche détaillée du Taxon Prioritaire.
+
+### Changements
+- Simplification des routes du module.
+- Déplacement du filtre global Territoire vers la liste des taxons prioritaires.
+- Renommage des composants en enlevant le préfixe "Cs".
+- Formatage de tous les fichiers du frontend avec Prettier.
+
+### Suppressions
+- Suppression du bandeau d'acceuil contenant le titre du module et le filtre global Territoire.
+- Suppression des références au filtre global Territoire.
 
 ## [0.3.0] - 2022-11-16
 

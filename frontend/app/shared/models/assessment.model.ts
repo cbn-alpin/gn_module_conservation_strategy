@@ -81,3 +81,9 @@ export interface IAssessmentList {
   incomplete_results: boolean;
   items: Partial<Assessment>[];
 }
+
+export interface ITerritory {
+  id: number;
+  label: string;
+  code: string;
+}

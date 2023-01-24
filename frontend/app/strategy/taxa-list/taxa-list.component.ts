@@ -1,38 +1,39 @@
 import {
   AfterViewInit,
-  AfterViewChecked,
   Component,
   ElementRef,
   HostListener,
   OnInit,
   ViewChild,
-  OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatPaginator, MatSort, MatTable } from '@angular/material';
-import { Subscription } from '@librairies/rxjs';
 
-import { tap } from 'rxjs/operators';
+import { Observable } from '@librairies/rxjs';
+import { tap, map } from 'rxjs/operators';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
 import { StoreService } from '../../shared/services/store.service';
 import { PriorityTaxa, TaxaDataSource } from './taxa.datasource';
+import { ITerritory } from "../../shared/models/assessment.model";
 
 @Component({
   selector: 'cs-taxa-list',
   templateUrl: './taxa-list.component.html',
   styleUrls: ['./taxa-list.component.scss']
 })
-export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TaxaListComponent implements OnInit, AfterViewInit {
 
   filtersForm: FormGroup;
   baseApiEndpoint;
   firstLoad: Boolean = true;
   dataTableHeight: number;
+  $territories: Observable<ITerritory[]>;
   displayedColumns = [
     'fullName',
     'cpi',
+    'territoryName',
     'dateMin',
     'dateMax',
     'areaPresenceCount',
@@ -44,18 +45,19 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatTable) dataTable: MatTable<PriorityTaxa>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  territorySubcription: Subscription;
 
   constructor(
     private cfg: ConfigService,
     private dataService: DataService,
     private formBuilder: FormBuilder,
     public store: StoreService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializeDataSource();
     this.initializeTaxaFiltersForm();
+    this.loadTerritories();
+    this.loadTaxa();
   }
 
   ngAfterViewInit(): void {
@@ -74,13 +76,13 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.sort.sortChange
       .pipe(
-          tap((event) => {
-            this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
-            this.loadTaxa();
-          })
+        tap((event) => {
+          this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
+          this.loadTaxa();
+        })
       )
       .subscribe();
-    
+
     // WARNING: use Promise to avoid ExpressionChangedAfterItHasBeenCheckedError
     // See: https://angular.io/errors/NG0100
     Promise.resolve(null).then(() => this.recalculateDataTableSize());
@@ -92,10 +94,6 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy(): void {
-    this.territorySubcription.unsubscribe();
-  }
-
   @HostListener("window:resize", ["$event"])
   onWindowResize(event) {
     this.calculateDataTableHeight();
@@ -105,22 +103,12 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     const screenHeight: number = document.documentElement.clientHeight;
     const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
     // TODO: see why we need to remove 11px !
-    const dataTableHeight = screenHeight - dataTableTop - 11 ;
+    const dataTableHeight = screenHeight - dataTableTop - 11;
     this.dataTableHeight = dataTableHeight;
   }
 
   private initializeDataSource() {
     this.dataSource = new TaxaDataSource(this.dataService);
-    this.onTerritoryChange();
-  }
-
-  private onTerritoryChange() {
-    this.territorySubcription = this.store.getSelectedTerritoryStatus.subscribe((status) => {
-      if (status === true) {
-        this.paginator.firstPage();
-        this.loadTaxa();
-      }
-    });
   }
 
   private initializeTaxaFiltersForm() {
@@ -128,6 +116,7 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.filtersForm = this.formBuilder.group({
       taxaFilter: null,
       cpiFilter: null,
+      territoryFilter: null,
       assessmentFilter: null,
     });
   }
@@ -154,6 +143,18 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadTaxa();
   }
 
+  onTerritoryFilterChanged(territory) {
+    this.dataSource.setFilterParam('territory-code', territory.value);
+    this.loadTaxa();
+  }
+
+  onTerritoryFilterCleared(event) {
+    event.stopPropagation();
+    this.filtersForm.controls.territoryFilter.reset();
+    this.dataSource.removeFilterParam('territory-code');
+    this.loadTaxa();
+  }
+
   onAssessmentFilterChanged(event) {
     if (event.checked) {
       this.dataSource.setFilterParam('with-assessment', 'true');
@@ -170,4 +171,17 @@ export class TaxaListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.firstLoad = false;
     }
   }
+
+  loadTerritories() {
+    this.$territories = this.dataService.getTerritories().pipe(
+      map(territories => {
+        let territoriesList = [];
+        territories.forEach((item) => {
+          territoriesList.push({ code: item.code, label: item.label });
+        })
+        return territoriesList;
+      })
+    );
+  }
+
 }

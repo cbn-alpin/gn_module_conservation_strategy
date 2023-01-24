@@ -9,13 +9,13 @@
 // Expansion panel
 mat-expansion-panel-header {
   &.bg-success {
-    background-color: #BDE7BD !important;
+    background-color: #bde7bd !important;
   }
   &.bg-warning {
-    background-color: #FFE08E !important;
+    background-color: #ffe08e !important;
   }
   &.bg-danger {
-    background-color: #FFB6B3 !important;
+    background-color: #ffb6b3 !important;
   }
 }
 
@@ -26,10 +26,12 @@ input.ng-invalid,
 mat-select.ng-invalid {
   border-left: none !important;
 }
+
 input.cs-grow {
   text-align: center;
   font-size: 1.5rem;
 }
+
 :host ::ng-deep .cs-grow .mat-form-field {
   width: 100%;
 }

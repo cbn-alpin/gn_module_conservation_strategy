@@ -1,65 +1,46 @@
 <div class="card">
   <div class="card-header">
-    <div class="d-flex flex-row">
-      <h3>{{ title }} : </h3>
-      <mat-form-field
-        id="cs-territory-select"
-        *ngIf="$territories | async as territories; else noTerritories"
-        class="ml-3"
-      >
-        <mat-select
-          placeholder="Territoires"
-          [(value)]="currentTerritory"
-          (selectionChange)="onTerritoryChanged($event)"
-        >
-          <mat-option
-            *ngFor="let territory of territories"
-            [value]="territory"
-          >
-          {{ territory.label }}
-          </mat-option>
-        </mat-select>
-        <mat-icon matPrefix fontSet="fa" fontIcon="fa-globe"></mat-icon>
-      </mat-form-field>
-      <ng-template #noTerritories>
-        <p>Aucun territoire</p>
-      </ng-template>
-    </div>
-  </div>
-
-  <div class="card-body">
     <nav mat-tab-nav-bar>
-      <a mat-tab-link
+      <a
+        mat-tab-link
         routerLink="/conservation_strategy"
         routerLinkActive
-        [routerLinkActiveOptions]="{exact:true}"
+        [routerLinkActiveOptions]="{ exact: true }"
         #rlaHome="routerLinkActive"
         [active]="rlaHome.isActive"
       >
-        <mat-icon fontSet="fa" fontIcon="fa-home"></mat-icon>
-        Accueil
+        <h3 class="h4">
+          <mat-icon fontSet="fa" fontIcon="fa-home"></mat-icon>
+          Accueil
+        </h3>
       </a>
-      <a mat-tab-link
-        routerLink="/conservation_strategy/territories/{{store.selectedTerritory?.code | lowercase }}/priority-taxa"
+      <a
+        mat-tab-link
+        routerLink="/conservation_strategy/priority-taxa"
         routerLinkActive
         #rlaPriorityTaxa="routerLinkActive"
         [active]="rlaPriorityTaxa.isActive"
       >
-        <mat-icon fontSet="fa" fontIcon="fa-list"></mat-icon>
-        Liste des taxons prioritaires
+        <h3 class="h4">
+          <mat-icon fontSet="fa" fontIcon="fa-list"></mat-icon>
+          Taxons prioritaires
+        </h3>
       </a>
-      <a mat-tab-link
+      <a
+        mat-tab-link
         routerLink="/conservation_strategy/planning"
         routerLinkActive
         #rlaPlanning="routerLinkActive"
         [active]="rlaPlanning.isActive"
       >
-        <mat-icon fontSet="fa" fontIcon="fa-calendar"></mat-icon>
-        Planning
+        <h3 class="h4">
+          <mat-icon fontSet="fa" fontIcon="fa-calendar"></mat-icon>
+          Planning
+        </h3>
       </a>
-
     </nav>
-
+  </div>
+  <div class="card-body">
     <router-outlet></router-outlet>
   </div>
 </div>

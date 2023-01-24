@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AbstractControl, FormGroup } from "@angular/forms";
+
 import { Observable } from "@librairies/rxjs";
+
 import { DialogService } from "../../../../shared/components/confirm-dialog/confirm-dialog.service";
 import { IAction, IOrganism } from "../../../../shared/models/assessment.model";
 import { DataService } from "../../../../shared/services/data.service";
@@ -43,15 +45,15 @@ export class ActionForm implements OnInit {
     this.progressValue = this.action.progressCode;
   }
 
-  onLevelNomenclatureChange(event: {text: string, value: string}) {
+  onLevelNomenclatureChange(event: { text: string, value: string }) {
     this.level = event ? event.text as string : '';
   }
 
-  onTypeChange(event: {text: string, value: string}) {
+  onTypeChange(event: { text: string, value: string }) {
     this.type = event ? event.text as string : '';
   }
 
-  onProgressChange(event: {text: string, value: string}) {
+  onProgressChange(event: { text: string, value: string }) {
     const formCtrls = (this.parentFormGroup as FormGroup).controls;
     formCtrls.planFor.reset();
     formCtrls.startingDate.reset();
@@ -66,7 +68,7 @@ export class ActionForm implements OnInit {
 
   onDeleteAction() {
     this.dialogService
-      .confirmDialog({message: 'Étes vous certain de vouloir supprimer cet action ?'})
+      .confirmDialog({ message: 'Étes vous certain de vouloir supprimer cet action ?' })
       .subscribe((yes) => {
         if (yes) {
           this.deleted.emit(this.uuid);

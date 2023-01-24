@@ -117,11 +117,9 @@ export class PlanningComponent implements OnInit, AfterViewInit {
 
   detectTypeOfTask(task) {
     let url = [
-      '/conservation_strategy/territories',
-      task.territoryCode,
+      '/conservation_strategy',
       'priority-taxa',
       task.priorityTaxonId,
-      { shortName: task.taxonName },
       'assessments',
       task.assessmentId
     ];

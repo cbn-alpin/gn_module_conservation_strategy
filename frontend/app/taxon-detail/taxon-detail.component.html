@@ -5,6 +5,9 @@
       Fiche détaillée du taxon :
       <span [innerHTML]="taxon?.displayFullName ? taxon?.displayFullName : displayFullName"></span>
     </h3>
+    <h4 class="territory">
+      Territoire : {{ taxon?.territoryName }}
+    </h4>
   </div>
   <div class="card-body">
     <nav mat-tab-nav-bar>

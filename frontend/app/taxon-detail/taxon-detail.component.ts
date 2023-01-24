@@ -9,7 +9,6 @@ import { StoreService } from '../shared/services/store.service';
   styleUrls: ['./taxon-detail.component.scss']
 })
 export class TaxonDetailComponent implements OnInit {
-  territoryCode: string;
   priorityTaxonId: number;
   displayFullName: string = '...';
   taxon: any;
@@ -18,7 +17,7 @@ export class TaxonDetailComponent implements OnInit {
     public route: ActivatedRoute,
     private dataService: DataService,
     public store: StoreService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.extractRouteParams();
@@ -26,23 +25,11 @@ export class TaxonDetailComponent implements OnInit {
 
   private extractRouteParams() {
     this.route.paramMap.subscribe(urlParams => {
-      if (urlParams.has('territoryCode')) {
-        this.territoryCode = urlParams.get('territoryCode');
-        this.dataService.getTerritory(this.territoryCode).subscribe(territory => {
-          this.store.selectedTerritory = territory;
-        });
-      }
-
-      if (urlParams.has('shortName')) {
-        this.displayFullName = urlParams.get('shortName');
-      }
-
       if (urlParams.has('priorityTaxonId')) {
         let priorityTaxonId = parseInt(urlParams.get('priorityTaxonId'));
         this.priorityTaxonId = priorityTaxonId;
         this.store.selectedTaxon = priorityTaxonId;
       }
-
       this.loadTaxon();
     });
   }

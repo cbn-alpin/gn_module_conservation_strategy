@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h1 class="modal-title" mat-dialog-title>
-    <ng-container *ngIf="(updateMode | async); else addModeTitleTpl">
+    <ng-container *ngIf="updateMode | async; else addModeTitleTpl">
       <mat-icon inline="true">edit</mat-icon>
       Édition d'un bilan
     </ng-container>
@@ -11,28 +11,39 @@
     </ng-template>
   </h1>
 
-  <button type="button" class="close" aria-label="Close" (click)="onCloseForm()">
+  <button
+    type="button"
+    class="close"
+    aria-label="Close"
+    (click)="onCloseForm()"
+  >
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-
 
 <div mat-dialog-content>
   <form [formGroup]="form">
     <div class="modal-body mb-auto">
       <div formGroupName="assessment" class="d-flex flex-column">
-
         <mat-form-field appearance="outline">
           <mat-label>Date de création</mat-label>
           <input
-          matInput [matDatepicker]="picker1"
-          formControlName="assessmentDate"
-          placeholder="Choisir une date en cliquant sur le calendrier">
-          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            matInput
+            [matDatepicker]="picker1"
+            formControlName="assessmentDate"
+            placeholder="Choisir une date en cliquant sur le calendrier"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker1"
+          ></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field hintLabel="Max {{threats.maxLength}} caractères" appearance="outline">
+        <mat-form-field
+          hintLabel="Max {{ threats.maxLength }} caractères"
+          appearance="outline"
+        >
           <mat-label>Menaces</mat-label>
           <textarea
             #threats
@@ -42,10 +53,15 @@
             rows="6"
             maxlength="10000"
           ></textarea>
-          <mat-hint align="end">{{threats.value?.length || 0}}/{{threats.maxLength}}</mat-hint>
+          <mat-hint align="end">
+            {{ threats.value?.length || 0 }}/{{ threats.maxLength }}
+          </mat-hint>
         </mat-form-field>
 
-        <mat-form-field hintLabel="Max {{description.maxLength}} caractères" appearance="outline">
+        <mat-form-field
+          hintLabel="Max {{ description.maxLength }} caractères"
+          appearance="outline"
+        >
           <mat-label>Description</mat-label>
           <textarea
             #description
@@ -55,7 +71,9 @@
             rows="6"
             maxlength="10000"
           ></textarea>
-          <mat-hint align="end">{{description.value?.length || 0}}/{{description.maxLength}}</mat-hint>
+          <mat-hint align="end">
+            {{description.value?.length || 0 }}/{{description.maxLength}}
+          </mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -79,7 +97,6 @@
             (change)="onNextAssessmentYearSliderChange($event)"
           ></mat-slider>
         </mat-form-field>
-
       </div>
 
       <div class="action-btn-container">
@@ -126,7 +143,6 @@
         class="uppercase"
         color="primary"
         [disabled]="!form.valid || disableSubmit"
-
         (click)="onCreateAssessment()"
       >
         <mat-icon>add</mat-icon>
