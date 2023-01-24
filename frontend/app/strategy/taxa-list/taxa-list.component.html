@@ -106,9 +106,9 @@
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom taxon</th>
           <td mat-cell *matCellDef="let taxon">
-            <i matTooltip="{{ taxon.fullName }} [{{ taxon.nameCode }}]">{{
-              taxon.shortName
-            }}</i>
+            <i matTooltip="{{ taxon.fullName }} [{{ taxon.nameCode }}]">
+              {{ taxon.shortName }}
+            </i>
           </td>
         </ng-container>
 

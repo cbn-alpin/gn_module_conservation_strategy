@@ -5,13 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2023-01-17
+## [0.4.0] - 2023-01-17
 
 ### Added
 - Add new nomenclatures in Actions types (docs/update_nomenclatures.sql).
 - Added a Planning tab that lists all the actions to be carried out for priority taxa.
 - Add of the breadcrumb when an Assessment or an Action is selected.
 - Add the belonging territory on the detailed form of a Priority Taxon.
+- Format all frontend documents with Prettier.
 
 ### Changed
 - Simplify module routes.
