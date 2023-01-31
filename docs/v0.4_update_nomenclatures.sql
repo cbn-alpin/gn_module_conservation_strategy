@@ -107,16 +107,30 @@ SET
 WHERE
 	id_nomenclature = ref_nomenclatures.get_id_nomenclature('CS_ACTION','emg');
 
-UPDATE
-	ref_nomenclatures.t_nomenclatures
-SET
-	definition_fr = 'Rédiger une fiche bilan stationnel pour renseigner les actions à mener.',
-	"hierarchy" = CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'), '.004'),
-	label_default = 'Réaliser une fiche bilan stationnel',
-	label_fr = 'Réaliser une fiche bilan stationnel',
-	definition_default = 'Rédiger une fiche bilan stationnel pour renseigner les actions à mener.'
-WHERE
-	id_nomenclature = ref_nomenclatures.get_id_nomenclature('CS_ACTION','rfbs');
+INSERT INTO ref_nomenclatures.t_nomenclatures (
+    id_type,
+	cd_nomenclature,
+	mnemonique,
+	label_default,
+	definition_default,
+	label_fr,
+	definition_fr,
+	id_broader,
+	"hierarchy",
+	active
+    )
+VALUES (
+    ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'),
+    'rfbs',
+    'realiserFicheBilanStationnel',
+    'Réaliser une fiche bilan stationnel',
+    'Rédiger une fiche bilan stationnel pour renseigner les actions à mener.',
+    'Réaliser une fiche bilan stationnel',
+    'Rédiger une fiche bilan stationnel pour renseigner les actions à mener.',
+    0,
+    CONCAT(ref_nomenclatures.get_id_nomenclature_type('CS_ACTION'), '.004'),
+    TRUE
+    );
 
 INSERT INTO ref_nomenclatures.t_nomenclatures (
     id_type,
