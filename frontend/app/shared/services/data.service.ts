@@ -78,4 +78,9 @@ export class DataService {
     const url = `${this.cfg.getBackendUrl()}/nomenclatures/nomenclature/${type}`;
     return this.http.get<any>(url);
   }
+
+  getPFStats(params: HttpParams): Observable<any> {
+    const url = `${this.cfg.getPFBackendUrl()}/stats`;
+    return this.http.get<any>(url, { params });
+  }
 }
