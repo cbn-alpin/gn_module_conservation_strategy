@@ -42,4 +42,8 @@ export class ConfigService {
   getTaxHubFrontendUrl() {
     return `${AppConfig.API_TAXHUB}`.replace('/api', '/');
   }
+
+  getPFBackendUrl() {
+    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.pf_module_code.toLowerCase()}`;
+  }
 }

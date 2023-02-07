@@ -11,3 +11,4 @@ from marshmallow import Schema, fields
 class GnModuleSchemaConf(Schema):
     module_code = fields.String(load_default="CONSERVATION_STRATEGY")
     module_title = fields.String(load_default="Stratégie Conservation")
+    pf_module_code = fields.String(load_default="PRIORITY_FLORA")
