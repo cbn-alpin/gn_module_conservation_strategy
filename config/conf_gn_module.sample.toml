@@ -3,3 +3,5 @@
 module_code="CONSERVATION_STRATEGY"
 # Titre du module utilisé pour l'affichage
 module_title="Stratégie Conservation"
+# Code du module Flore Prioritaire
+module_code_pf ="PRIORITY_FLORA"
