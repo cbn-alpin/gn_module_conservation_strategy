@@ -8,6 +8,7 @@ import { TaxonDetailComponent } from './taxon-detail/taxon-detail.component';
 import { TaxaListComponent } from './strategy/taxa-list/taxa-list.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
 import { PlanningComponent } from './strategy/planning/planning.component';
+import { StatsComponent } from './taxon-detail/stats/stats.component';
 
 export const routes: Routes = [
   {
@@ -92,6 +93,22 @@ export const routes: Routes = [
                         label: 'Infos générales',
                         title: 'Informations générales sur le taxon prioritaire.',
                         iconClass: 'fa fa-info-circle',
+                      }
+                    },
+                  },
+                  {
+                    path: '',
+                    redirectTo: 'stats',
+                    pathMatch: 'full',
+                  },
+                  {
+                    path: 'stats',
+                    component: StatsComponent,
+                    data: {
+                      breadcrumb: {
+                        label: 'Synthèse et Calculs',
+                        title: 'Synthèse des données issues des bilans stationnels',
+                        iconClass: 'fa fa-bar-chart',
                       }
                     },
                   },

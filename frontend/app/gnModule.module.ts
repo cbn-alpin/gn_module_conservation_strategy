@@ -38,6 +38,7 @@ import { ConfigService } from './shared/services/config.service';
 import { AssessmentsListComponent } from './taxon-detail/assessments-list/assessments-list.component';
 import { HomeComponent } from './strategy/home/home.component';
 import { PlanningComponent } from './strategy/planning/planning.component';
+import { StatsComponent } from './taxon-detail/stats/stats.component';
 import { RootComponent } from './root/root.component';
 import { StrategyComponent } from './strategy/strategy.component';
 import { TaxaListComponent } from './strategy/taxa-list/taxa-list.component'
@@ -81,6 +82,7 @@ export const routingConfiguration: ExtraOptions = {
     SortByPipe,
     TaxaFilterComponent,
     TaxonInfosComponent,
+    StatsComponent,
   ],
   imports: [
     CarouselModule.forRoot(),
