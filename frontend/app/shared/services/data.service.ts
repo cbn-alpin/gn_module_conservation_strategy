@@ -79,8 +79,8 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getPFStats(params: HttpParams): Observable<any> {
-    const url = `${this.cfg.getPFBackendUrl()}/stats`;
+  getStatsPriorityFlora(params: HttpParams): Observable<any>{
+    const url = `${this.cfg.getPriorityFloraBackendUrl()}/stats`;
     return this.http.get<any>(url, { params });
   }
 }

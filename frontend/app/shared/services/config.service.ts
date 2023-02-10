@@ -43,7 +43,7 @@ export class ConfigService {
     return `${AppConfig.API_TAXHUB}`.replace('/api', '/');
   }
 
-  getPFBackendUrl() {
-    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.pf_module_code.toLowerCase()}`;
+  getPriorityFloraBackendUrl() {
+    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.module_code_pf.toLowerCase()}`;
   }
 }
