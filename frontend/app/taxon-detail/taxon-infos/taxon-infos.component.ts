@@ -9,7 +9,7 @@ import { StoreService } from '../../shared/services/store.service';
 
 interface ITaxon {
   taxhubRecordId: number;
-  refNameCode: number;
+  taxonCode: number;
 }
 
 @Component({
@@ -50,7 +50,7 @@ export class TaxonInfosComponent implements OnInit {
       if (data.taxhubRecordId) {
         this.taxhubEditFormUrl += `/#!/taxonform/edit/${data.taxhubRecordId}`;
       } else {
-        this.taxhubEditFormUrl += `/#!/taxonform/new/${data.refNameCode}`;
+        this.taxhubEditFormUrl += `/#!/taxonform/new/${data.taxonCode}`;
       }
     });
   }

@@ -8,7 +8,7 @@ import { catchError, finalize } from 'rxjs/operators'
 import { DataService } from '../../shared/services/data.service';
 
 export interface PriorityTaxa {
-  refNameCode: number;
+  taxonCode: number;
   fullName: string;
   displayFullName: string;
   territoryName: string;
