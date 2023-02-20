@@ -28,15 +28,19 @@ export class TaxonDetailComponent implements OnInit {
       if (urlParams.has('priorityTaxonId')) {
         let priorityTaxonId = parseInt(urlParams.get('priorityTaxonId'));
         this.priorityTaxonId = priorityTaxonId;
-        this.store.selectedTaxon = priorityTaxonId;
+        this.store.priorityTaxon = priorityTaxonId;
+        this.loadTaxon();
+      } else {
+        // TODO: display error
       }
-      this.loadTaxon();
     });
   }
 
   private loadTaxon() {
     this.dataService.getPriorityTaxon(this.priorityTaxonId).subscribe(data => {
       this.taxon = data;
+      this.store.priorityTaxonData.taxonCode = data.taxonCode;
+      this.store.priorityTaxonData.territoryId = data.territoryId;
     });
   }
 

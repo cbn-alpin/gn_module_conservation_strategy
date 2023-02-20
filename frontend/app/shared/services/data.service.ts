@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { Observable } from "@librairies/rxjs";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ConfigService } from "./config.service";
-import { StoreService } from "./store.service";
 import { IOrganism } from "../models/assessment.model";
 import { ITasks } from "../../strategy/planning/planning.datasource";
-
+import { IStats, IStatParams } from "../models/stats.model";
 
 // TODO: use StoreService to get territory code and taxon name code.
 @Injectable()
@@ -16,11 +16,15 @@ export class DataService {
   constructor(
     private cfg: ConfigService,
     private http: HttpClient,
-    private store: StoreService,
   ) { }
 
   getTerritories() {
     const url = `${this.cfg.getModuleBackendUrl()}/territories`;
+    return this.http.get<any>(url);
+  }
+
+  getTerritory(territoryId: number) {
+    const url = `${this.cfg.getModuleBackendUrl()}/territories/${territoryId}`;
     return this.http.get<any>(url);
   }
 
@@ -39,7 +43,7 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getTaxonInfos(priorityTaxonId: number, params = {}) {
+  getTaxonInfos(priorityTaxonId: BehaviorSubject<number>, params = {}) {
     const url = `${this.cfg.getModuleBackendUrl()}/taxons/${priorityTaxonId}`;
     return this.http.get<any>(url, { params });
   }
@@ -79,8 +83,12 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getStatsPriorityFlora(params: HttpParams): Observable<any>{
+  getStatsPriorityFlora(params: IStatParams): Observable<IStats> {
+    let statParams = new HttpParams();
+    for (let key in params) {
+      statParams = statParams.set(key, params[key]);
+    }
     const url = `${this.cfg.getPriorityFloraBackendUrl()}/stats`;
-    return this.http.get<any>(url, { params });
-  }
+    return this.http.get<any>(url, { params: statParams });
+  } 
 }
