@@ -1,21 +1,40 @@
 import { Injectable } from "@angular/core";
-
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { ITaxonData } from "../models/stats.model";
+
 @Injectable()
 export class StoreService {
-  private taxon: number;
-  private selectedTaxonStatus = new BehaviorSubject(false);
+  selectedPriorityTaxon: BehaviorSubject<number> = new BehaviorSubject(null);
+  selectedPriorityTaxonData:
+    BehaviorSubject<ITaxonData> = new BehaviorSubject<ITaxonData>({
+      taxonCode: null,
+      territoryId: null
+    });
 
-  get selectedTaxon(): number {
-    return this.taxon;
+  get priorityTaxon(): number {
+    return this.selectedPriorityTaxon.getValue();
   }
 
-  set selectedTaxon(taxonNameCode: number) {
-    this.taxon = taxonNameCode;
-    this.selectedTaxonStatus.next
+  set priorityTaxon(priorityTaxonId: number) {
+    this.selectedPriorityTaxon.next(priorityTaxonId)
+  }
+  
+  get $selectedPriorityTaxon(): Observable<number>{
+    return this.selectedPriorityTaxon.asObservable();
   }
 
-  getSelectedTaxonStatus: Observable<Boolean> = this.selectedTaxonStatus.asObservable();
+  get priorityTaxonData(): ITaxonData {
+    return this.selectedPriorityTaxonData.getValue();
+  }
+
+  set priorityTaxonData(taxonData: ITaxonData) {
+    this.selectedPriorityTaxonData.next(taxonData)
+  }
+
+  get $selectedPriorityTaxonData(): Observable<ITaxonData> {
+    return this.selectedPriorityTaxonData.asObservable();
+  }
+
 }

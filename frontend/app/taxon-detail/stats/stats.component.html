@@ -1,0 +1,27 @@
+<div *ngIf="stats | async as stats; else noStats">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Département(s)</th>
+        <th scope="col">Communes(s)</th>
+        <th scope="col">Observateur(s)</th>
+        <th scope="col">Id ZP</th>
+        <th scope="col">Nb d'aires de présence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let prospection of stats.prospections">
+        <td>{{prospection.departement}}</td>
+        <td>{{prospection.municipality}}</td>
+        <td>{{prospection.date}}</td>
+        <td>{{prospection.id}}</td>
+        <td>{{prospection.presenceAreaNb}}</td>
+    </tbody>
+  </table>
+</div>
+<ng-template #noStats>
+  <p>
+    <mat-icon inline>info</mat-icon>
+    Aucune zone de prospection pour ce taxon prioritaire.
+  </p>
+</ng-template>
