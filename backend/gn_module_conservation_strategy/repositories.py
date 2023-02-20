@@ -1,6 +1,5 @@
 import logging
 
-from sqlalchemy import func
 from werkzeug.exceptions import BadRequest
 
 from geonature.utils.env import DB
@@ -12,7 +11,6 @@ from .models import (
     TPriorityTaxon,
     TAction,
     TAssessment,
-    TTerritory,
 )
 from .utils import remove_entries
 
