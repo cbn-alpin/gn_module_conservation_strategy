@@ -7,6 +7,7 @@ from sqlalchemy.orm import aliased
 from sqlalchemy.sql import literal_column
 
 from geonature.core.gn_permissions import decorators as permissions
+from geonature.core.ref_geo.models import LAreas, BibAreasTypes
 from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
@@ -17,7 +18,6 @@ from apptax.taxonomie.models import (
     Taxref,
     CorTaxonAttribut,
 )
-from pypnusershub.db.models import Organisme
 from pypnnomenclature.models import TNomenclatures
 
 from .models import (
@@ -48,6 +48,25 @@ def get_territories():
     data = q.all()
     output = [d.as_dict() for d in data]
     return prepare_output(output, remove_in_key="territory")
+
+@blueprint.route("/territories/<int:territory_id>", methods=["GET"])
+@permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
+@json_resp
+def get_territory(territory_id):
+    query = (
+        DB.session.query(
+            TTerritory.id_territory.label("territory_id"),
+            LAreas.area_code.label("area_code"),
+            BibAreasTypes.type_code.label("area_type"),
+        )
+        .join(LAreas, LAreas.id_area == TTerritory.id_area)
+        .join(BibAreasTypes, BibAreasTypes.id_type == LAreas.id_type)
+        .filter(TTerritory.id_territory == territory_id)
+    )
+
+    data = query.first()
+    output = data._asdict()
+    return prepare_output(output)
 
 
 @blueprint.route("/taxons/search", methods=["GET"])
@@ -243,6 +262,7 @@ def get_priority_taxon_infos(priority_taxon_id):
         TPriorityTaxon.max_prospect_zone_date.label("date_max"),
         TPriorityTaxon.presence_area_count,
         TTerritory.label.label("territory_name"),
+        TTerritory.id_territory.label("territory_id"),
     ]
     query = (
         DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
