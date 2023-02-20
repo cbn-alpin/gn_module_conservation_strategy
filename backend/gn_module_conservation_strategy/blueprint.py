@@ -150,7 +150,7 @@ def get_taxons():
 
     # Execute query
     fields = [
-        Taxref.cd_ref.label("ref_name_code"),
+        Taxref.cd_ref.label("taxon_code"),
         Taxref.nom_complet.label("full_name"),
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
@@ -251,7 +251,7 @@ def get_priority_taxon_infos(priority_taxon_id):
 
     # Execute query
     fields = [
-        Taxref.cd_ref.label("ref_name_code"),
+        Taxref.cd_ref.label("taxon_code"),
         Taxref.nom_complet.label("full_name"),
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
