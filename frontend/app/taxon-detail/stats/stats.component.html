@@ -1,80 +1,76 @@
-<mat-card-header>
-  <h5> Synthèse des prospections </h5>
-</mat-card-header>
 <div *ngIf="stats | async as stats; else noStats">
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th scope="col">Département(s)</th>
-        <th scope="col">Communes(s)</th>
-        <th scope="col">Observateur(s)</th>
-        <th scope="col">Id ZP</th>
-        <th scope="col">Nb d'aires de présence</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let prospection of stats.prospections">
-        <td>{{prospection.departement}}</td>
-        <td>{{prospection.municipality}}</td>
-        <td>{{prospection.observers}}</td>
-        <td>{{prospection.id}}</td>
-        <td>{{prospection.presenceAreaNb}}</td>
-    </tbody>
-  </table>
-  <mat-card-header>
-    <h5> État des populations </h5>
-  </mat-card-header>
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th scope="col">Communes(s)</th>
-        <th scope="col">Id ZP</th>
-        <th scope="col">Id AP</th>
-        <th scope="col">Surface AP</th>
-        <th scope="col">Fréquence d'occurence</th>
-        <th scope="col">Méthode d'estimation</th>
-        <th scope="col">Effectifs</th>
-        <th scope="col">Type de comptage</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let population of stats.populations">
-        <td>{{population.municipality}}</td>
-        <td>{{population.idZp}}</td>
-        <td>{{population.idAp}}</td>
-        <td>{{population.areaAp}}</td>
-        <td>{{population.occurrenceFrequency}}</td>
-        <td>{{population.estimateMethod}}</td>
-        <td>{{population.count}}</td>
-        <td>{{population.countingType}}</td>
-    </tbody>
-  </table>
-    <mat-card-header>
-    <h5> État des habitats </h5>
-  </mat-card-header>
-  <table class="table table-sm">
-    <thead>
-      <tr>
-        <th scope="col">Id AP</th>
-        <th scope="col">Type d'habitat</th>
-        <!-- <th scope="col">État de conservation</th> -->
-        <th scope="col">Perturbations</th>
-        <th scope="col">Évaluation de la menace</th>
-        <!-- <th scope="col">Type de gestion</th> -->
-        <!-- <th scope="col">Évaluation de la gestion</th> -->
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let habitat of stats.habitats">
-        <td>{{habitat.id}}</td>
-        <td>{{habitat.habitatType}}</td>
-        <!-- <td>{{habitat.}}</td> -->
-        <td>{{habitat.perturbationType}}</td>
-        <td>{{habitat.threatLevel}}</td>
-        <!-- <td>{{habitat.}}</td> -->
-        <!-- <td>{{habitat.}}</td> -->
-    </tbody>
-  </table>
+  <mat-card class="synthese">
+    <h5 class="title"> Synthèse des prospections </h5>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Département(s)</th>
+          <th scope="col">Communes(s)</th>
+          <th scope="col">Observateur(s)</th>
+          <th scope="col">Id ZP</th>
+          <th scope="col">Nb d'aires de présence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prospection of stats.prospections">
+          <td>{{prospection.departement}}</td>
+          <td>{{prospection.municipality}}</td>
+          <td>{{prospection.observers}}</td>
+          <td>{{prospection.id}}</td>
+          <td>{{prospection.presenceAreaNb}}</td>
+      </tbody>
+    </table>
+    <h5 class="title"> État des populations </h5>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Communes(s)</th>
+          <th scope="col">Id ZP</th>
+          <th scope="col">Id AP</th>
+          <th scope="col">Surface AP</th>
+          <th scope="col">Fréquence d'occurence</th>
+          <th scope="col">Méthode d'estimation</th>
+          <th scope="col">Effectifs</th>
+          <th scope="col">Type de comptage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let population of stats.populations">
+          <td>{{population.municipality}}</td>
+          <td>{{population.idZp}}</td>
+          <td>{{population.idAp}}</td>
+          <td>{{population.areaAp}}</td>
+          <td>{{population.occurrenceFrequency}}</td>
+          <td>{{population.estimateMethod}}</td>
+          <td>{{population.count}}</td>
+          <td>{{population.countingType}}</td>
+      </tbody>
+    </table>
+    <h5 class="title"> État des habitats </h5>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Id AP</th>
+          <th scope="col">Type d'habitat</th>
+          <!-- <th scope="col">État de conservation</th> -->
+          <th scope="col">Perturbations</th>
+          <th scope="col">Évaluation de la menace</th>
+          <!-- <th scope="col">Type de gestion</th> -->
+          <!-- <th scope="col">Évaluation de la gestion</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let habitat of stats.habitats">
+          <td>{{habitat.id}}</td>
+          <td>{{habitat.habitatType}}</td>
+          <!-- <td>{{habitat.}}</td> -->
+          <td>{{habitat.perturbationType}}</td>
+          <td>{{habitat.threatLevel}}</td>
+          <!-- <td>{{habitat.}}</td> -->
+          <!-- <td>{{habitat.}}</td> -->
+      </tbody>
+    </table>
+  </mat-card>
 </div>
 <ng-template #noStats>
   <p>
