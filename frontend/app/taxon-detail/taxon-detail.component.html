@@ -24,6 +24,8 @@
       <a mat-tab-link
       routerLink="stats"
       routerLinkActive
+      #rlaStats="routerLinkActive"
+      [active]="rlaStats.isActive"
       >
         <mat-icon fontSet="fa" fontIcon="fa-bar-chart"></mat-icon>
         Synthèse
