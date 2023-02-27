@@ -26,16 +26,17 @@ export class StatsComponent implements OnInit {
         this.storeService.$selectedPriorityTaxonData.subscribe(data => {
             let taxonCode = data.taxonCode;
             let territoryId = data.territoryId;
-
-            this.dataService.getTerritory(territoryId).subscribe(territory => {
-                let territoryCode = territory.areaCode;
-                let territoryType = territory.areaType;
-                this.stats = this.dataService.getStatsPriorityFlora({
-                    'area-code': territoryCode,
-                    'area-type': territoryType,
-                    'taxon-code': taxonCode
-                })
-            });
+            if (territoryId != null) {
+                this.dataService.getTerritory(territoryId).subscribe(territory => {
+                    let territoryCode = territory.areaCode;
+                    let territoryType = territory.areaType;
+                    this.stats = this.dataService.getStatsPriorityFlora({
+                        'area-code': territoryCode,
+                        'area-type': territoryType,
+                        'taxon-code': taxonCode
+                    })
+                });
+            }
         })
     }
 }

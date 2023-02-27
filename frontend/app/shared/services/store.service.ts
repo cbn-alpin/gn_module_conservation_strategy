@@ -6,8 +6,8 @@ import { ITaxonData } from "../models/stats.model";
 
 @Injectable()
 export class StoreService {
-  selectedPriorityTaxon: BehaviorSubject<number> = new BehaviorSubject(null);
-  selectedPriorityTaxonData:
+  private selectedPriorityTaxon: BehaviorSubject<number> = new BehaviorSubject(null);
+  private selectedPriorityTaxonData:
     BehaviorSubject<ITaxonData> = new BehaviorSubject<ITaxonData>({
       taxonCode: null,
       territoryId: null
