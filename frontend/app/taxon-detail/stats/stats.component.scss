@@ -2,8 +2,13 @@
   max-width: 60%;
 }
 
-.title{
-    text-align: center;
-    border: 2px inset;
-    padding: 5px;
+.synthese-table{
+  margin-bottom: 20px;
 }
+
+.mat-card-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
