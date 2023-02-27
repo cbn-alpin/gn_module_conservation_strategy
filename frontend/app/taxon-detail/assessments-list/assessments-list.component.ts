@@ -57,7 +57,7 @@ export class AssessmentsListComponent implements OnInit, OnDestroy {
 
   private loadAssessments() {
     const params = {
-      'priority-taxon-id': this.store.selectedPriorityTaxon,
+      'priority-taxon-id': this.store.priorityTaxon,
     }
     this.assessments = this.dataService.getAssessments(params);
   }

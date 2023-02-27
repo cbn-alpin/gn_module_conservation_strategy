@@ -43,7 +43,7 @@ export class DataService {
     return this.http.get<any>(url);
   }
 
-  getTaxonInfos(priorityTaxonId: BehaviorSubject<number>, params = {}) {
+  getTaxonInfos(priorityTaxonId: number, params = {}) {
     const url = `${this.cfg.getModuleBackendUrl()}/taxons/${priorityTaxonId}`;
     return this.http.get<any>(url, { params });
   }

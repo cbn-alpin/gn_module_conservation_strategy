@@ -39,7 +39,7 @@ export class TaxonInfosComponent implements OnInit {
   }
 
   private loadTaxonInfos() {
-    const priorityTaxonId = this.store.selectedPriorityTaxon;
+    const priorityTaxonId = this.store.priorityTaxon;
     const params = {
       "with-taxhub-attributs": true,
       "with-medias": true,
