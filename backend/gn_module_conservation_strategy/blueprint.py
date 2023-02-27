@@ -59,13 +59,17 @@ def get_territory(territory_id):
             LAreas.area_code.label("area_code"),
             BibAreasTypes.type_code.label("area_type"),
         )
-        .join(LAreas, LAreas.id_area == TTerritory.id_area)
-        .join(BibAreasTypes, BibAreasTypes.id_type == LAreas.id_type)
+        .outerjoin(LAreas, LAreas.id_area == TTerritory.id_area)
+        .outerjoin(BibAreasTypes, BibAreasTypes.id_type == LAreas.id_type)
         .filter(TTerritory.id_territory == territory_id)
     )
 
     data = query.first()
-    output = data._asdict()
+    output = None if data == None else {
+        "territory_id": data[0],
+        "area_code": data[1],
+        "area_type": data[2],
+    }
     return prepare_output(output)
 
 

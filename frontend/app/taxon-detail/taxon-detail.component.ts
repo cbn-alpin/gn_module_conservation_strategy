@@ -32,6 +32,7 @@ export class TaxonDetailComponent implements OnInit {
         this.loadTaxon();
       } else {
         // TODO: display error
+        console.log('Error')
       }
     });
   }
@@ -39,9 +40,12 @@ export class TaxonDetailComponent implements OnInit {
   private loadTaxon() {
     this.dataService.getPriorityTaxon(this.priorityTaxonId).subscribe(data => {
       this.taxon = data;
-      this.store.priorityTaxonData.taxonCode = data.taxonCode;
-      this.store.priorityTaxonData.territoryId = data.territoryId;
+      this.store.priorityTaxonData = {
+        taxonCode: data.taxonCode,
+        territoryId: data.territoryId,
+      }
     });
   }
+
 
 }
