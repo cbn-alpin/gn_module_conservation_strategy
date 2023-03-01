@@ -86,7 +86,7 @@ def search_taxons():
             .order_by(desc("idx_trgm"))
         )
 
-    data = query.limit(limit).offset(page * limit).all()
+    data = query.distinct().limit(limit).offset(page * limit).all()
 
     # Manage output
     output = [d._asdict() for d in data]
@@ -554,7 +554,7 @@ def get_tasks():
         DB.session.query(*fields_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-        .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
+        .outerjoin(TTerritory.distinct(), TTerritory.id_territory == TPriorityTaxon.id_territory)
         .outerjoin(TAction, TAction.id_assessment == TAssessment.id)
         .outerjoin(CorActionOrganism, CorActionOrganism.id_action == TAction.id)
         .outerjoin(
