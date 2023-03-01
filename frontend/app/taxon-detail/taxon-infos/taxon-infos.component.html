@@ -100,14 +100,14 @@
   </div>
 
   <div class="card-container">
-    <mat-card [class.bg-warning]="!infos.attributs?.atlasChorologieDescription">
+    <mat-card [class.bg-warning]="!infos.attributs?.atlasChorologyDescription">
       <mat-card-header>
         <mat-icon mat-card-avatar>landscape</mat-icon>
         <mat-card-title>Chorologie</mat-card-title>
       </mat-card-header>
       <mat-card-content
-        *ngIf="infos.attributs?.atlasChorologieDescription; else noChorology"
-        [innerHtml]="infos.attributs?.atlasChorologieDescription"
+        *ngIf="infos.attributs?.atlasChorologyDescription ; else noChorology"
+        [innerHtml]="infos.attributs?.atlasChorologyDescription"
       ></mat-card-content>
       <ng-template #noChorology>
         <mat-card-content>

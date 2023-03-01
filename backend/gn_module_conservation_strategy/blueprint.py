@@ -27,7 +27,7 @@ from .models import (
     TAssessment,
     TTerritory,
 )
-from .repositories import AssessmentRepository
+from .repositories import AssessmentRepository, OrganismRepository
 from .utils import prepare_input, prepare_output
 
 
@@ -315,23 +315,9 @@ def get_organisms():
     # Get request parameters
     order_by = request.args.get("order-by", "nom_organisme")
 
-    # Prepare query
-    query = DB.session.query(Organisme).filter(Organisme.id_organisme > 0)
-    if order_by:
-        try:
-            order_column = getattr(Organisme.__table__.columns, order_by)
-            query = query.order_by(order_column)
-        except AttributeError:
-            columns = ", ".join(list(Organisme.__table__.columns.keys()))
-            msg = f"Unknown order-by parameter '{order_by}'. Use only : {columns}"
-            log.error(msg)
-            return {"message": msg, "status": "error"}, 400
+    organism_repo = OrganismRepository()
+    data = organism_repo.get_all(order_by)
 
-    # Execute query
-    organisms = query.all()
-
-    # Manage output
-    data = [organism.as_dict() for organism in organisms]
     return prepare_output(data)
 
 

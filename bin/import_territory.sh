@@ -66,7 +66,7 @@ function main() {
     initScript "${@}"
     parseScriptOptions "${@}"
     loadScriptConfig "${setting_file_path-}"
-    redirectOutput "${taxons_import_log}"
+    redirectOutput "${territory_import_log}"
 
     checkSuperuser
     commands=("psql" "csvtool")

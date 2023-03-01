@@ -1,6 +1,6 @@
 BEGIN;
 
---t_assessment
+-- t_assessment
 
 INSERT INTO pr_conservation_strategy.t_assessment(
 	id_assessment,
@@ -15,9 +15,9 @@ INSERT INTO pr_conservation_strategy.t_assessment(
 	meta_create_date,
 	meta_create_by,
 	meta_update_date,
-	meta_update_by 
+	meta_update_by
 )
-SELECT 
+SELECT
 	o.id_assessment,
 	tpt.id_priority_taxon,
 	o.date_min,
@@ -30,13 +30,21 @@ SELECT
 	o.meta_create_date,
 	o.meta_create_by,
 	o.meta_update_date,
-	o.meta_update_by	
+	o.meta_update_by
 FROM pr_conservation_strategy_old.t_assessment AS o
 JOIN pr_conservation_strategy.t_priority_taxon AS tpt
 	ON tpt.id_territory = o.id_territory
 		AND tpt.cd_nom = o.cd_nom;
 
---t_action
+SELECT setval(
+    'pr_conservation_strategy.t_assessment_id_assessment_seq',
+    (SELECT MAX(id_assessment) FROM pr_conservation_strategy.t_assessment),
+    TRUE
+) ;
+
+CLUSTER pr_conservation_strategy.t_assessment USING t_assessment_pkey;
+
+-- t_action
 
 INSERT INTO pr_conservation_strategy.t_action(
 	id_action,
@@ -48,9 +56,9 @@ INSERT INTO pr_conservation_strategy.t_action(
 	plan_for,
 	starting_date,
 	implementation_date,
-	description 
+	description
 )
-SELECT 
+SELECT
 	o.id_action,
 	o.id_assessment,
 	o.creation_date,
@@ -60,11 +68,18 @@ SELECT
 	o.plan_for,
 	o.starting_date,
 	o.implementation_date,
-	o.description 
+	o.description
 FROM pr_conservation_strategy_old.t_action AS o;
 
---cor_action_organism
+SELECT setval(
+    'pr_conservation_strategy.t_action_id_action_seq',
+    (SELECT MAX(id_action) FROM pr_conservation_strategy.t_action),
+    TRUE
+) ;
 
+CLUSTER pr_conservation_strategy.t_action USING t_action_pkey;
+
+-- cor_action_organism
 
 INSERT INTO pr_conservation_strategy.cor_action_organism (
 	id_organism,
@@ -72,7 +87,7 @@ INSERT INTO pr_conservation_strategy.cor_action_organism (
 )
 SELECT
 	o.id_organism,
-	o.id_action 
+	o.id_action
 FROM pr_conservation_strategy_old.cor_action_organism AS o;
 
 COMMIT;
