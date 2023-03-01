@@ -103,6 +103,7 @@ function importTerritories() {
         while IFS= read -r line; do
             local label="$(printf "${head}\n${line}" | csvtool -t TAB namedcol label - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
             local code="$(printf "${head}\n${line}" | csvtool -t TAB namedcol code - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
+            local area_code="$(printf "${head}\n${line}" | csvtool -t TAB namedcol area_code - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
             local area_type="$(printf "${head}\n${line}" | csvtool -t TAB namedcol area_type - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
             local code_parent="$(printf "${head}\n${line}" | csvtool -t TAB namedcol code_parent - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
             local surface="$(printf "${head}\n${line}" | csvtool -t TAB namedcol surface - | sed 1d | sed -e 's/^"//' -e 's/"$//')"
@@ -113,6 +114,7 @@ function importTerritories() {
                 psql -h "${db_host}" -U "${user_pg}" -d "${db_name}" ${psql_verbosity-} \
                     -v label="${label}" \
                     -v code="${code}" \
+                    -v areaCode="${area_code}" \
                     -v areaType="${area_type}" \
                     -v codeParent="${code_parent}" \
                     -v surface="${surface}" \
