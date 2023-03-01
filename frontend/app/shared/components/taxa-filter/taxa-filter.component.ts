@@ -113,7 +113,7 @@ export class TaxaFilterComponent implements OnInit {
         }
       })
       .map(response => {
-        this.noResult = response.length === 0;
+        this.noResult = response && response.length === 0;
         this.isLoading = false;
         return response;
       });
