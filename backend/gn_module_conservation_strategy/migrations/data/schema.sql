@@ -390,4 +390,52 @@ CREATE INDEX idx_cor_action_organism_id_organism
 CREATE INDEX idx_cor_action_organism_id_action
     ON cor_action_organism USING btree(id_action) ;
 
+-- --------------------------------------------------------------------------------
+-- TRIGGERS
+
+ -- Update t_territory.surface
+CREATE OR REPLACE FUNCTION pr_conservation_strategy.fct_trg_t_territory_id_area()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    NEW.surface = (
+        SELECT
+        ROUND(st_area(geom)/1000000)
+        FROM ref_geo.l_areas la
+        WHERE la.id_area = NEW.id_area
+       );
+
+    NEW.meshes_total = (
+    WITH inpn5 AS (
+        SELECT
+            la.id_area,
+            la.geom
+        FROM ref_geo.l_areas la
+        WHERE la.id_type = ref_geo.get_id_area_type('M5')
+    )
+    SELECT
+        COUNT(la.id_area) AS nb 
+    FROM ref_geo.l_areas la
+    JOIN inpn5
+        ON st_intersects(la.geom, inpn5.geom)
+    WHERE la.id_area = NEW.id_area
+    );
+
+    RETURN NEW;
+END;
+$function$
+;
+
+
+
+CREATE TRIGGER trg_t_territory_id_area BEFORE
+INSERT
+    OR
+UPDATE
+    OF id_area ON
+    pr_conservation_strategy.t_territory
+FOR EACH ROW
+EXECUTE FUNCTION pr_conservation_strategy.fct_trg_t_territory();
+
 COMMIT;
