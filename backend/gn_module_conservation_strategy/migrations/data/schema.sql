@@ -1,3 +1,4 @@
+BEGIN;
 -- Create Conservation Strategy schema and tables
 
 -- Set database variables
@@ -388,3 +389,5 @@ CREATE INDEX idx_cor_action_organism_id_organism
 
 CREATE INDEX idx_cor_action_organism_id_action
     ON cor_action_organism USING btree(id_action) ;
+
+COMMIT;
