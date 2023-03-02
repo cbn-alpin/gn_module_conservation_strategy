@@ -1,3 +1,4 @@
+BEGIN;
 -- Insert Conservation Strategy default data (nomenclatures, module)
 -- NOMENCLATURE
 
@@ -139,3 +140,5 @@ INSERT INTO taxonomie.bib_attributs(
         SELECT id_theme FROM taxonomie.bib_themes WHERE nom_theme = 'Atlas' LIMIT 1
     ) LIMIT 1)
 ) ;
+
+COMMIT;
