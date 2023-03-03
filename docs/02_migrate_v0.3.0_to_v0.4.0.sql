@@ -514,6 +514,34 @@ VALUES (
     TRUE
     );
 
+UPDATE ref_nomenclatures.t_nomenclatures
+    SET
+    definition_default='Niveau territorial.',
+    label_default='Territorial',
+    label_fr='Territorial',
+    mnemonique='territorial',
+    definition_fr='Niveau territorial.'
+    WHERE 
+    id_nomenclature = ref_nomenclatures.get_id_nomenclature('CS_ACTION_GEO_LEVEL', 't');
+
+UPDATE ref_nomenclatures.t_nomenclatures
+    SET
+    definition_default='Niveau local.',
+    label_default='Local',
+    label_fr='Local',
+    mnemonique='local',
+    definition_fr='Niveau local.'
+    WHERE
+    id_nomenclature = ref_nomenclatures.get_id_nomenclature('CS_ACTION_GEO_LEVEL', 'l');
+
+UPDATE ref_nomenclatures.t_nomenclatures
+    SET
+    label_default='Mis en place',
+    label_fr='Mis en place',
+    definition_fr='Mis en place.',
+    definition_default='Mis en place.'
+    WHERE
+    id_nomenclature = ref_nomenclatures.get_id_nomenclature('CS_ACTION_PROGRESS', 'pl');
 
 -- --------------------------------------------------------------------------------
 -- TRIGGERS
