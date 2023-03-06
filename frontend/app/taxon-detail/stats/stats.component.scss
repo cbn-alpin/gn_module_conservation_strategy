@@ -1,3 +1,9 @@
+.mat-card-header{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .synthese{
   max-width: 60%;
 }
@@ -6,9 +12,29 @@
   margin-bottom: 20px;
 }
 
-.mat-card-header{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+// display initial thumblabel for slider
+::ng-deep {
+  .mat-slider-thumb-label {
+    transform: rotate(45deg) !important;
+    border-radius: 50% 50% 0 !important;
+  }
+  .mat-slider-thumb {
+    transform: scale(0) !important;
+  }
+  .mat-slider-thumb-label-text {
+    opacity: 1 !important;
+  }
 }
 
+fieldset {
+  padding: 0.35em 0.625em 0.75em !important;
+  border: 1px solid silver !important;
+  margin: 0 2px !important;
+  border-radius: 3px;
+}
+
+legend {
+  width: auto;
+  font-size: inherit;
+}
