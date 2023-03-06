@@ -1,6 +1,6 @@
 type_nomenclature_code,cd_nomenclature,mnemonique,label_default,definition_default,label_fr,definition_fr,cd_nomenclature_broader,hierarchy
-CS_ACTION_GEO_LEVEL,t,territoriale,Territoriale,Action territoriale.,Territoriale,Action territoriale.,0,.001
-CS_ACTION_GEO_LEVEL,l,locale,Locale,Action locale.,Locale,Action locale.,0,.002
+CS_ACTION_GEO_LEVEL,t,territorial,Territorial,Niveau territorial.,Territorial,Niveau territorial.,0,.001
+CS_ACTION_GEO_LEVEL,l,local,Local,Niveau local.,Local,Niveau local.,0,.002
 CS_ACTION,con,controler,Contrôler à 10-15 ans,Vérifier l'état de conservation des stations 10 à 15 ans après l'édition de la fiche bilan stationnel.,Contrôler à 10-15 ans,Vérifier l'état de conservation des stations 10 à 15 ans après l'édition de la fiche bilan stationnel.,0,.001
 CS_ACTION,sm,surveillerMenace,Surveiller les menaces,"Vérifier régulièrement l'évolution des menaces, par exemple si des menaces qualifiées de potentielles se sont transformées en menaces imminentes.",Surveiller les menaces,"Vérifier régulièrement l'évolution des menaces, par exemple si des menaces qualifiées de potentielles se sont transformées en menaces imminentes.",0,.002
 CS_ACTION,rbs,realiserBilanStationnel,Réaliser un bilan stationnel,Établir un bilan stationnel après visite des stations et déduire du résultat de ce bilan des actions de conservations si nécessaire.,Réaliser un bilan stationnel,Établir un bilan stationnel après visite des stations et déduire du résultat de ce bilan des actions de conservations si nécessaire.,0,.003
@@ -27,4 +27,4 @@ CS_ACTION,mpr,realiserProtocolesRecherche,Réaliser des protocoles de recherche,
 CS_ACTION,pag,procederAnalyseGenetique,Procéder à des analyses génétiques,Procéder à des analyses génétiques,Procéder à des analyses génétiques,Procéder à des analyses génétiques,0,.024
 CS_ACTION_PROGRESS,pr,aPrevoir,À mettre en place,À mettre en place.,À mettre en place,À mettre en place.,0,.001
 CS_ACTION_PROGRESS,c,enCours,En cours de mise en place,En cours de mise en place.,En cours de mise en place,En cours de mise en place.,0,.002
-CS_ACTION_PROGRESS,pl,enPlace,Mise en place,Mise en place.,Mise en place,Mise en place.,0,.003
+CS_ACTION_PROGRESS,pl,enPlace,Mis en place,Mis en place.,Mis en place,Mis en place.,0,.003
