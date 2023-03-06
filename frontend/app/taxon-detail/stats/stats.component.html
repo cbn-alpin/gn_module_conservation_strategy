@@ -1,5 +1,35 @@
 <div *ngIf="stats | async as stats; else noStats">
   <mat-card class="synthese">
+    <fieldset>
+      <legend>
+        <mat-icon>tune</mat-icon>
+        Filtres
+      </legend>
+      <div class="d-flex justify-content-around align-items-baseline">
+        <mat-form-field>
+          <input
+          matInput
+          [matDatepicker]="picker"
+          placeholder="Date de début">
+          <mat-datepicker-toggle
+          matSuffix [for]="picker">
+          </mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="d-flex align-items-baseline">
+          <label class="pr-3">Nombre d'années à prendre en compte</label>
+          <mat-card>
+            <mat-slider
+            [max]=6
+            [min]=1
+            [value]="5"
+            thumbLabel
+            [tickInterval]=1>
+            </mat-slider>
+          </mat-card>
+        </div>
+      </div>
+    </fieldset>
     <mat-card class="synthese-table">
       <mat-card-header>
         <mat-card-title> Synthèse des prospections </mat-card-title>
