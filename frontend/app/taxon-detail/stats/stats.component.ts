@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
 
 import { Observable } from '@librairies/rxjs';
 
@@ -15,28 +16,44 @@ import { IStats } from '../../shared/models/stats.model';
 export class StatsComponent implements OnInit {
 
     stats: Observable<IStats>;
+    statsForm = this.form.group({
+        dateStart: [new Date()],
+        nbYear: [5]
+    })
+    taxonCode: number;
+    territoryCode: string;
+    territoryType: string;
+
 
     constructor(
         private dataService: DataService,
         private storeService: StoreService,
+        private form: FormBuilder,
         public route: ActivatedRoute,
     ) { }
 
     ngOnInit(): void {
         this.storeService.$selectedPriorityTaxonData.subscribe(data => {
-            let taxonCode = data.taxonCode;
+            this.taxonCode = data.taxonCode;
             let territoryId = data.territoryId;
             if (territoryId != null) {
                 this.dataService.getTerritory(territoryId).subscribe(territory => {
-                    let territoryCode = territory.areaCode;
-                    let territoryType = territory.areaType;
-                    this.stats = this.dataService.getStatsPriorityFlora({
-                        'area-code': territoryCode,
-                        'area-type': territoryType,
-                        'taxon-code': taxonCode
-                    })
+                    this.territoryCode = territory.areaCode;
+                    this.territoryType = territory.areaType;
+                    this.loadStats();
                 });
             }
+        })
+    }
+
+
+    loadStats() {
+        this.stats = this.dataService.getStatsPriorityFlora({
+            'area-code': this.territoryCode,
+            'area-type': this.territoryType,
+            'taxon-code': this.taxonCode,
+            'date-start': this.statsForm.value.dateStart.toISOString().split('T')[0],
+            'nbr': this.statsForm.value.nbYear
         })
     }
 }
