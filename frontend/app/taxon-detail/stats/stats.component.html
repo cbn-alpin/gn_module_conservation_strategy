@@ -95,7 +95,7 @@
           <tr>
             <th scope="col" matTooltip="Identifiant des Aires de présence">Id AP</th>
             <th scope="col">Type d'habitat</th>
-            <!-- <th scope="col">État de conservation</th> -->
+            <th scope="col">État de conservation</th>
             <th scope="col">Perturbations</th>
             <th scope="col">Évaluation de la menace</th>
             <!-- <th scope="col">Type de gestion</th> -->
@@ -106,7 +106,7 @@
           <tr *ngFor="let habitat of stats.habitats">
             <td>{{habitat.id}}</td>
             <td>{{habitat.habitatType}}</td>
-            <!-- <td>{{habitat.}}</td> -->
+            <td>{{habitat.conservationStatus}}</td>
             <td>{{habitat.perturbationType}}</td>
             <td>{{habitat.threatLevel}}</td>
             <!-- <td>{{habitat.}}</td> -->
