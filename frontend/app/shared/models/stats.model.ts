@@ -6,8 +6,35 @@ export interface IProspections {
     presenceAreaNb: number;
 }
 
+export interface IPopulations {
+    idAp: number;
+    idZp: number;
+    areaAp: string;
+    occurrenceFrequency?: number;
+    count: number;
+    municipality: string;
+    estimateMethod?: string;
+    countingType?: string;
+}
+
+export interface IHabitats {
+    idAp: number;
+    idZp: number;
+    conservationStatus?: string;
+    habitatType?: string;
+    perturbationType?: string;
+    threatLevel?: string;
+}
+
+export interface ICalculations {
+    nbStations: number;
+    areaPresence: number;
+}
+
 export interface IStats {
     prospections: IProspections[];
+    populations: IPopulations[];
+    habitats: [IHabitats[], ICalculations];
 }
 
 export interface IStatParams {
