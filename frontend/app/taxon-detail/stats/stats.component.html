@@ -150,7 +150,9 @@
           </div>
           <div class="col-auto pb-2">
             <mat-card>
-              <b class="justify-content-center"> % stations à habitat favorable </b>
+              <b class="justify-content-center">
+                {{stats.habitats[1].habitatFavorable | number:'1.0-2':'fr'}} % stations à habitat favorable
+              </b>
             </mat-card>
           </div>
         </div>

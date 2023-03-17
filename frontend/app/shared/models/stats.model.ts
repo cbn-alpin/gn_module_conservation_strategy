@@ -29,6 +29,8 @@ export interface IHabitats {
 export interface ICalculations {
     nbStations: number;
     areaPresence: number;
+    threatLevel: number;
+    habitatFavorable: number;
 }
 
 export interface IStats {
