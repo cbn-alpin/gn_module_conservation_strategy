@@ -4,23 +4,33 @@ Toutes les modifications notables apportées à ce projet seront documentées da
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2023-01-17
+## [0.4.0] - 2023-04-23
 
 ### Fonctionnalités
 - Ajout de nouvelles nomenclatures dans les Actions (docs/update_nomenclatures.sql).
 - Ajout d'un onglet Planning qui recense toutes les actions à mener vis-à-vis des taxons prioritaires.
 - Ajout du fil d'Ariane lorsqu'une fiche Bilan Stationnel ou une Action est sélectionnée.
 - Ajout du territoire d'appartenance sur la fiche détaillée du Taxon Prioritaire.
+- Ajout d'un onglet Synthèse dans la fiche détaillée du Taxon Prioritaire recensant toutes les données issues du module Bilan Stationnel (via un web service) pour le taxon concerné. Ces données sont synthétisées dans les tableaux 'Synthèse des prospections', 'État des populations' et 'État des habitats' ainsi que dans des encarts pour les calculs automatisés du nombre de stations, de la surface d'aire de présence, du pourcentage de stations menacées ainsi que du pourcentage de stations à habitat favorable. La consultation de ces données peut être filtrée par date et par nombre d'années à prendre en compte.
+- Ajout de mises à jours automatiques (triggers insert et update) du calcul de la surface et du nombre de mailles M5 (inpn 5x5km) totales pour chaque territoire.
+- Ajout du référencement des régions AURA et PACA dans `t_territory`.
 
 ### Changements
 - Simplification des routes du module.
 - Déplacement du filtre global Territoire vers la liste des taxons prioritaires.
 - Renommage des composants en enlevant le préfixe "Cs".
 - Formatage de tous les fichiers du frontend avec Prettier.
+- Fusion des opérations de migration de la v0.3 à la v0.4 dans un fichier unique.
 
 ### Suppressions
 - Suppression du bandeau d'acceuil contenant le titre du module et le filtre global Territoire.
 - Suppression des références au filtre global Territoire.
+
+### Corrections
+Au niveau du champ Action, les nomenclatures suivantes ont été corrigées :
+- 'niveau géographique territorial' et pas territoriale
+- 'état d'avancement mis en place' et pas mise en place
+- 'Action locale' devient 'Niveau local'
 
 ## [0.3.0] - 2022-11-16
 

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - 2023-01-17
+## [0.4.0] - 2023-04-23
 
 ### Added
 - Add new nomenclatures in Actions types (docs/update_nomenclatures.sql).
@@ -13,15 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add of the breadcrumb when an Assessment or an Action is selected.
 - Add the belonging territory on the detailed form of a Priority Taxon.
 - Format all frontend documents with Prettier.
+- Add of an Overview ('Synthèse') tab in the detailed form of a Priority Taxon summarizing all the data from the Priority Flora module (through a web service) for the taxon concerned. These data are summarized in the tables 'Prospecting overview', 'Population status' and 'Habitat status' as well as in automated calculations of the number of stations, the area of presence, the percentage of threatened stations and the percentage of stations with favorable habitat. The consultation of these data can be filtered by date and by the number of years to be taken into account.
+- Add of automatic updates (insert and update triggers) of the calculation of the area and the number of total M5 meshes (inpn 5x5km) for each territory.
+- Add references to AURA and PACA regions in `t_territory`.
 
 ### Changed
 - Simplify module routes.
 - Moved the Territory global filter to the Priority taxa list.
 - Renaming the components by removing the "Cs" prefix.
+- Merging of migration operations from v03 to v04 in an unique file.
 
 ### Removed
 - Removed the welcome banner containing the title of the module and the global filter Territory.
 - Removed the references to the global filter Territory.
+
+### Fixed
+In the Action field, the following nomenclatures have been corrected:
+- 'niveau géographique territorial',
+- 'état d'avancement mis en place',
+- 'local action' becomes 'local level'
 
 ## [0.3.0] - 2022-11-16
 
