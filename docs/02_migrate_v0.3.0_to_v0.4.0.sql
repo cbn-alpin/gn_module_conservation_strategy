@@ -589,6 +589,6 @@ UPDATE
     OF id_area ON
     pr_conservation_strategy.t_territory
 FOR EACH ROW
-EXECUTE FUNCTION pr_conservation_strategy.fct_trg_t_territory();
+EXECUTE FUNCTION pr_conservation_strategy.fct_trg_t_territory_id_area();
 
 COMMIT;

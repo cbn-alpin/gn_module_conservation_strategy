@@ -1,4 +1,3 @@
-BEGIN;
 -- Create Conservation Strategy schema and tables
 
 -- Set database variables
@@ -393,7 +392,7 @@ CREATE INDEX idx_cor_action_organism_id_action
 -- --------------------------------------------------------------------------------
 -- TRIGGERS
 
- -- Update t_territory.surface
+ -- Update t_territory.surface and t_territory.meshes_total
 CREATE OR REPLACE FUNCTION pr_conservation_strategy.fct_trg_t_territory_id_area()
  RETURNS trigger
  LANGUAGE plpgsql
@@ -401,7 +400,7 @@ AS $function$
 BEGIN
     NEW.surface = (
         SELECT
-        ROUND(st_area(geom)/1000000)
+            ROUND(st_area(geom)/1000000)
         FROM ref_geo.l_areas la
         WHERE la.id_area = NEW.id_area
        );
@@ -436,6 +435,6 @@ UPDATE
     OF id_area ON
     pr_conservation_strategy.t_territory
 FOR EACH ROW
-EXECUTE FUNCTION pr_conservation_strategy.fct_trg_t_territory();
+EXECUTE FUNCTION pr_conservation_strategy.fct_trg_t_territory_id_area();
 
 COMMIT;

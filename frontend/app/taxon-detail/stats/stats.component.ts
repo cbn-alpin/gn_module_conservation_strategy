@@ -16,7 +16,7 @@ import { IStats } from '../../shared/models/stats.model';
 export class StatsComponent implements OnInit {
 
     stats: Observable<IStats>;
-    statsForm = this.form.group({
+    statsForm = this.formBuilder.group({
         dateStart: [new Date()],
         nbYear: [5]
     })
@@ -24,11 +24,10 @@ export class StatsComponent implements OnInit {
     territoryCode: string;
     territoryType: string;
 
-
     constructor(
         private dataService: DataService,
         private storeService: StoreService,
-        private form: FormBuilder,
+        private formBuilder: FormBuilder,
         public route: ActivatedRoute,
     ) { }
 
@@ -45,7 +44,6 @@ export class StatsComponent implements OnInit {
             }
         })
     }
-
 
     loadStats() {
         this.stats = this.dataService.getStatsPriorityFlora({
