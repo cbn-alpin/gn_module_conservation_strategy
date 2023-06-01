@@ -36,7 +36,8 @@ export interface ICalculations {
 export interface IStats {
     prospections: IProspections[];
     populations: IPopulations[];
-    habitats: [IHabitats[], ICalculations];
+    habitats: IHabitats[];
+    calculations: ICalculations[];
 }
 
 export interface IStatParams {

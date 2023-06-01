@@ -8,54 +8,70 @@
               <mat-icon>tune</mat-icon>
               Filtres
             </legend>
-              <form [formGroup]="statsForm" class="d-flex justify-content-around align-items-center pb-2">
-                <mat-form-field>
-                  <input
-                    matInput
-                    [matDatepicker]="picker"
-                    placeholder="Date de début"
-                    formControlName="dateStart"
-                    (dateChange)="loadStats()"
-                  >
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-hint>Date du jour par défaut</mat-hint>
-                </mat-form-field>
-                <mat-card class="d-flex justify-content-end align-items-center">
-                  <mat-label class="pr-2">Nombre d'années à prendre en compte :</mat-label>
-                  <mat-slider
-                    [min]=1
-                    [max]=6
-                    (change)="loadStats()"
-                    [tickInterval]=1
-                    thumbLabel
-                    formControlName="nbYear"
-                  >
-                  </mat-slider>
-                </mat-card>
-              </form>
+            <form
+              [formGroup]="statsForm"
+              class="d-flex justify-content-around align-items-center pb-2"
+            >
+              <mat-form-field>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  placeholder="Date de début"
+                  formControlName="dateStart"
+                  (dateChange)="loadStats()"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-hint>Date du jour par défaut</mat-hint>
+              </mat-form-field>
+              <mat-card class="d-flex justify-content-end align-items-center">
+                <mat-label class="pr-2"
+                  >Nombre d'années à prendre en compte :</mat-label
+                >
+                <mat-slider
+                  [min]="1"
+                  [max]="6"
+                  (change)="loadStats()"
+                  [tickInterval]="1"
+                  thumbLabel
+                  formControlName="nbYear"
+                >
+                </mat-slider>
+              </mat-card>
+            </form>
           </fieldset>
           <mat-card>
             <mat-card-header>
               <mat-card-title> Synthèse des prospections </mat-card-title>
             </mat-card-header>
-            <table class="table table-sm table-striped table-bordered table-hover mb-4">
+            <table
+              class="table table-sm table-striped table-bordered table-hover mb-4"
+            >
               <thead>
                 <tr>
                   <th scope="col">Département(s)</th>
                   <th scope="col">Communes(s)</th>
                   <th scope="col">Observateur(s)</th>
-                  <th scope="col" matTooltip="Identifiant des Zones de prospection">Id ZP</th>
+                  <th
+                    scope="col"
+                    matTooltip="Identifiant des Zones de prospection"
+                  >
+                    Id ZP
+                  </th>
                   <th scope="col">Nb d'aires de présence</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let prospection of stats.prospections">
-                  <td>{{prospection.departement}}</td>
-                  <td>{{prospection.municipality}}</td>
-                  <td>{{prospection.observers}}</td>
-                  <td>{{prospection.id}}</td>
-                  <td>{{prospection.presenceAreaNb}}</td>
+                  <td>{{ prospection.departement }}</td>
+                  <td>{{ prospection.municipality }}</td>
+                  <td>{{ prospection.observers }}</td>
+                  <td>{{ prospection.id }}</td>
+                  <td>{{ prospection.presenceAreaNb }}</td>
+                </tr>
               </tbody>
             </table>
           </mat-card>
@@ -63,14 +79,33 @@
             <mat-card-header>
               <mat-card-title> État des populations </mat-card-title>
             </mat-card-header>
-            <table class="table table-sm table-striped table-bordered table-hover mb-4">
+            <table
+              class="table table-sm table-striped table-bordered table-hover mb-4"
+            >
               <thead>
                 <tr>
                   <th scope="col">Communes(s)</th>
-                  <th scope="col" matTooltip="Identifiant des Zones de prospection">Id ZP</th>
-                  <th scope="col" matTooltip="Identifiant des Aires de présence">Id AP</th>
-                  <th scope="col" matTooltip="Surface des Aires de présence">Surface AP</th>
-                  <th scope="col" matTooltip="Estimation en termes de recouvrement">Fréquence d'occurence</th>
+                  <th
+                    scope="col"
+                    matTooltip="Identifiant des Zones de prospection"
+                  >
+                    Id ZP
+                  </th>
+                  <th
+                    scope="col"
+                    matTooltip="Identifiant des Aires de présence"
+                  >
+                    Id AP
+                  </th>
+                  <th scope="col" matTooltip="Surface des Aires de présence">
+                    Surface AP
+                  </th>
+                  <th
+                    scope="col"
+                    matTooltip="Estimation en termes de recouvrement"
+                  >
+                    Fréquence d'occurence
+                  </th>
                   <th scope="col">Méthode d'estimation</th>
                   <th scope="col">Effectifs</th>
                   <th scope="col">Type de comptage</th>
@@ -78,14 +113,18 @@
               </thead>
               <tbody>
                 <tr *ngFor="let population of stats.populations">
-                  <td>{{population.municipality}}</td>
-                  <td>{{population.idZp}}</td>
-                  <td>{{population.idAp}}</td>
-                  <td>{{population.areaAp}}</td>
-                  <td>{{population.occurrenceFrequency | number:'1.0-2':'fr'}} %</td>
-                  <td>{{population.estimateMethod}}</td>
-                  <td>{{population.count}}</td>
-                  <td>{{population.countingType}}</td>
+                  <td>{{ population.municipality }}</td>
+                  <td>{{ population.idZp }}</td>
+                  <td>{{ population.idAp }}</td>
+                  <td>{{ population.areaAp }}</td>
+                  <td>
+                    {{ population.occurrenceFrequency | number: "1.0-2":"fr" }}
+                    %
+                  </td>
+                  <td>{{ population.estimateMethod }}</td>
+                  <td>{{ population.count }}</td>
+                  <td>{{ population.countingType }}</td>
+                </tr>
               </tbody>
             </table>
           </mat-card>
@@ -93,10 +132,17 @@
             <mat-card-header>
               <mat-card-title> État des habitats </mat-card-title>
             </mat-card-header>
-            <table class="table table-sm table-striped table-bordered table-hover mb-4">
+            <table
+              class="table table-sm table-striped table-bordered table-hover mb-4"
+            >
               <thead>
                 <tr>
-                  <th scope="col" matTooltip="Identifiant des Aires de présence">Id AP</th>
+                  <th
+                    scope="col"
+                    matTooltip="Identifiant des Aires de présence"
+                  >
+                    Id AP
+                  </th>
                   <th scope="col">Type d'habitat</th>
                   <th scope="col">État de conservation</th>
                   <th scope="col">Perturbations</th>
@@ -106,57 +152,60 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let habitat of stats.habitats[0]">
-                  <td>{{habitat.idAp}}</td>
-                  <td>{{habitat.habitatType}}</td>
-                  <td>{{habitat.conservationStatus}}</td>
-                  <td>{{habitat.perturbationType}}</td>
-                  <td>{{habitat.threatLevel}}</td>
+                <tr *ngFor="let habitat of stats.habitats">
+                  <td>{{ habitat.idAp }}</td>
+                  <td>{{ habitat.habitatType }}</td>
+                  <td>{{ habitat.conservationStatus }}</td>
+                  <td>{{ habitat.perturbationType }}</td>
+                  <td>{{ habitat.threatLevel }}</td>
                   <!-- <td>{{habitat.}}</td> -->
                   <!-- <td>{{habitat.}}</td> -->
+                </tr>
               </tbody>
             </table>
           </mat-card>
         </mat-card>
       </div>
-      <div class="col-5">
+      <div class="col-5" *ngFor="let calculation of stats.calculations">
         <div class="row justify-content-around pt-4">
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{stats.habitats[1].nbStations}} stations
+                {{ calculation.nbstations }} stations
               </b>
             </mat-card>
           </div>
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{stats.habitats[1].areaPresence}} m² d'aire de présence
+                {{ calculation.areapresence }} m² d'aire de présence
               </b>
             </mat-card>
           </div>
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{stats.habitats[1].threatLevel | number:'1.0-2':'fr'}} % stations menacées
+                {{ calculation.threatlevel | number: "1.0-2":"fr" }} % stations
+                menacées
               </b>
             </mat-card>
           </div>
-        <div class="row justify-content-around pt-4">
-          <!-- <div class="col-auto pb-2">
+          <div class="row justify-content-around pt-4">
+            <!-- <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center"> % stations à gestion favorable </b>
             </mat-card>
           </div> -->
-          <div class="col-auto pb-2">
-            <mat-card>
-              <b class="justify-content-center">
-                {{stats.habitats[1].habitatFavorable | number:'1.0-2':'fr'}} % stations à habitat favorable
-              </b>
-            </mat-card>
+            <div class="col-auto pb-2">
+              <mat-card>
+                <b class="justify-content-center">
+                  {{ calculation.habitatfavorable | number: "1.0-2":"fr" }}
+                  % stations à habitat favorable
+                </b>
+              </mat-card>
+            </div>
           </div>
-        </div>
-        <!-- <div class="row justify-content-around pt-4"> -->
+          <!-- <div class="row justify-content-around pt-4"> -->
           <!-- <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center"> % stations réglementairement protégées </b>
@@ -167,21 +216,21 @@
               <b class="justify-content-center"> % stations foncièrement protégées </b>
             </mat-card>
           </div> -->
-        <!-- <div class="row justify-content-around pt-4">
+          <!-- <div class="row justify-content-around pt-4">
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center"> Dynamique des populations </b>
             </mat-card>
           </div>
         </div> -->
+        </div>
       </div>
     </div>
   </div>
+  <ng-template #noStats>
+    <p>
+      <mat-icon inline>info</mat-icon>
+      Aucune statistique pour ce taxon prioritaire.
+    </p>
+  </ng-template>
 </div>
-<ng-template #noStats>
-  <p>
-    <mat-icon inline>info</mat-icon>
-    Aucune statistique pour ce taxon prioritaire.
-  </p>
-</ng-template>
-
