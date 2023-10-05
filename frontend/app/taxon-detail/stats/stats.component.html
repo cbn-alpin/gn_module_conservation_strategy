@@ -66,7 +66,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let prospection of stats.prospections">
-                  <td>{{ prospection.departement }}</td>
+                  <td>{{ prospection.departements }}</td>
                   <td>{{ prospection.municipality }}</td>
                   <td>{{ prospection.observers }}</td>
                   <td>{{ prospection.id }}</td>
@@ -166,27 +166,34 @@
           </mat-card>
         </mat-card>
       </div>
-      <div class="col-5" *ngFor="let calculation of stats.calculations">
+      <div class="col-5">
         <div class="row justify-content-around pt-4">
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{ calculation.nbstations }} stations
+                {{ stats.calculations.nbStations }} stations
               </b>
             </mat-card>
           </div>
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{ calculation.areapresence }} m² d'aire de présence
+                {{ stats.calculations.areaPresence }} m² d'aire de présence
               </b>
             </mat-card>
           </div>
           <div class="col-auto pb-2">
             <mat-card>
               <b class="justify-content-center">
-                {{ calculation.threatlevel | number: "1.0-2":"fr" }} % stations
-                menacées
+                <span
+                  *ngIf="stats.calculations.threatLevel; else noThreatLevelData"
+                >
+                  {{ stats.calculations.threatLevel | number: "1.0-2":"fr" }} %
+                  stations menacées
+                </span>
+                <ng-template #noThreatLevelData>
+                  Aucune donnée de station menacée.
+                </ng-template>
               </b>
             </mat-card>
           </div>
@@ -199,8 +206,18 @@
             <div class="col-auto pb-2">
               <mat-card>
                 <b class="justify-content-center">
-                  {{ calculation.habitatfavorable | number: "1.0-2":"fr" }}
-                  % stations à habitat favorable
+                  <span
+                    *ngIf="
+                      stats.calculations.haitatFavorable;
+                      else noHabitatFavorableData
+                    "
+                  >
+                    {{ stats.calculations.threatLevel | number: "1.0-2":"fr" }}
+                    % stations menacées
+                  </span>
+                  <ng-template #noHabitatFavorableData>
+                    Aucune donnée d'habitat favorable.
+                  </ng-template>
                 </b>
               </mat-card>
             </div>
