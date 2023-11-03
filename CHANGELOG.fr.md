@@ -4,6 +4,14 @@ Toutes les modifications notables apportées à ce projet seront documentées da
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Inédit]
+
+## [0.4.1] - 2023-11-03
+
+### Corrections
+- Corriger l'affichage des calculs en affichant le message aucune données seulement si nécessaire.
+- Modification du webservice de Priority Flora pour y ajouter les calculs dans un attribut distinct.
+
 ## [0.4.0] - 2023-04-23
 
 ### Fonctionnalités
