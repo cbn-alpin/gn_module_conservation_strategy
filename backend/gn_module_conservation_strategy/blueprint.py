@@ -346,7 +346,7 @@ def get_organisms():
 
 
 @blueprint.route("/assessments", methods=["POST"])
-@permissions.check_cruved_scope("C", get_role=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("C", get_scope=True, module_code="CONSERVATION_STRATEGY")
 @json_resp
 def create_assessment(info_role):
     """
@@ -443,7 +443,7 @@ def get_assessment_details(assessment_id):
 
 
 @blueprint.route("/assessments/<int:assessment_id>", methods=["PUT"])
-@permissions.check_cruved_scope("U", get_role=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("U", get_scope=True, module_code="CONSERVATION_STRATEGY")
 @json_resp
 def update_assessment(info_role, assessment_id):
     """
