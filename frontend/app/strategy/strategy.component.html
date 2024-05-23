@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    <nav mat-tab-nav-bar>
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
       <a
         mat-tab-link
         routerLink="/conservation_strategy"
@@ -41,6 +41,8 @@
     </nav>
   </div>
   <div class="card-body">
-    <router-outlet></router-outlet>
+    <mat-tab-nav-panel #tabPanel>
+      <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
   </div>
 </div>

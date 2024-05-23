@@ -51,7 +51,7 @@ export class StatsComponent implements OnInit {
             'area-type': this.territoryType,
             'taxon-code': this.taxonCode,
             'date-start': this.statsForm.value.dateStart.toISOString().split('T')[0],
-            'nbr': this.statsForm.value.nbYear
+            'years-nbr': this.statsForm.value.nbYear
         })
     }
 }

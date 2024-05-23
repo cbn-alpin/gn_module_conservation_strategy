@@ -90,19 +90,25 @@
           <mat-slider
             class="cs-grow-slider"
             thumbLabel
-            tickInterval="1"
+            showTickMarks
+            discrete
+            step=1
             [min]="currentYear"
             [max]="currentYear + 25"
-            [value]="nextAssessmentYearCtrl.value"
-            (change)="onNextAssessmentYearSliderChange($event)"
-          ></mat-slider>
+          >
+            <input
+              matSliderThumb
+              value="nextAssessmentYearCtrl.value"
+              (valueChange)="onNextAssessmentYearSliderChange($event)"
+              formControlName="nextAssessmentYear"
+            >
+          </mat-slider>
         </mat-form-field>
       </div>
 
       <div class="action-btn-container">
         <button
           mat-raised-button
-          class="uppercase"
           color="primary"
           (click)="onAddActionForm()"
         >

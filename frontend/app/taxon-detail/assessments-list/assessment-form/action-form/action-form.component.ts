@@ -62,8 +62,8 @@ export class ActionForm implements OnInit {
     this.progressValue = event ? event.value as string : '';
   }
 
-  onPlanForSliderChange(event, planForCtrl: AbstractControl) {
-    planForCtrl.setValue(event.value);
+  onPlanForSliderChange(year, planForCtrl: AbstractControl) {
+    planForCtrl.patchValue(year);
   }
 
   onDeleteAction() {

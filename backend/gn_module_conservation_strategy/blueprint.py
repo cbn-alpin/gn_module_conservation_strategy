@@ -1,13 +1,13 @@
 import logging
 
-from flask import Blueprint, request
-from sqlalchemy import and_, desc, func, or_, exc, case, String
+from flask import Blueprint, request, g
+from sqlalchemy import and_, desc, func, or_, exc, case, String, select, union, distinct
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased
 from sqlalchemy.sql import literal_column
 
 from geonature.core.gn_permissions import decorators as permissions
-from geonature.core.ref_geo.models import LAreas, BibAreasTypes
+from ref_geo.models import LAreas, BibAreasTypes
 from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
@@ -44,32 +44,37 @@ def get_territories():
 
     :returns: une liste de dictionnaires contenant les infos d'un territoire.
     """
-    q = DB.session.query(TTerritory)
-    data = q.all()
+    q = select(TTerritory)
+    data = DB.session.scalars(q).unique().all()
     output = [d.as_dict() for d in data]
     return prepare_output(output, remove_in_key="territory")
+
 
 @blueprint.route("/territories/<int:territory_id>", methods=["GET"])
 @permissions.check_cruved_scope("R", module_code="CONSERVATION_STRATEGY")
 @json_resp
 def get_territory(territory_id):
     query = (
-        DB.session.query(
+        select(
             TTerritory.id_territory.label("territory_id"),
             LAreas.area_code.label("area_code"),
             BibAreasTypes.type_code.label("area_type"),
         )
         .outerjoin(LAreas, LAreas.id_area == TTerritory.id_area)
         .outerjoin(BibAreasTypes, BibAreasTypes.id_type == LAreas.id_type)
-        .filter(TTerritory.id_territory == territory_id)
+        .where(TTerritory.id_territory == territory_id)
     )
 
-    data = query.first()
-    output = None if data == None else {
-        "territory_id": data[0],
-        "area_code": data[1],
-        "area_type": data[2],
-    }
+    data = DB.session.execute(query).first()
+    output = (
+        None
+        if data == None
+        else {
+            "territory_id": data[0],
+            "area_code": data[1],
+            "area_type": data[2],
+        }
+    )
     return prepare_output(output)
 
 
@@ -94,7 +99,7 @@ def search_taxons():
     page = int(request.args.get("page", 0))
 
     # Execute query
-    query = DB.session.query(
+    query = select(
         TPriorityTaxon.cd_nom,
         Taxref.cd_ref,
         Taxref.lb_nom.label("search_name"),
@@ -104,12 +109,12 @@ def search_taxons():
     if search_name:
         ilike_search_name = f"%{search_name.replace(' ', '%')}%"
         query = (
-            query.filter(Taxref.lb_nom.ilike(ilike_search_name))
+            query.where(Taxref.lb_nom.ilike(ilike_search_name))
             .add_columns(func.similarity(Taxref.lb_nom, search_name).label("idx_trgm"))
             .order_by(desc("idx_trgm"))
         )
 
-    data = query.distinct().limit(limit).offset(page * limit).all()
+    data = DB.session.execute(query.limit(limit).offset(page * limit)).unique().all()
 
     # Manage output
     output = [d._asdict() for d in data]
@@ -169,20 +174,20 @@ def get_taxons():
         TTerritory.label.label("territory_name"),
     ]
     query = (
-        DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
+        select(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
     )
 
     if territory:
-        query = query.filter(func.lower(TTerritory.code) == territory.lower())
+        query = query.where(func.lower(TTerritory.code) == territory.lower())
 
     if cd_nom:
-        query = query.filter(TPriorityTaxon.cd_nom == cd_nom)
+        query = query.where(TPriorityTaxon.cd_nom == cd_nom)
 
     if cpi:
-        query = query.filter(
+        query = query.where(
             or_(
                 TPriorityTaxon.revised_conservation_priority == cpi,
                 TPriorityTaxon.computed_conservation_priority == cpi,
@@ -225,8 +230,8 @@ def get_taxons():
             return {"message": msg, "status": "error"}, 400
 
     query = query.group_by(*fields)
-    count = query.count()
-    items = query.limit(limit).offset(page * limit).all()
+    count = DB.session.scalar(select(func.count("*")).select_from(query))
+    items = DB.session.execute(query.limit(limit).offset(page * limit)).unique().all()
 
     # Manage output
     output = {
@@ -269,7 +274,7 @@ def get_priority_taxon_infos(priority_taxon_id):
         TTerritory.id_territory.label("territory_id"),
     ]
     query = (
-        DB.session.query(*fields, func.count(TAssessment.id).label("assessment_count"))
+        select(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(BibNoms, BibNoms.cd_nom == Taxref.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
@@ -278,12 +283,12 @@ def get_priority_taxon_infos(priority_taxon_id):
         .group_by(*fields)
     )
 
-    data = query.one()._asdict()
+    data = DB.session.execute(query).one()._asdict()
 
     # Manage medias
     if with_medias:
         query = (
-            DB.session.query(
+            select(
                 TMedias.titre.label("title"),
                 TMedias.url,
                 TMedias.chemin.label("path"),
@@ -296,28 +301,26 @@ def get_priority_taxon_infos(priority_taxon_id):
             )
             .join(Taxref, Taxref.cd_ref == TMedias.cd_ref)
             .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
-            .filter(TPriorityTaxon.id == priority_taxon_id)
-            .filter(TMedias.is_public == True)
-            .filter(TMedias.supprime == False)
+            .where(TPriorityTaxon.id == priority_taxon_id)
+            .where(TMedias.is_public == True)
+            .where(TMedias.supprime == False)
         )
-        medias = query.all()
+        medias = DB.session.scalars(query).all()
         data["medias"] = [media._asdict() for media in medias]
 
     # Manage TaxHub Attributs
     if with_taxhub_attributs:
         query = (
-            DB.session.query(
+            select(
                 CorTaxonAttribut.valeur_attribut.label("content"),
                 BibAttributs.nom_attribut.label("code"),
             )
-            .join(
-                BibAttributs, BibAttributs.id_attribut == CorTaxonAttribut.id_attribut
-            )
+            .join(BibAttributs, BibAttributs.id_attribut == CorTaxonAttribut.id_attribut)
             .join(Taxref, Taxref.cd_ref == CorTaxonAttribut.cd_ref)
             .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
-            .filter(TPriorityTaxon.id == priority_taxon_id)
+            .where(TPriorityTaxon.id == priority_taxon_id)
         )
-        attributs = query.all()
+        attributs = DB.session.scalars(query).all()
         data["attributs"] = {}
         for attribut in attributs:
             data["attributs"][attribut.code] = attribut.content
@@ -346,9 +349,9 @@ def get_organisms():
 
 
 @blueprint.route("/assessments", methods=["POST"])
-@permissions.check_cruved_scope("C", get_role=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("C", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def create_assessment(info_role):
+def create_assessment():
     """
     Ajouter une fiche bilan stationnel.
 
@@ -358,7 +361,7 @@ def create_assessment(info_role):
     """
     # Transform received data
     data = prepare_input(dict(request.get_json()))
-    data["assessment"]["meta_create_by"] = int(getattr(info_role, "id_role"))
+    data["assessment"]["meta_create_by"] = g.current_user.id_role
     exception = None
 
     try:
@@ -443,9 +446,9 @@ def get_assessment_details(assessment_id):
 
 
 @blueprint.route("/assessments/<int:assessment_id>", methods=["PUT"])
-@permissions.check_cruved_scope("U", get_role=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("U", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def update_assessment(info_role, assessment_id):
+def update_assessment(assessment_id):
     """
     Mettre à jour une fiche bilan stationnel.
 
@@ -459,7 +462,7 @@ def update_assessment(info_role, assessment_id):
     # Transform received data
     data = prepare_input(dict(request.get_json()))
     data["assessment"]["id"] = assessment_id
-    data["assessment"]["meta_update_by"] = int(getattr(info_role, "id_role"))
+    data["assessment"]["meta_update_by"] = g.current_user.id_role
     exception = None
 
     try:
@@ -538,7 +541,7 @@ def get_tasks():
     ]
 
     query_action = (
-        DB.session.query(*fields_action)
+        select(*fields_action)
         .outerjoin(TAssessment, TAssessment.id == TAction.id_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
@@ -575,7 +578,7 @@ def get_tasks():
     ]
 
     query_assessment = (
-        DB.session.query(*fields_assessment)
+        select(*fields_assessment)
         .outerjoin(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
         .outerjoin(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
@@ -614,16 +617,15 @@ def get_tasks():
     elif type == "assessment":
         query = query_assessment.distinct(TAssessment.id)
     else:
-        query = query_action.union(query_assessment).distinct(
-            TAssessment.id, TAction.id
-        )
+        union_query = union(query_action, query_assessment).subquery()
+        query = select(union_query)
 
     if organisms:
         query = query.filter(CorActionOrganism.id_organism.in_(organisms))
 
     if sort:
         subquery = query.subquery()
-        query = DB.session.query(subquery) # enable orderby on date
+        query = select(subquery)  # enable orderby on date
         try:
             (column, direction) = sort.split(":")
 
@@ -652,8 +654,8 @@ def get_tasks():
             return {"message": msg, "status": "error"}, 400
 
     # for pagination
-    count = query.count()
-    items = query.limit(limit).offset(page * limit).all()
+    count = DB.session.scalar(select(func.count("*")).select_from(query))
+    items = DB.session.execute(query.limit(limit).offset(page * limit)).all()
 
     # Manage output
     output = {

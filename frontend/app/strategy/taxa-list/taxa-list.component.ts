@@ -7,7 +7,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatPaginator, MatSort, MatTable } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
 
 import { Observable } from '@librairies/rxjs';
 import { tap, map } from 'rxjs/operators';

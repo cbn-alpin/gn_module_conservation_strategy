@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { CarouselConfig } from '@librairies/ngx-bootstrap/carousel';
+import { CarouselConfig } from 'ngx-bootstrap/carousel';
 import { Observable } from '@librairies/rxjs';
 
 import { ConfigService } from '../../shared/services/config.service';

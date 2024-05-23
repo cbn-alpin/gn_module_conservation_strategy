@@ -12,10 +12,10 @@
     [inputFormatter]="formatter"
     [resultTemplate]="rt"
     (selectItem)="onTaxonSelected($event)"
+    container="body"
   />
 
   <button
-    mat-button
     *ngIf="parentFormControl.value"
     matSuffix mat-icon-button aria-label="Clear"
     (click)="onClearField()"

@@ -1,49 +1,47 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
-import { AppConfig } from '@geonature_config/app.config';
-import { ModuleConfig } from '../../module.config';
+import { ConfigService as GnConfigService } from '@geonature/services/config.service';
 
 @Injectable()
 export class ConfigService {
 
   constructor(
-    private http: HttpClient,
+    public config: GnConfigService,
   ) {}
 
   getModuleTitle() {
-    return ModuleConfig.module_title;
+    return this.config.CONSERVATION_STRATEGY.module_title;
   }
 
   getModuleCode() {
-    return ModuleConfig.module_code;
+    return this.config.CONSERVATION_STRATEGY.module_code;
   }
 
   getAppUrl() {
-    return `${AppConfig.URL_APPLICATION}`;
+    return `${this.config.URL_APPLICATION}`;
   }
 
   getBackendUrl() {
-    return `${AppConfig.API_ENDPOINT}`;
+    return `${this.config.API_ENDPOINT}`;
   }
 
   getModuleBackendUrl() {
-    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.module_code.toLowerCase()}`;
+    return `${this.config.API_ENDPOINT}/${this.config.CONSERVATION_STRATEGY.module_code.toLowerCase()}`;
   }
 
   getFrontendModuleUrl() {
-    return ModuleConfig.module_code.toLowerCase();
+    return this.config.CONSERVATION_STRATEGY.module_code.toLowerCase();
   }
 
   getTaxHubBackendUrl() {
-    return `${AppConfig.API_TAXHUB}`;
+    return `${this.config.API_TAXHUB}`;
   }
 
   getTaxHubFrontendUrl() {
-    return `${AppConfig.API_TAXHUB}`.replace('/api', '/');
+    return `${this.config.API_TAXHUB}`.replace('/api', '/');
   }
 
   getPriorityFloraBackendUrl() {
-    return `${AppConfig.API_ENDPOINT}/${ModuleConfig.module_code_pf.toLowerCase()}`;
+    return `${this.config.API_ENDPOINT}/${this.config.CONSERVATION_STRATEGY.module_code_pf.toLowerCase()}`;
   }
 }

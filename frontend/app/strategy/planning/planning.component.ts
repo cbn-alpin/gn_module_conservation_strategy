@@ -7,7 +7,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { MatPaginator, MatSort, MatTable } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTable } from '@angular/material/table';
 
 import { Observable } from '@librairies/rxjs';
 import { tap, map } from 'rxjs/operators';
@@ -111,8 +113,6 @@ export class PlanningComponent implements OnInit, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
-    this.dataSource.setFilterParam('sort', `date:desc`);
-    this.paginator.firstPage();
   }
 
   detectTypeOfTask(task) {

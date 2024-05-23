@@ -27,7 +27,7 @@
       <cs-simple-nomenclature
         class="cs-grow flex-fill mr-3"
         label="Niveau géographique"
-        [parentFormControl]="parentFormGroup.controls.level"
+        [parentFormControl]="parentFormGroup['controls'].level"
         codeNomenclatureType="CS_ACTION_GEO_LEVEL"
         keyValue="cd_nomenclature"
         (change)="onLevelNomenclatureChange($event)"
@@ -37,7 +37,7 @@
       <cs-simple-nomenclature
         class="cs-grow flex-fill"
         label="Type d'action"
-        [parentFormControl]="parentFormGroup.controls.type"
+        [parentFormControl]="parentFormGroup['controls'].type"
         codeNomenclatureType="CS_ACTION"
         keyValue="cd_nomenclature"
         (change)="onTypeChange($event)"
@@ -49,7 +49,7 @@
       <cs-simple-nomenclature
         class="cs-grow flex-fill mr-3"
         label="État d'avancement"
-        [parentFormControl]="parentFormGroup.controls.progress"
+        [parentFormControl]="parentFormGroup['controls'].progress"
         codeNomenclatureType="CS_ACTION_PROGRESS"
         keyValue="cd_nomenclature"
         (change)="onProgressChange($event)"
@@ -57,7 +57,7 @@
       ></cs-simple-nomenclature>
 
       <mat-form-field
-        *ngIf="parentFormGroup.controls.progress.value == 'pr'"
+        *ngIf="parentFormGroup['controls'].progress.value == 'pr'"
         class="cs-grow flex-fill"
         appearance="outline"
       >
@@ -66,7 +66,7 @@
           class="cs-grow"
           #planForCtrl
           matInput
-          [formControl]="parentFormGroup.controls.planFor"
+          [formControl]="parentFormGroup['controls'].planFor"
           type="number"
           [min]="currentYear"
           [max]="currentYear + 10"
@@ -74,24 +74,29 @@
         <mat-slider
           class="cs-grow-slider"
           thumbLabel
-          tickInterval="1"
+          showTickMarks
+          discrete
+          step=1
           [min]="currentYear"
           [max]="currentYear + 10"
-          [value]="planForCtrl.value"
-          (change)="
-            onPlanForSliderChange($event, parentFormGroup.controls.planFor)
-          "
-        ></mat-slider>
+        >
+          <input
+            matSliderThumb
+            value="planForCtrl.value"
+            (valueChange)="onPlanForSliderChange($event, parentFormGroup['controls'].planFor)"
+            [formControl]="parentFormGroup['controls'].planFor"
+          >
+        </mat-slider>
       </mat-form-field>
 
       <mat-form-field
-        *ngIf="parentFormGroup.controls.progress.value == 'c'"
+        *ngIf="parentFormGroup['controls'].progress.value == 'c'"
         class="cs-grow flex-fill"
         appearance="outline"
       >
         <mat-label>Début le ...</mat-label>
         <input
-          [formControl]="parentFormGroup.controls.startingDate"
+          [formControl]="parentFormGroup['controls'].startingDate"
           matInput
           [matDatepicker]="picker"
           placeholder="Choisir une date"
@@ -101,13 +106,13 @@
       </mat-form-field>
 
       <mat-form-field
-        *ngIf="parentFormGroup.controls.progress.value == 'pl'"
+        *ngIf="parentFormGroup['controls'].progress.value == 'pl'"
         class="cs-grow flex-fill"
         appearance="outline"
       >
         <mat-label>Mis en place le ...</mat-label>
         <input
-          [formControl]="parentFormGroup.controls.implementationDate"
+          [formControl]="parentFormGroup['controls'].implementationDate"
           matInput
           [matDatepicker]="picker"
           placeholder="Choisir une date"
@@ -125,7 +130,7 @@
       <textarea
         #descriptionCtrl
         matNativeControl
-        [formControl]="parentFormGroup.controls.description"
+        [formControl]="parentFormGroup['controls'].description"
         placeholder="Indiquer le détail de l'action à mettre en place ou mise en place."
         rows="6"
         maxlength="10000"
@@ -139,7 +144,7 @@
       <mat-label> Partenaires </mat-label>
       <mat-select
         #partnersCtrl
-        [formControl]="parentFormGroup.controls.partners"
+        [formControl]="parentFormGroup['controls'].partners"
         [multiple]="true"
       >
         <mat-option
@@ -150,7 +155,6 @@
         </mat-option>
       </mat-select>
       <button
-        mat-button
         *ngIf="partnersCtrl.value"
         matSuffix
         mat-icon-button
@@ -167,7 +171,7 @@
       type="button"
       mat-stroked-button
       color="warn"
-      (click)="onDeleteAction($event)"
+      (click)="onDeleteAction()"
     >
       <mat-icon>delete</mat-icon>
       Supprimer l'action

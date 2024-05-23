@@ -3,24 +3,24 @@ import localeFr from '@angular/common/locales/fr';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule } from '@angular/router';
-import {
-  MatCheckboxModule,
-  MatDatepickerModule, MAT_DATE_LOCALE,
-  MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS,
-  MatInputModule, MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatTooltipModule,
-} from '@angular/material';
-import { MatMomentDateModule } from '@angular/material-moment-adapter'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -49,12 +49,11 @@ import { ReplaceTagsPipe } from './shared/pipes/replace-tags.pipe';
 import { routes } from './gnModule.routes';
 import { SimpleNomenclatureComponent } from './shared/components/form/simple-nomenclature/simple-nomenclature.component';
 import { SortByPipe } from './shared/pipes/sort-by.pipe';
+import { NgJoinPipeModule } from './shared/pipes/join.pipe';
+import { NgPluckPipeModule } from './shared/pipes/pluck.pipe';
 import { StoreService } from './shared/services/store.service';
 import { TaxaFilterComponent } from './shared/components/taxa-filter/taxa-filter.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
-import { PluckPipe } from './shared/pipes/pluck.pipe';
-import { JoinPipe } from './shared/pipes/join.pipe';
-
 
 
 export const routingConfiguration: ExtraOptions = {
@@ -75,8 +74,6 @@ export const routingConfiguration: ExtraOptions = {
     StrategyComponent,
     TaxaListComponent,
     TaxonDetailComponent,
-    JoinPipe,
-    PluckPipe,
     ReplaceTagsPipe,
     SimpleNomenclatureComponent,
     SortByPipe,
@@ -92,7 +89,7 @@ export const routingConfiguration: ExtraOptions = {
     MatDatepickerModule,
     MatDialogModule,
     MatInputModule,
-    MatMomentDateModule,
+    NgxMatMomentModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
@@ -103,6 +100,9 @@ export const routingConfiguration: ExtraOptions = {
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
+    MatNativeDateModule,
+    NgJoinPipeModule,
+    NgPluckPipeModule,
     RouterModule.forChild(routes),
     ToastrModule.forRoot(),
   ],

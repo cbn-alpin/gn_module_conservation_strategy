@@ -45,7 +45,7 @@ export interface IStatParams {
     'area-code': string;
     'area-type': string;
     'date-start'?: string;
-    nbr?: number;
+    'years-nbr'?: number;
     'taxon-code': number;
 }
 
