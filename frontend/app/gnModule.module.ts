@@ -3,24 +3,24 @@ import localeFr from '@angular/common/locales/fr';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule } from '@angular/router';
-import {
-  MatCheckboxModule,
-  MatDatepickerModule, MAT_DATE_LOCALE,
-  MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS,
-  MatInputModule, MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  MatPaginatorIntl,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatTooltipModule,
-} from '@angular/material';
-import { MatMomentDateModule } from '@angular/material-moment-adapter'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
@@ -92,7 +92,7 @@ export const routingConfiguration: ExtraOptions = {
     MatDatepickerModule,
     MatDialogModule,
     MatInputModule,
-    MatMomentDateModule,
+    NgxMatMomentModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
