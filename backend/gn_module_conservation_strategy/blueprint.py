@@ -7,7 +7,7 @@ from sqlalchemy.orm import aliased
 from sqlalchemy.sql import literal_column
 
 from geonature.core.gn_permissions import decorators as permissions
-from geonature.core.ref_geo.models import LAreas, BibAreasTypes
+from ref_geo.models import LAreas, BibAreasTypes
 from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
