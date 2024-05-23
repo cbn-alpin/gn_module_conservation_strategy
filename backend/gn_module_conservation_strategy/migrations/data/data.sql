@@ -67,6 +67,19 @@ INSERT INTO taxonomie.bib_themes (
     4 -- TODO : Voir à quoi cela correspond
 ) ;
 
+INSERT INTO taxonomie.bib_themes (
+    nom_theme,
+    desc_theme,
+    ordre,
+    id_droit
+) VALUES (
+    'Atlas',
+    'Informations relatives à GeoNature-atlas',
+    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1),
+    3 -- TODO : Voir à quoi cela correspond
+) ON CONFLICT DO NOTHING
+;
+
 -- Update TaxHub attributes
 INSERT INTO taxonomie.bib_attributs (
     nom_attribut,
