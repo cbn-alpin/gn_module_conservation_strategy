@@ -5,7 +5,8 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 import { DataFormService } from "@geonature_common/form/data-form.service";
 import { GenericFormComponent } from "@geonature_common/form/genericForm.component";
-import { MatOption, MatSelect, MatSelectChange } from "@angular/material";
+import { MatSelect, MatSelectChange } from "@angular/material/select";
+import { MatOption } from '@angular/material/core';
 
 /**
  * Ce composant permet de créer un "input" de type "mat-select" à partir

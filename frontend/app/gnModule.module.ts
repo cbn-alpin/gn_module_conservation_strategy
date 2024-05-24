@@ -9,7 +9,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
@@ -19,12 +19,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { ToastrService, ToastrModule } from 'ngx-toastr';
-
 
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
 
@@ -52,9 +50,6 @@ import { SortByPipe } from './shared/pipes/sort-by.pipe';
 import { StoreService } from './shared/services/store.service';
 import { TaxaFilterComponent } from './shared/components/taxa-filter/taxa-filter.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
-import { PluckPipe } from './shared/pipes/pluck.pipe';
-import { JoinPipe } from './shared/pipes/join.pipe';
-
 
 
 export const routingConfiguration: ExtraOptions = {
@@ -75,8 +70,6 @@ export const routingConfiguration: ExtraOptions = {
     StrategyComponent,
     TaxaListComponent,
     TaxonDetailComponent,
-    JoinPipe,
-    PluckPipe,
     ReplaceTagsPipe,
     SimpleNomenclatureComponent,
     SortByPipe,

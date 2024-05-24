@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from "@angular/common/http";
 
 import { Observable, of } from 'rxjs';
+import { filter, tap, debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { NgbTypeaheadSelectItemEvent } from '@ng-bootstrap/ng-bootstrap';
 
 import { CommonService } from '@geonature_common/service/common.service';
