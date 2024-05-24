@@ -15,7 +15,7 @@ const defaultsDialogData: ConfirmDialogData = {
   styleUrls: ['./confirm-dialog.component.scss'],
 })
 export class ConfirmDialogComponent implements OnInit {
-  private dialogData: ConfirmDialogData;
+  public dialogData: ConfirmDialogData;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
