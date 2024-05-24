@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { ConfigService as GnConfigService } from '@geonature/services/config.service';
-import { ModuleConfig } from '../../module.config';
 
 @Injectable()
 export class ConfigService {
@@ -11,11 +10,11 @@ export class ConfigService {
   ) {}
 
   getModuleTitle() {
-    return ModuleConfig.module_title;
+    return this.config.CONSERVATION_STRATEGY.module_title;
   }
 
   getModuleCode() {
-    return ModuleConfig.module_code;
+    return this.config.CONSERVATION_STRATEGY.module_code;
   }
 
   getAppUrl() {
@@ -27,11 +26,11 @@ export class ConfigService {
   }
 
   getModuleBackendUrl() {
-    return `${this.config.API_ENDPOINT}/${ModuleConfig.module_code.toLowerCase()}`;
+    return `${this.config.API_ENDPOINT}/${this.config.CONSERVATION_STRATEGY.module_code.toLowerCase()}`;
   }
 
   getFrontendModuleUrl() {
-    return ModuleConfig.module_code.toLowerCase();
+    return this.config.CONSERVATION_STRATEGY.module_code.toLowerCase();
   }
 
   getTaxHubBackendUrl() {
@@ -43,6 +42,6 @@ export class ConfigService {
   }
 
   getPriorityFloraBackendUrl() {
-    return `${this.config.API_ENDPOINT}/${ModuleConfig.module_code_pf.toLowerCase()}`;
+    return `${this.config.API_ENDPOINT}/${this.config.CONSERVATION_STRATEGY.module_code_pf.toLowerCase()}`;
   }
 }
