@@ -10,7 +10,7 @@
     </h4>
   </div>
   <div class="card-body">
-    <nav mat-tab-nav-bar>
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
       <a mat-tab-link
         routerLink="infos"
         routerLinkActive
@@ -41,7 +41,8 @@
         Fiches bilan stationnel
       </a>
     </nav>
-
-    <router-outlet></router-outlet>
+    <mat-tab-nav-panel #tabPanel>
+      <router-outlet></router-outlet>
+    </mat-tab-nav-panel>
   </div>
 </div>
