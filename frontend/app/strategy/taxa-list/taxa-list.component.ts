@@ -43,7 +43,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
     'actions',
   ];
   dataSource: TaxaDataSource;
-  @ViewChild('dataTableContainer') dataTableContainer: ElementRef;
+  @ViewChild('dataTableContainer', { static: true }) dataTableContainer: ElementRef;
   @ViewChild(MatTable) dataTable: MatTable<PriorityTaxa>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
