@@ -5,6 +5,7 @@ tsconfig.json
 /frontend/app/module.config.ts
 /log/
 /frontend/assets/templates/home.tpl.html
+settings.ini
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
