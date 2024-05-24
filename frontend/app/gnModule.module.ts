@@ -22,7 +22,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
 
@@ -97,7 +96,6 @@ export const routingConfiguration: ExtraOptions = {
     MatTabsModule,
     MatTooltipModule,
     RouterModule.forChild(routes),
-    ToastrModule.forRoot(),
   ],
   providers: [
     ConfigService,
@@ -105,7 +103,6 @@ export const routingConfiguration: ExtraOptions = {
     DialogService,
     HttpClient,
     StoreService,
-    ToastrService,
     {
       provide: MatPaginatorIntl,
       useValue: CustomPaginator(),
