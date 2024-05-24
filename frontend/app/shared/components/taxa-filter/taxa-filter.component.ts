@@ -69,7 +69,9 @@ export class TaxaFilterComponent implements OnInit {
 
   ngOnInit() {
     this.parentFormControl.valueChanges
-      .filter(value => value !== null && value.length === 0)
+      .pipe(
+        filter(value => value !== null && value.length === 0)
+      )
       .subscribe(value => {
         this.onDelete.emit(this.selectedName);
       });
@@ -91,16 +93,16 @@ export class TaxaFilterComponent implements OnInit {
   }
 
   searchTaxon = (text$: Observable<string>) =>
-    text$
-      .do(() => (this.isLoading = true))
-      .debounceTime(400)
-      .distinctUntilChanged()
-      .switchMap(search => {
+    text$.pipe(
+      tap(() => (this.isLoading = true)),
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap(search => {
         if (search.length >= this.charNumber) {
           return this.autocomplete({
-              q: search,
-              limit: this.listLength.toString()
-            })
+            q: search,
+            limit: this.listLength.toString()
+          })
             .catch(err => {
               if (err.status_code === 500) {
                 this.commonService.translateToaster('error', 'ErrorMessage');
@@ -111,12 +113,12 @@ export class TaxaFilterComponent implements OnInit {
           this.isLoading = false;
           return [[]];
         }
-      })
-      .map(response => {
+      }),
+      map(response => {
         this.noResult = response && response.length === 0;
         this.isLoading = false;
         return response;
-      });
+      }));
 
   autocomplete(params) {
     let urlParams = {...this.apiParams, ...params};
