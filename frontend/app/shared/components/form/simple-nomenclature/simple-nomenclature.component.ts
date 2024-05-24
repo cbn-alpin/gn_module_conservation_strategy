@@ -109,7 +109,7 @@ export class SimpleNomenclatureComponent extends GenericFormComponent implements
   initLabels() {
     const filters = { orderby: 'label_default' };
     this.dataFormService
-      .getNomenclature(this.codeNomenclatureType, undefined, undefined, filters)
+      .getNomenclature(this.codeNomenclatureType, undefined, undefined, undefined, filters)
       .subscribe(data => {
         this.labels = data.values;
         this.savedLabels = data.values;
