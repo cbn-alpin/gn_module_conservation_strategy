@@ -106,8 +106,8 @@ export class AssessmentForm implements OnInit, AfterViewInit {
     this.actionsContainer.clear();
   }
 
-  onNextAssessmentYearSliderChange(event) {
-    this.form.get('assessment.nextAssessmentYear').setValue(event.value);
+  onNextAssessmentYearSliderChange(year) {
+    this.form.get('assessment.nextAssessmentYear').patchValue(year);
   }
 
   onAddActionForm() {
