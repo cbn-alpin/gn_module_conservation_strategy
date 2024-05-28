@@ -20,6 +20,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 
@@ -95,6 +96,7 @@ export const routingConfiguration: ExtraOptions = {
     MatTableModule,
     MatTabsModule,
     MatTooltipModule,
+    MatNativeDateModule,
     RouterModule.forChild(routes),
   ],
   providers: [
