@@ -17,40 +17,60 @@ input.cs-grow {
 }
 
 // Mat Slider
-::ng-deep .mat-slider.mat-slider-horizontal.cs-grow-slider {
+:host ::ng-deep .mat-mdc-slider.mdc-slider.cs-grow-slider {
   width: 100%;
   margin-top: 15px;
   padding-bottom: 0;
+  height: 20px;
+}
 
-  .mat-slider-wrapper {
-    top: 18px;
-  }
+:host ::ng-deep .mat-mdc-slider.mat-primary {
+    --mdc-slider-handle-color: #ffd740;
+    --mdc-slider-focus-handle-color: #ffd740;
+    --mdc-slider-hover-handle-color: #ffd740;
+    --mdc-slider-with-tick-marks-active-container-color: #212529;
+    --mdc-slider-with-tick-marks-inactive-container-color: #212529;
+    --mat-mdc-slider-hover-ripple-color: rgba(0,0,0,0);
+    --mat-mdc-slider-focus-ripple-color: rgba(0,0,0,0);
+}
 
-  .mat-slider-track-wrapper {
-    height: 12px;
-    border-radius: 10px;
-  }
+// Change style of active track
+:host ::ng-deep .mat-primary .mdc-slider__track--active_fill {
+    background-color: #ffd740;
+    border: 0px solid #FFFFFF !important; /* Removes border from active track */
+    border-radius: 3px;
+}
 
-  .mat-slider-track-fill,
-  .mat-slider-wrapper,
-  .mat-slider-track-wrapper,
-  .mat-slider-track-background {
-    height: 12px;
-  }
+:host ::ng-deep .mat-primary .mdc-slider__track--active {
+    height: 10px;
+}
 
-  .mat-slider-ticks-container {
-    top: 5px;
-  }
+// Change style of inactive track
+:host ::ng-deep .mat-primary .mdc-slider__track--inactive {
+    background-color: rgba(0, 0, 0, .26)!important;
+    border-radius: 3px;
+    height: 10px;
+}
 
-  .mat-slider-thumb {
-    height: 30px;
-    width: 30px;
-    bottom: -15px;
-  }
+// Change style of thumb
+:host ::ng-deep .mat-primary .mdc-slider__thumb {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+}
+
+:host ::ng-deep .mat-mdc-slider .mdc-slider__thumb-knob {
+    background-color: #ffd740;
+    border-color: #ffd740;
+}
+
+:host ::ng-deep .mat-mdc-slider .mdc-slider__tick-marks {
+  padding-top: 5px;
+  color : pink;
 }
 
 // Modal
-::ng-deep .edit-assessment-modal {
+:host ::ng-deep .edit-assessment-modal {
   .mat-dialog-container {
     padding: 0 !important;
     overflow-x: hidden;
