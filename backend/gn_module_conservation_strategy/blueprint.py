@@ -1,6 +1,6 @@
 import logging
 
-from flask import Blueprint, request
+from flask import Blueprint, request, g
 from sqlalchemy import and_, desc, func, or_, exc, case, String
 from sqlalchemy.sql.expression import cast
 from sqlalchemy.orm import aliased
@@ -346,9 +346,9 @@ def get_organisms():
 
 
 @blueprint.route("/assessments", methods=["POST"])
-@permissions.check_cruved_scope("C", get_scope=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("C", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def create_assessment(info_role):
+def create_assessment():
     """
     Ajouter une fiche bilan stationnel.
 
@@ -358,7 +358,7 @@ def create_assessment(info_role):
     """
     # Transform received data
     data = prepare_input(dict(request.get_json()))
-    data["assessment"]["meta_create_by"] = int(getattr(info_role, "id_role"))
+    data["assessment"]["meta_create_by"] = g.current_user.id_role
     exception = None
 
     try:
@@ -443,9 +443,9 @@ def get_assessment_details(assessment_id):
 
 
 @blueprint.route("/assessments/<int:assessment_id>", methods=["PUT"])
-@permissions.check_cruved_scope("U", get_scope=True, module_code="CONSERVATION_STRATEGY")
+@permissions.check_cruved_scope("U", module_code="CONSERVATION_STRATEGY")
 @json_resp
-def update_assessment(info_role, assessment_id):
+def update_assessment(assessment_id):
     """
     Mettre à jour une fiche bilan stationnel.
 
@@ -459,7 +459,7 @@ def update_assessment(info_role, assessment_id):
     # Transform received data
     data = prepare_input(dict(request.get_json()))
     data["assessment"]["id"] = assessment_id
-    data["assessment"]["meta_update_by"] = int(getattr(info_role, "id_role"))
+    data["assessment"]["meta_update_by"] = g.current_user.id_role
     exception = None
 
     try:
