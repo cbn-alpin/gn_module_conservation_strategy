@@ -127,7 +127,7 @@ class AssessmentRepository:
         for organism_id in organisms_ids:
             partner = CorActionOrganism(
                 id_action=action.id,
-                id_organism=organism_id,
+                id_organism=organism_id[0],
             )
             action.partners.append(partner)
 
