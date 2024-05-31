@@ -66,13 +66,12 @@ export class AssessmentsListComponent implements OnInit, OnDestroy {
     // Prevent for looping twice because of expanded
     if (!this.assessmentIdSelected || this.assessmentIdSelected !== id) {
       this.goingToNewAssessment = true;
-      let url = this.router.url.replace(/assessments\/[0-9]+$/, 'assessments');
+      let url = this.router.url.replace(/assessments\/.+$/, 'assessments');
       this.router.navigateByUrl(decodeURIComponent(url) + '/' + id);
     }
   }
 
   resetAssessmentList(id) {
-    console.log(this.goingToNewAssessment)
     if (!this.goingToNewAssessment && this.assessmentIdSelected == id) {
       let url = this.router.url.replace(/assessments\/[0-9]+$/, 'assessments');
       this.router.navigateByUrl(decodeURIComponent(url));
