@@ -74,14 +74,19 @@
         <mat-slider
           class="cs-grow-slider"
           thumbLabel
-          tickInterval="1"
+          showTickMarks
+          discrete
+          step=1
           [min]="currentYear"
           [max]="currentYear + 10"
-          [value]="planForCtrl.value"
-          (change)="
-            onPlanForSliderChange($event, parentFormGroup['controls'].planFor)
-          "
-        ></mat-slider>
+        >
+          <input
+            matSliderThumb
+            value="planForCtrl.value"
+            (valueChange)="onPlanForSliderChange($event, parentFormGroup['controls'].planFor)"
+            [formControl]="parentFormGroup['controls'].planFor"
+          >
+        </mat-slider>
       </mat-form-field>
 
       <mat-form-field
@@ -150,7 +155,6 @@
         </mat-option>
       </mat-select>
       <button
-        mat-button
         *ngIf="partnersCtrl.value"
         matSuffix
         mat-icon-button

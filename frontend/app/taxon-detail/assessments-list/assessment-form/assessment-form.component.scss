@@ -64,9 +64,12 @@ input.cs-grow {
     border-color: #ffd740;
 }
 
+:host ::ng-deep .mdc-slider .mdc-slider__value-indicator-container {
+    bottom: 30px;
+}
+
 :host ::ng-deep .mat-mdc-slider .mdc-slider__tick-marks {
   padding-top: 5px;
-  color : pink;
 }
 
 // Modal
