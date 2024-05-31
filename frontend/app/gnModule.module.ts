@@ -23,6 +23,8 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { ToastrService, ToastrModule } from 'ngx-toastr';
+
 
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
 
@@ -98,6 +100,7 @@ export const routingConfiguration: ExtraOptions = {
     MatTooltipModule,
     MatNativeDateModule,
     RouterModule.forChild(routes),
+    ToastrModule.forRoot(),
   ],
   providers: [
     ConfigService,
@@ -105,6 +108,7 @@ export const routingConfiguration: ExtraOptions = {
     DialogService,
     HttpClient,
     StoreService,
+    ToastrService,
     {
       provide: MatPaginatorIntl,
       useValue: CustomPaginator(),
