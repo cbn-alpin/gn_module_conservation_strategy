@@ -49,6 +49,8 @@ import { ReplaceTagsPipe } from './shared/pipes/replace-tags.pipe';
 import { routes } from './gnModule.routes';
 import { SimpleNomenclatureComponent } from './shared/components/form/simple-nomenclature/simple-nomenclature.component';
 import { SortByPipe } from './shared/pipes/sort-by.pipe';
+import { NgJoinPipeModule } from './shared/pipes/join.pipe';
+import { NgPluckPipeModule } from './shared/pipes/pluck.pipe';
 import { StoreService } from './shared/services/store.service';
 import { TaxaFilterComponent } from './shared/components/taxa-filter/taxa-filter.component';
 import { TaxonInfosComponent } from './taxon-detail/taxon-infos/taxon-infos.component';
@@ -99,6 +101,8 @@ export const routingConfiguration: ExtraOptions = {
     MatTabsModule,
     MatTooltipModule,
     MatNativeDateModule,
+    NgJoinPipeModule,
+    NgPluckPipeModule,
     RouterModule.forChild(routes),
     ToastrModule.forRoot(),
   ],
