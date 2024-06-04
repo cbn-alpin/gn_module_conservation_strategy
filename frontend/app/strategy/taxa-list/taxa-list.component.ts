@@ -43,7 +43,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
     'actions',
   ];
   dataSource: TaxaDataSource;
-  @ViewChild('dataTableContainer', { static: false }) dataTableContainer: ElementRef;
+  @ViewChild('dataTableContainer') dataTableContainer: ElementRef;
   @ViewChild(MatTable) dataTable: MatTable<PriorityTaxa>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -103,6 +103,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
 
   private calculateDataTableHeight(): void {
     const screenHeight: number = document.documentElement.clientHeight;
+    console.log(this.dataTableContainer);
     const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
     // TODO: see why we need to remove 11px !
     const dataTableHeight = screenHeight - dataTableTop - 11;
