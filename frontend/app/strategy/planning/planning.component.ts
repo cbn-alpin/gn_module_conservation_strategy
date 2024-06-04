@@ -113,8 +113,6 @@ export class PlanningComponent implements OnInit, AfterViewInit {
 
   private initializeDataSource() {
     this.dataSource = new PlanningDataSource(this.dataService);
-    this.dataSource.setFilterParam('sort', `date:desc`);
-    this.paginator.firstPage();
   }
 
   detectTypeOfTask(task) {
