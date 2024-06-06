@@ -10,7 +10,7 @@ legend {
   font-size: inherit;
 }
 
-.mat-card-header{
+.mat-mdc-card-header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,18 +20,39 @@ th {
   text-align: center;
 }
 
-
-// display initial thumblabel for slider
-::ng-deep {
-  .mat-slider-thumb-label {
-    transform: rotate(45deg) !important;
-    border-radius: 50% 50% 0 !important;
-  }
-  .mat-slider-thumb {
-    transform: scale(0) !important;
-  }
-  .mat-slider-thumb-label-text {
-    opacity: 1 !important;
-  }
+// Mat Slider
+:host ::ng-deep .mat-mdc-slider.mdc-slider.cs-grow-slider {
+  width: 100%;
+  height: 20px;
 }
 
+:host ::ng-deep .mat-mdc-slider.mat-primary {
+  --mdc-slider-handle-color: #ffd740;
+  --mdc-slider-focus-handle-color: #ffd740;
+  --mdc-slider-hover-handle-color: #ffd740;
+  --mdc-slider-with-tick-marks-active-container-color: #212529;
+  --mdc-slider-with-tick-marks-inactive-container-color: #212529;
+  --mat-mdc-slider-hover-ripple-color: rgba(0, 0, 0, 0);
+  --mat-mdc-slider-focus-ripple-color: rgba(0, 0, 0, 0);
+}
+
+// Change style of active track
+:host ::ng-deep .mat-primary .mdc-slider__track--active_fill {
+  background-color: #ffd740;
+  border: 0px solid #ffffff !important; /* Removes border from active track */
+  border-radius: 3px;
+}
+
+:host ::ng-deep .mdc-slider .mdc-slider__value-indicator {
+  transform: scale(1);
+  background-color: #ffd740;
+}
+
+:host ::ng-deep .mdc-slider .mdc-slider__value-indicator-container {
+  background-color: #ffd740;
+}
+
+:host ::ng-deep .mat-mdc-slider {
+  --mdc-slider-label-container-color: #ffc107;
+  --mdc-slider-label-label-text-color: black;
+}
