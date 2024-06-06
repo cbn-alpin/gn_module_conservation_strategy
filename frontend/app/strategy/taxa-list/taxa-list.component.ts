@@ -103,7 +103,6 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
 
   private calculateDataTableHeight(): void {
     const screenHeight: number = document.documentElement.clientHeight;
-    console.log(this.dataTableContainer);
     const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
     // TODO: see why we need to remove 11px !
     const dataTableHeight = screenHeight - dataTableTop - 11;
