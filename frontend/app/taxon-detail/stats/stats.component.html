@@ -10,7 +10,7 @@
             </legend>
             <form
               [formGroup]="statsForm"
-              class="d-flex justify-content-around align-items-center pb-2"
+              class="d-flex justify-content-around align-middle pb-2"
             >
               <mat-form-field>
                 <input
@@ -27,18 +27,22 @@
                 <mat-datepicker #picker></mat-datepicker>
                 <mat-hint>Date du jour par défaut</mat-hint>
               </mat-form-field>
-              <mat-card class="d-flex justify-content-end align-items-center">
+              <mat-card class="d-flex flex-row align-items-center">
                 <mat-label class="pr-2"
                   >Nombre d'années à prendre en compte :</mat-label
                 >
                 <mat-slider
                   [min]="1"
                   [max]="6"
-                  (change)="loadStats()"
-                  [tickInterval]="1"
                   thumbLabel
-                  formControlName="nbYear"
+                  showTickMarks
+                  discrete
                 >
+                  <input
+                    matSliderThumb
+                    (valueChange)="loadStats()"
+                    formControlName="nbYear"
+                  />
                 </mat-slider>
               </mat-card>
             </form>
@@ -168,21 +172,33 @@
       </div>
       <div class="col-5">
         <div class="row justify-content-around pt-4">
-          <div class="col-auto pb-2">
+          <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center">
-                {{ stats.calculations.nbStations }} stations
+                <span *ngIf="stats.calculations.nbStations; else noStations">
+                  {{ stats.calculations.nbStations }} stations
+                </span>
+                <ng-template #noStations>
+                  Aucune donnée d'aire de présence.
+                </ng-template>
               </b>
             </mat-card>
           </div>
-          <div class="col-auto pb-2">
+          <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center">
-                {{ stats.calculations.areaPresence }} m² d'aire de présence
+                <span
+                  *ngIf="stats.calculations.areaPresence; else noAreaPresence"
+                >
+                  {{ stats.calculations.areaPresence }} m² d'aire de présence
+                </span>
+                <ng-template #noAreaPresence>
+                  Aucune donnée d'aire de présence.
+                </ng-template>
               </b>
             </mat-card>
           </div>
-          <div class="col-auto pb-2">
+          <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center">
                 <span
@@ -198,12 +214,12 @@
             </mat-card>
           </div>
           <div class="row justify-content-around pt-4">
-            <!-- <div class="col-auto pb-2">
+            <!-- <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center"> % stations à gestion favorable </b>
             </mat-card>
           </div> -->
-            <div class="col-auto pb-2">
+            <div class="col px-md-5">
               <mat-card>
                 <b class="justify-content-center">
                   <span
@@ -223,18 +239,18 @@
             </div>
           </div>
           <!-- <div class="row justify-content-around pt-4"> -->
-          <!-- <div class="col-auto pb-2">
+          <!-- <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center"> % stations réglementairement protégées </b>
             </mat-card>
           </div> -->
-          <!-- <div class="col-auto pb-2">
+          <!-- <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center"> % stations foncièrement protégées </b>
             </mat-card>
           </div> -->
           <!-- <div class="row justify-content-around pt-4">
-          <div class="col-auto pb-2">
+          <div class="col px-md-5">
             <mat-card>
               <b class="justify-content-center"> Dynamique des populations </b>
             </mat-card>
