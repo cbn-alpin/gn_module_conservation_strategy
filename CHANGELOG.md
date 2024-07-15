@@ -7,15 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-07-15
+
+### Fonctionnalités
+
+- Compatible with GeoNature 2.14
+- Module permissions (CRUVED) declared in alembic branch
+- Added backend dependencies
+- Insert 'Atlas' taxonomy theme if not exists in database
+- Improved display of statistics for a given taxon and territory
+
+### Changements
+
+- Angular components are imported individually and via the full path to '@angular/material'
+- Changed parameter 'nbr' to 'years-nbr' in `/stats` route
+- Updated frontend dependencies
+
+### Corrections
+
+- Corrected import of territories
+- Navigate to correct url when assessment opened after action opened
+
 ## [0.4.1] - 2023-11-03
 
 ### Fixed
+
 - Display no data message when necessary for calculations.
 - Modify priority flora webservice to add calculations.
 
 ## [0.4.0] - 2023-04-23
 
 ### Added
+
 - Add new nomenclatures in Actions types (docs/update_nomenclatures.sql).
 - Added a Planning tab that lists all the actions to be carried out for priority taxa.
 - Add of the breadcrumb when an Assessment or an Action is selected.
@@ -26,17 +49,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add references to AURA and PACA regions in `t_territory`.
 
 ### Changed
+
 - Simplify module routes.
 - Moved the Territory global filter to the Priority taxa list.
 - Renaming the components by removing the "Cs" prefix.
 - Merging of migration operations from v03 to v04 in an unique file.
 
 ### Removed
+
 - Removed the welcome banner containing the title of the module and the global filter Territory.
 - Removed the references to the global filter Territory.
 
 ### Fixed
+
 In the Action field, the following nomenclatures have been corrected:
+
 - 'niveau géographique territorial',
 - 'état d'avancement mis en place',
 - 'local action' becomes 'local level'
@@ -44,12 +71,14 @@ In the Action field, the following nomenclatures have been corrected:
 ## [0.3.0] - 2022-11-16
 
 ### Added
+
 - Add new nomenclatures in Actions.
 - Add an export file to test the API with Postman.
 - Packaging of the module.
 - Add a "Creation date" field for new assessments.
 
 ### Changed
+
 - Respect the Keepchangelog format.
 - Rename the "cor_territory_taxon" table to "t_priority_taxon".
 - Simplification of the taxon search web service.
@@ -60,6 +89,7 @@ In the Action field, the following nomenclatures have been corrected:
 - Update the format of the fields containing dates in the module schema creation to consider the time zone.
 
 ### Fixed
+
 - No more error if no territory is found.
 - The reference to Taxref is functional.
 
@@ -68,9 +98,10 @@ In the Action field, the following nomenclatures have been corrected:
 Version integrating the basic interfaces to enter assessments.
 
 ### Added
+
 - Add a modal window "Creation/Modification of an assessment" to access the form to edit an assessment.
 - Add a tab "Station report sheets" allowing to consult the information
-of the assessments previously entered. Buttons "add an assessment" and
+  of the assessments previously entered. Buttons "add an assessment" and
   "Modify this assessment" give access to the editing window of a form.
 - Add a tab "General information" allowing to display the photos
   in a carousel and the content of several attributes from TaxHub.
@@ -89,6 +120,7 @@ of the assessments previously entered. Buttons "add an assessment" and
 First stable version of the module compatible with GeoNature version 2.4.1.
 
 ### Added
+
 - Add a breadcrumb trail to the interface via the `<breadcrumbs>` component
 - Display the title (config) and the list of territories (webservice) on the interface.
 - Restructure the contents of the `frontend/` folder to make it functional
@@ -112,9 +144,10 @@ First stable version of the module compatible with GeoNature version 2.4.1.
 - Create the base code from the GeoNature module template.
 
 ### Changed
+
 - Merge in `/.gitignore` the lines from `/frontend/.gitignore`.
 
 ### Removed
+
 - Removed the `/frontend/.editorconfig` file because the `/.editorconfig` file is sufficient.
 - Removed many seemingly useless files in the `/frontend/` folder
-
