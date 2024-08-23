@@ -29,7 +29,7 @@ export class DataService {
   }
 
   getHomePage(): Observable<string> {
-    const path = 'external_assets/conservation_strategy/templates/home.tpl.html';
+    const path = "assets/conservation_strategy/assets/templates/home.tpl.html";
     return this.http.get(path, { responseType: 'text' });
   }
 
@@ -90,5 +90,5 @@ export class DataService {
     }
     const url = `${this.cfg.getPriorityFloraBackendUrl()}/stats`;
     return this.http.get<any>(url, { params: statParams });
-  } 
+  }
 }
