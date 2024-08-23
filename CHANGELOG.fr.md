@@ -22,11 +22,18 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - L'import des composants Angular se fait de manière individuelle et via le chemin complet vers '@angular/material'
 - Changement du paramètre 'nbr' en 'years-nbr' de la route `/stats`
 - Mise à jour des dépendances du frontend
+- Modification de l'URL de chargement du fichier personnalisé de la page d'accueil
+pour correspondre au noveau format des ressources des modules externes compatible
+avec Angular 15 et GeoNature 2.14.2+. Voir PnX-SI/GeoNature#2957.
+- Amélioration des styles CSS pour un meilleure affichage de la page d'accueil.
 
 ### Corrections
 
 - Correction de l'import des territoires dans le module
 - Navigation vers la bonne url lorsque l'on ouvre une fiche bilan stationnel après avoir ouvert une action
+- Ajout d'un fichier `package.json` et correction du fichier `package-lock.json`
+pour permettre l'installation correcte des paquets NPM lors de l'installation du
+module en tant que module externe de GeoNature.
 
 ## [0.4.1] - 2023-11-03
 

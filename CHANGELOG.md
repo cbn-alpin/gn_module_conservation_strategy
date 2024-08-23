@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.0] - 2024-08-20
 
-### Fonctionnalités
+### Added
 
 - Compatible with GeoNature 2.14
 - Module permissions (CRUVED) declared in alembic branch
@@ -17,16 +17,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Insert 'Atlas' taxonomy theme if not exists in database
 - Improved display of statistics for a given taxon and territory
 
-### Changements
+### Changed
 
 - Angular components are imported individually and via the full path to '@angular/material'
 - Changed parameter 'nbr' to 'years-nbr' in `/stats` route
 - Updated frontend dependencies
+- Change URL for home HTML template to new GN 2.14 version of external modules
+assets. See PnX-SI/GeoNature#2957.
+- Improve home template CSS
 
-### Corrections
+### Fixed
 
 - Corrected import of territories
 - Navigate to correct url when assessment opened after action opened
+- Add `package.json` and fix `package-lock.json` to install it correctly as an external GeoNature module
 
 ## [0.4.1] - 2023-11-03
 
