@@ -1,10 +1,10 @@
 {
   "name": "gn_module_conservation_strategy",
-  "version": "0.2.0",
+  "version": "0.5.0",
   "description": "Outil d'aide à la décision des actions de la stratégie de conservation à mettre en place pour les taxons prioritaires d'un territoire.",
   "dependencies": {
     "@angular-material-components/moment-adapter": "^15.0.0",
-    "ngx-bootstrap": "^10.0.0",
+    "ngx-bootstrap": "^10.3.0",
     "@angular-material-components/datetime-picker": "^15.0.0"
   }
 }
