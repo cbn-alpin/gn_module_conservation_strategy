@@ -305,8 +305,8 @@ def get_priority_taxon_infos(priority_taxon_id):
             .where(TMedias.is_public == True)
             .where(TMedias.supprime == False)
         )
-        medias = DB.session.scalars(query).all()
-        data["medias"] = [media._asdict() for media in medias]
+        medias = DB.session.execute(query).mappings().all()
+        data["medias"] = [dict(media) for media in medias]
 
     # Manage TaxHub Attributs
     if with_taxhub_attributs:
@@ -320,7 +320,7 @@ def get_priority_taxon_infos(priority_taxon_id):
             .join(TPriorityTaxon, TPriorityTaxon.cd_nom == Taxref.cd_nom)
             .where(TPriorityTaxon.id == priority_taxon_id)
         )
-        attributs = DB.session.scalars(query).all()
+        attributs = DB.session.execute(query).mappings().all()
         data["attributs"] = {}
         for attribut in attributs:
             data["attributs"][attribut.code] = attribut.content
