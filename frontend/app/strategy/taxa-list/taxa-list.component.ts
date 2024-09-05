@@ -12,7 +12,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 
 import { Observable } from '@librairies/rxjs';
-import { tap, map } from 'rxjs/operators';
+import { tap, map } from '@librairies/rxjs/operators';
 
 import { ConfigService } from '../../shared/services/config.service';
 import { DataService } from '../../shared/services/data.service';
@@ -103,10 +103,13 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
 
   private calculateDataTableHeight(): void {
     const screenHeight: number = document.documentElement.clientHeight;
-    const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
-    // TODO: see why we need to remove 11px !
-    const dataTableHeight = screenHeight - dataTableTop - 11;
-    this.dataTableHeight = dataTableHeight;
+    if (this.dataTableContainer != undefined) {
+      const dataTableTop =
+        this.dataTableContainer.nativeElement.getBoundingClientRect().top;
+      // TODO: see why we need to remove 11px !
+      const dataTableHeight = screenHeight - dataTableTop - 11;
+      this.dataTableHeight = dataTableHeight;
+    }
   }
 
   private initializeDataSource() {
