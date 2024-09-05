@@ -15,7 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Module permissions (CRUVED) declared in alembic branch
 - Added backend dependencies
 - Insert 'Atlas' taxonomy theme if not exists in database
-- Improved display of statistics for a given taxon and territory
+- Improve the display of statistics for a given taxon and territory
+- Improve the display of record update and creation dates in the assessment details view
+- Use new `pyproject.toml` file for installation and requirements instead of `setup.py`
+- Add the example `tsconfig.json` file to use with module development outside the GeoNature directory
 
 ### Changed
 
@@ -25,12 +28,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Change URL for home HTML template to new GN 2.14 version of external modules
 assets. See PnX-SI/GeoNature#2957.
 - Improve home template CSS
+- Remove unnecessary imports in the module (`locale fr`, `Toastr`)
 
 ### Fixed
 
 - Corrected import of territories
 - Navigate to correct url when assessment opened after action opened
 - Add `package.json` and fix `package-lock.json` to install it correctly as an external GeoNature module
+- Fixes severals SQLAlchemy errors caused by using the deprecated `_asdict()` function
+- Show the assessment creation date in the assessment editing form
+- Fixes the deletion of last assessment action
+- Accept an assessment without action
+- Accept an action without partner
+- Fix error with responsive height of priority taxa data table
+
 
 ## [0.4.1] - 2023-11-03
 

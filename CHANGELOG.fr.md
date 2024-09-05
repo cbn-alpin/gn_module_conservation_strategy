@@ -16,24 +16,31 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Ajout des dépendances backend du module
 - Ajout du theme 'Atlas' dans `taxonomie.bib_themes` s'il n'existe pas (bloquant à l'installation sinon)
 - Amélioration de l'affichage des statisques pour un taxon et un territoire donné
+- Amélioration de l'affichage des dates de création et de mise à jour des enregistrements dans la vue détaillée d'un Fiche Bilan Stationnel
+- Utilisation du nouveau format `pyproject.toml` pour l'installation et la définition des dépendances du module à la place du fichier `setup.py`
+- Ajout d'un exmple de fichier `tsconfig.json` à utiliser pour les développements du module à l'extérieur du dossier de GeoNature
 
 ### Changements
 
 - L'import des composants Angular se fait de manière individuelle et via le chemin complet vers '@angular/material'
 - Changement du paramètre 'nbr' en 'years-nbr' de la route `/stats`
 - Mise à jour des dépendances du frontend
-- Modification de l'URL de chargement du fichier personnalisé de la page d'accueil
-pour correspondre au noveau format des ressources des modules externes compatible
-avec Angular 15 et GeoNature 2.14.2+. Voir PnX-SI/GeoNature#2957.
+- Modification de l'URL de chargement du fichier personnalisé de la page d'accueilpour correspondre au noveau format des ressources des modules externes compatible avec Angular 15 et GeoNature 2.14.2+. Voir PnX-SI/GeoNature#2957.
 - Amélioration des styles CSS pour un meilleure affichage de la page d'accueil.
+- Suppression des imports inutiles dans le module (`locale fr`, `Toastr`)
 
 ### Corrections
 
 - Correction de l'import des territoires dans le module
 - Navigation vers la bonne url lorsque l'on ouvre une fiche bilan stationnel après avoir ouvert une action
-- Ajout d'un fichier `package.json` et correction du fichier `package-lock.json`
-pour permettre l'installation correcte des paquets NPM lors de l'installation du
-module en tant que module externe de GeoNature.
+- Ajout d'un fichier `package.json` et correction du fichier `package-lock.json` pour permettre l'installation correcte des paquets NPM lors de l'installation du module en tant que module externe de GeoNature.
+- Corrections de plusieurs erreurs SQLAlchemy lié à l'usage de `_asdict()`
+- Affichage de la date de création d'une fiche bilan stationnel dans le formulaire d'édition d'une fiche bilan stationnel
+- Correction de la suppresion impossible de la dernière action d'une fiche bilan stationnel
+- Une fiche bilan stationnel sans action est maintenant acceptée et ne génère plus d'erreur
+- Une action sans partenaires est mainttenant acceptée et ne génère plus d'erreur
+- Suppression de l'erreur lors du calcul dynamique de la hauteur de la table de données de la liste des taxons prioritaires
+
 
 ## [0.4.1] - 2023-11-03
 
