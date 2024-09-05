@@ -13,12 +13,12 @@ import sqlalchemy as sa
 from sqlalchemy.sql import text
 
 from utils_flask_sqla.migrations.utils import logger
-from gn_module_conservation_strategy import MODULE_CODE
+from gn_module_conservation_strategy import MODULE_CODE, MODULE_DB_BRANCH
 
 
 revision = "858d1ee4778a7135"
 down_revision = None
-branch_labels = "conservation_strategy"
+branch_labels = MODULE_DB_BRANCH
 depends_on = ("f06cc80cc8ba",)  # GeoNature 2.7.5
 
 """
