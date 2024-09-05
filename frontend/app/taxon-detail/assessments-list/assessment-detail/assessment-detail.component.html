@@ -1,6 +1,6 @@
 <div class="container-fluid" *ngIf="assessmentDetail | async as assessment">
-  <div class="row mb-3">
-    <mat-card class="col mr-3">
+  <div class="row">
+    <mat-card class="col mr-3 mb-3">
       <mat-card-header>
         <mat-icon mat-card-avatar>event_note</mat-icon>
         <mat-card-title>Date de création</mat-card-title>
@@ -13,7 +13,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="col mr-3" *ngIf="assessment.nextAssessmentYear">
+    <mat-card class="col mr-md-3 mb-3" *ngIf="assessment.nextAssessmentYear">
       <mat-card-header>
         <mat-icon mat-card-avatar>pending_actions</mat-icon>
         <mat-card-title>Futur bilan en ...</mat-card-title>
@@ -23,17 +23,38 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="col">
+    <mat-card class="col mb-3">
       <mat-card-header>
         <mat-icon mat-card-avatar>info</mat-icon>
         <mat-card-title>Enregistrement</mat-card-title>
       </mat-card-header>
-      <mat-card-content class="cs-small-text">
-        Édité par <b>{{ assessment.metaCreateBy }}</b>
-        <br />
-        le
-        <b>{{ assessment.metaCreateDate | date: "medium":undefined:"fr" }}</b>
+      <mat-card-content
+        *ngIf="assessment.metaUpdateDate > assessment.metaCreateDate ; else createInfos"
+        class="cs-small-text d-flex flex-sm-row flex-lg-column"
+      >
+        <div class="flex-fill">
+          Édité par <b>{{ assessment.metaUpdateBy }}</b>
+          <br />
+          le
+          <b>{{ assessment.metaUpdateDate | date: "medium":undefined:"fr" }}</b>
+          <br />
+        </div>
+        <div class="flex-fill text-muted font-italic small">
+          Créé
+          <span *ngIf="assessment.metaCreateBy != assessment.metaUpdateBy">
+            par {{ assessment.metaCreateBy }}
+          </span>
+          le  {{ assessment.metaCreateDate | date: "medium":undefined:"fr" }}
+        </div>
       </mat-card-content>
+      <ng-template #createInfos>
+        <mat-card-content class="cs-small-text">
+          Créé par <b>{{ assessment.metaCreateBy }}</b>
+          <br />
+          le
+          <b>{{ assessment.metaCreateDate | date: "medium":undefined:"fr" }}</b>
+        </mat-card-content>
+      </ng-template>
     </mat-card>
   </div>
 
