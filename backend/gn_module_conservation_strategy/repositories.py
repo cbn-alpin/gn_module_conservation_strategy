@@ -19,6 +19,9 @@ log = logging.getLogger(__name__)
 
 
 class AssessmentRepository:
+    date_fmt = "%Y-%m-%d"
+    date_time_fmt = "%Y-%m-%d %H:%M:%S"
+
     def get_one(self, assessment_id):
         # Build query
         query = (
@@ -32,13 +35,26 @@ class AssessmentRepository:
         return self._buildOutput(results) if results != None else {}
 
     def _buildOutput(self, assessment):
+
         item = assessment.as_dict(exclude=["id_territory", "meta_create_by"])
+        if assessment.assessment_date is not None:
+            item["assessment_date"] = assessment.assessment_date.strftime(self.date_fmt)
         item["meta_create_by"] = assessment.create_by.nom_complet
+        item["meta_create_date"] = assessment.meta_create_date.strftime(self.date_time_fmt)
+        if assessment.update_by is not None:
+            item["meta_update_by"] = assessment.update_by.nom_complet
+        if assessment.meta_update_date is not None:
+            item["meta_update_date"] = assessment.meta_update_date.strftime(self.date_time_fmt)
         item["actions"] = []
         organism_repositiory = OrganismRepository()
         for action in assessment.actions:
             action_dict = action.as_dict(
-                exclude=["id_assessment", "id_action_level", "id_action_type", "id_action_progress"]
+                exclude=[
+                    "id_assessment",
+                    "id_action_level",
+                    "id_action_type",
+                    "id_action_progress",
+                ]
             )
             if action.action_level:
                 action_dict["level"] = action.action_level.label_default
@@ -52,15 +68,16 @@ class AssessmentRepository:
                 action_dict["progress_code"] = action.action_progress.cd_nomenclature
             action_dict["partners"] = []
             for partner in action.partners:
-                action_dict["partners"].append(organism_repositiory.buildOutput(partner.organism))
+                action_dict["partners"].append(
+                    organism_repositiory.buildOutput(partner.organism)
+                )
             item["actions"].append(action_dict)
         return item
 
     def get_all(self, priority_taxon_id, limit, page):
         # Build query
-        query = (
-            DB.session.query(TAssessment)
-            .join(TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon)
+        query = DB.session.query(TAssessment).join(
+            TPriorityTaxon, TPriorityTaxon.id == TAssessment.id_priority_taxon
         )
 
         if priority_taxon_id:
@@ -71,7 +88,7 @@ class AssessmentRepository:
         results = query.limit(limit).offset(page * limit).all()
         # Manage output
         items = []
-        for (assessment) in results:
+        for assessment in results:
             item = assessment.as_dict(exclude=["meta_create_by"])
             item["meta_create_by"] = assessment.create_by.nom_role
             items.append(item)
@@ -91,9 +108,15 @@ class AssessmentRepository:
         assessment = TAssessment(**assessment_data)
         if actions_data:
             self._prepare_actions(assessment, actions_data)
+        else:
+            assessment.actions = []
 
         # Update or insert
-        DB.session.merge(assessment) if "id" in assessment_data else DB.session.add(assessment)
+        (
+            DB.session.merge(assessment)
+            if "id" in assessment_data
+            else DB.session.add(assessment)
+        )
 
     def _prepare_actions(self, assessment: TAssessment, actions_data: dict):
         for action_data in actions_data:
@@ -103,11 +126,15 @@ class AssessmentRepository:
             action = TAction(**cleaned_action_data)
 
             if "level" in action_data:
-                action.id_action_level = self.get_action_geo_level(action_data.get("level"))
+                action.id_action_level = self.get_action_geo_level(
+                    action_data.get("level")
+                )
             if "type" in action_data:
                 action.id_action_type = self.get_action_type(action_data.get("type"))
             if "progress" in action_data:
-                action.id_action_progress = self.get_action_progress(action_data.get("progress"))
+                action.id_action_progress = self.get_action_progress(
+                    action_data.get("progress")
+                )
             if "partners" in action_data:
                 self._prepare_partners(action, action_data.get("partners"))
 
@@ -138,15 +165,12 @@ class AssessmentRepository:
             .all()
         )
 
+
 class OrganismRepository:
 
     def get_all(self, order_by):
         # Prepare query
-        query = (DB.session
-            .query(Organisme)
-            .filter(Organisme.id_organisme > 0)
-
-        )
+        query = DB.session.query(Organisme).filter(Organisme.id_organisme > 0)
         if order_by:
             try:
                 order_column = getattr(Organisme.__table__.columns, order_by)
@@ -179,4 +203,3 @@ class OrganismRepository:
             "logo_url": organism.url_logo,
         }
         return data
-
