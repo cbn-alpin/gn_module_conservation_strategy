@@ -1,5 +1,4 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
 import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule } from '@angular/router';
@@ -23,7 +22,6 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { MatNativeDateModule } from '@angular/material/core';
 
 import { CarouselModule } from 'ngx-bootstrap/carousel';
-import { ToastrService, ToastrModule } from 'ngx-toastr';
 
 
 import { GN2CommonModule } from '@geonature_common/GN2Common.module';
@@ -104,7 +102,6 @@ export const routingConfiguration: ExtraOptions = {
     NgJoinPipeModule,
     NgPluckPipeModule,
     RouterModule.forChild(routes),
-    ToastrModule.forRoot(),
   ],
   providers: [
     ConfigService,
@@ -112,7 +109,6 @@ export const routingConfiguration: ExtraOptions = {
     DialogService,
     HttpClient,
     StoreService,
-    ToastrService,
     {
       provide: MatPaginatorIntl,
       useValue: CustomPaginator(),
@@ -143,8 +139,5 @@ export const routingConfiguration: ExtraOptions = {
   bootstrap: []
 })
 export class GeonatureModule {
-  constructor() {
-    // TODO: remove line below with GN 2.8.0+
-    registerLocaleData(localeFr, 'fr');
-  }
+  constructor() {}
 }
