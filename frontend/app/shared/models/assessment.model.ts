@@ -38,6 +38,12 @@ export class Action implements Partial<IAction> {
   implementationDate: string;
   description: string;
   partners: IOrganism[] = [];
+
+  constructor(public data: Partial<IAction> = {}) {
+    for (let key in data) {
+      this[key] = data[key];
+    }
+  }
 }
 
 export interface IAssessment {
