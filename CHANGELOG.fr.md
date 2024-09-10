@@ -18,7 +18,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Amélioration de l'affichage des statisques pour un taxon et un territoire donné
 - Amélioration de l'affichage des dates de création et de mise à jour des enregistrements dans la vue détaillée d'un Fiche Bilan Stationnel
 - Utilisation du nouveau format `pyproject.toml` pour l'installation et la définition des dépendances du module à la place du fichier `setup.py`
-- Ajout d'un exmple de fichier `tsconfig.json` à utiliser pour les développements du module à l'extérieur du dossier de GeoNature
+- Ajout d'un exemple de fichier `tsconfig.json` à utiliser pour les développements du module à l'extérieur du dossier de GeoNature
 
 ### Changements
 
