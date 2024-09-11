@@ -1,15 +1,17 @@
 # Changelog
 
-Toutes les modifications notables apportées à ce projet seront documentées dans ce fichier.
+Toutes les modifications notables apportées à ce projet seront documentées dans ce fichier en français.
 
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Inédit]
+
 
 ## [0.5.0] - 2024-08-20
 
-### Fonctionnalités
+### 🚀 Ajouté
 
 - Compatible avec GeoNature 2.14
 - Declaration des permissions CRUVED du module dans une branche alembic
@@ -20,7 +22,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Utilisation du nouveau format `pyproject.toml` pour l'installation et la définition des dépendances du module à la place du fichier `setup.py`
 - Ajout d'un exemple de fichier `tsconfig.json` à utiliser pour les développements du module à l'extérieur du dossier de GeoNature
 
-### Changements
+### 🔄 Modifié
 
 - L'import des composants Angular se fait de manière individuelle et via le chemin complet vers '@angular/material'
 - Changement du paramètre 'nbr' en 'years-nbr' de la route `/stats`
@@ -29,7 +31,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Amélioration des styles CSS pour un meilleure affichage de la page d'accueil.
 - Suppression des imports inutiles dans le module (`locale fr`, `Toastr`)
 
-### Corrections
+### 🐛 Corrigé
 
 - Correction de l'import des territoires dans le module
 - Navigation vers la bonne url lorsque l'on ouvre une fiche bilan stationnel après avoir ouvert une action
@@ -44,14 +46,15 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [0.4.1] - 2023-11-03
 
-### Corrections
+### 🐛 Corrigé
 
 - Corriger l'affichage des calculs en affichant le message aucune données seulement si nécessaire.
 - Modification du webservice de Priority Flora pour y ajouter les calculs dans un attribut distinct.
 
+
 ## [0.4.0] - 2023-04-23
 
-### Fonctionnalités
+### 🚀 Ajouté
 
 - Ajout de nouvelles nomenclatures dans les Actions (docs/update_nomenclatures.sql).
 - Ajout d'un onglet Planning qui recense toutes les actions à mener vis-à-vis des taxons prioritaires.
@@ -61,7 +64,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Ajout de mises à jours automatiques (triggers insert et update) du calcul de la surface et du nombre de mailles M5 (inpn 5x5km) totales pour chaque territoire.
 - Ajout du référencement des régions AURA et PACA dans `t_territory`.
 
-### Changements
+### 🔄 Modifié
 
 - Simplification des routes du module.
 - Déplacement du filtre global Territoire vers la liste des taxons prioritaires.
@@ -69,12 +72,12 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Formatage de tous les fichiers du frontend avec Prettier.
 - Fusion des opérations de migration de la v0.3 à la v0.4 dans un fichier unique.
 
-### Suppressions
+### 🗑 Supprimé
 
 - Suppression du bandeau d'acceuil contenant le titre du module et le filtre global Territoire.
 - Suppression des références au filtre global Territoire.
 
-### Corrections
+### 🐛 Corrigé
 
 Au niveau du champ Action, les nomenclatures suivantes ont été corrigées :
 
@@ -82,9 +85,10 @@ Au niveau du champ Action, les nomenclatures suivantes ont été corrigées :
 - 'état d'avancement mis en place' et pas mise en place
 - 'Action locale' devient 'Niveau local'
 
+
 ## [0.3.0] - 2022-11-16
 
-### Fonctionnalités
+### 🚀 Ajouté
 
 - Ajout de nouvelles nomenclatures dans les Actions.
 - Ajout d'un fichier d'export pour tester l'API avec Postman.
@@ -92,7 +96,7 @@ Au niveau du champ Action, les nomenclatures suivantes ont été corrigées :
 - Packaging du module.
 - Ajout du champ "Date de création" dans le formulaire de création des fiches bilan stationnel.
 
-### Changements
+### 🔄 Modifié
 
 - Renommage de la table cor_territory_taxon en t_priority_taxon.
 - Simplification du web service de recherche de taxons.
@@ -102,16 +106,17 @@ Au niveau du champ Action, les nomenclatures suivantes ont été corrigées :
 - Simplification du fichier "package.json".
 - Mise à jour du format des champs contenant des dates dans le schéma du module pour considérer la time zone.
 
-### Corrections
+### 🐛 Corrigé
 
 - Plus d'erreur si aucun territoire n'est trouvé.
 - La référence à Taxref pour établir les fiches taxons est fonctionnelle.
+
 
 ## [0.2.0] - 2021-12-16
 
 Version intégrant les interfaces de base permettant de saisir une fiche bilan stationnel.
 
-### Fonctionnalités
+### 🚀 Ajouté
 
 - Ajout d'une fenêtre modale "Création/Modification d'une fiche bilan stationnel"
   permettant d'accéder au formulaire d'édition d'une fiche bilan stationnel.
@@ -131,11 +136,12 @@ Version intégrant les interfaces de base permettant de saisir une fiche bilan s
 - Ajout d'un script Bash d'import des taxons prioritaires et sa documentation.
 - Ajout d'un script Bash d'import des territoires et sa documentation.
 
+
 ## [0.1.0] - 2021-11-09
 
 Première version stable du module compatible avec GeoNature version 2.4.1.
 
-### Fonctionnalités
+### 🚀 Ajouté
 
 - Ajout d'un fil d'ariane à l'interface via le composant `<breadcrumbs>`
 - Affichage du titre (config) et de la liste des territoires (webservice) sur l'interface.
@@ -159,11 +165,11 @@ Première version stable du module compatible avec GeoNature version 2.4.1.
 - Ajout de la licence GNU GPL V3 dans [LICENCE.txt](LICENCE.txt)
 - Création du code de base à partir du template de module GeoNature.
 
-### Changements
+### 🔄 Modifié
 
 - Fusion dans `/.gitignore` des lignes de `/frontend/.gitignore`.
 
-### Suppressions
+### 🗑 Supprimé
 
 - Suppression du fichier `/frontend/.editorconfig` car le fichier `/.editorconfig` est suffisant.
 - Suppression de nombreux fichiers semblant inutiles dans le dossier `frontend/`
