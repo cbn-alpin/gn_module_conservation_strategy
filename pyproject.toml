@@ -4,7 +4,7 @@ description = "GeoNature module for conservation strategy."
 readme = "README.md"
 requires-python = ">=3.11"
 keywords = ["conservation", "strategy", "flora"]
-license = {file = "LICENSE.txt"}
+license = {file = "LICENSE"}
 maintainers = [
     {name = "Conservatoire Botanique National Alpin", email = "geonature@cbn-alpin.fr"},
 ]
@@ -13,8 +13,8 @@ authors = [
     {name = "Jean-Pascal MILCENT", email = "jp.milcent@cbn-alpin.fr"},
 ]
 classifiers = [
-    "Development Status :: 1 - Planning",
-    "Intended Audience :: Developers",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GNU Affero General Public License v3",
