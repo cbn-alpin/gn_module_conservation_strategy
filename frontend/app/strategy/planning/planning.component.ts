@@ -139,7 +139,7 @@ export class PlanningComponent implements OnInit, AfterViewInit {
   }
 
   private loadCurrentUserOrganismId() {
-    let currentUser = localStorage.getItem('current_user');
+    let currentUser = localStorage.getItem('gn_current_user');
     let currentUserJson = JSON.parse(currentUser);
     this.filtersForm.controls['organismFilter'].patchValue([currentUserJson.id_organisme])
     this.dataSource.setFilterParam('organisms', currentUserJson.id_organisme);
