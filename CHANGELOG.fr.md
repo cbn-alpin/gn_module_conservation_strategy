@@ -42,6 +42,7 @@ et ce projet adhère à [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Une fiche bilan stationnel sans action est maintenant acceptée et ne génère plus d'erreur
 - Une action sans partenaires est mainttenant acceptée et ne génère plus d'erreur
 - Suppression de l'erreur lors du calcul dynamique de la hauteur de la table de données de la liste des taxons prioritaires
+- Utilisation du nouvel identifiant `gn_current_user` du stockage local au navigateur à la place de `current_user`
 
 
 ## [0.4.1] - 2023-11-03

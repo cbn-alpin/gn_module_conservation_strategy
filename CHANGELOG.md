@@ -41,6 +41,7 @@ assets. See PnX-SI/GeoNature#2957.
 - Accept an assessment without action
 - Accept an action without partner
 - Fix error with responsive height of priority taxa data table
+- Use new local storage id `gn_current_user` instead of `current_user`
 
 
 ## [0.4.1] - 2023-11-03
