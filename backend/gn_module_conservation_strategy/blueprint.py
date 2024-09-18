@@ -617,8 +617,10 @@ def get_tasks():
     elif type == "assessment":
         query = query_assessment.distinct(TAssessment.id)
     else:
-        union_query = union(query_action, query_assessment).subquery()
-        query = select(union_query)
+        union_query = (
+            union(query_action, query_assessment).subquery()
+        )
+        query = select(union_query).distinct()
 
     if organisms:
         query = query.filter(CorActionOrganism.id_organism.in_(organisms))
