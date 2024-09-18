@@ -23,10 +23,9 @@ import { ITask, PlanningDataSource } from './planning.datasource';
 @Component({
   selector: 'cs-planning',
   templateUrl: './planning.component.html',
-  styleUrls: ['./planning.component.scss']
+  styleUrls: ['./planning.component.scss'],
 })
 export class PlanningComponent implements OnInit, AfterViewInit {
-
   filtersForm: FormGroup;
   baseApiEndpoint;
   firstLoad: Boolean = true;
@@ -52,8 +51,8 @@ export class PlanningComponent implements OnInit, AfterViewInit {
     private cfg: ConfigService,
     private dataService: DataService,
     private formBuilder: FormBuilder,
-    public store: StoreService,
-  ) { }
+    public store: StoreService
+  ) {}
 
   ngOnInit() {
     // WARNING: respect order of methods call
@@ -89,7 +88,8 @@ export class PlanningComponent implements OnInit, AfterViewInit {
           this.dataSource.setFilterParam('sort', `${event.active}:${event.direction}`);
           this.loadTasks();
         })
-      ).subscribe();
+      )
+      .subscribe();
   }
 
   private recalculateDataTableSize(): void {
@@ -98,17 +98,19 @@ export class PlanningComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @HostListener("window:resize", ["$event"])
+  @HostListener('window:resize', ['$event'])
   onWindowResize(event) {
     this.calculateDataTableHeight();
   }
 
   private calculateDataTableHeight(): void {
     const screenHeight = document.documentElement.clientHeight;
-    const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
-    // TODO: see why we need to remove 11px !
-    const dataTableHeight = screenHeight - dataTableTop - 11;
-    this.dataTableHeight = dataTableHeight;
+    if (this.dataTableContainer != undefined) {
+      const dataTableTop = this.dataTableContainer.nativeElement.getBoundingClientRect().top;
+      // TODO: see why we need to remove 11px !
+      const dataTableHeight = screenHeight - dataTableTop - 11;
+      this.dataTableHeight = dataTableHeight;
+    }
   }
 
   private initializeDataSource() {
@@ -121,7 +123,7 @@ export class PlanningComponent implements OnInit, AfterViewInit {
       'priority-taxa',
       task.priorityTaxonId,
       'assessments',
-      task.assessmentId
+      task.assessmentId,
     ];
     if (task.actionId) {
       url.push('actions', task.actionId);
@@ -141,7 +143,7 @@ export class PlanningComponent implements OnInit, AfterViewInit {
   private loadCurrentUserOrganismId() {
     let currentUser = localStorage.getItem('gn_current_user');
     let currentUserJson = JSON.parse(currentUser);
-    this.filtersForm.controls['organismFilter'].patchValue([currentUserJson.id_organisme])
+    this.filtersForm.controls['organismFilter'].patchValue([currentUserJson.id_organisme]);
     this.dataSource.setFilterParam('organisms', currentUserJson.id_organisme);
   }
 
@@ -179,11 +181,11 @@ export class PlanningComponent implements OnInit, AfterViewInit {
 
   loadOrganisms() {
     this.$organisms = this.dataService.getOrganisms().pipe(
-      map(organisms => {
+      map((organisms) => {
         let organismList = [];
         organisms.forEach((item) => {
           organismList.push(item);
-        })
+        });
         return organismList;
       })
     );
@@ -201,14 +203,13 @@ export class PlanningComponent implements OnInit, AfterViewInit {
 
   loadProgressStatus() {
     this.$progressStatus = this.dataService.getNomenclatures('CS_ACTION_PROGRESS').pipe(
-      map(nomenclatures => {
+      map((nomenclatures) => {
         let nomenclaturesList = [];
         nomenclatures.values.forEach((item) => {
           nomenclaturesList.push({ code: item.cd_nomenclature, label: item.label_default });
-        })
+        });
         return nomenclaturesList;
       })
     );
   }
-
 }
