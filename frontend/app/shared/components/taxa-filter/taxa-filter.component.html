@@ -24,7 +24,7 @@
   </button>
 
   <mat-hint class="mat-error" *ngIf="!isLoading && noResult && parentFormControl.value?.length >= charNumber">
-    {{'Taxon.NoTaxonFound' | translate}}
+    {{'TaxonSearch.Messages.NoTaxonFound' | translate}}
   </mat-hint>
 
   <ng-template #rt let-r="result" let-t="term">

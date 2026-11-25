@@ -181,7 +181,7 @@ export class TaxaListComponent implements OnInit, AfterViewInit {
     this.$territories = this.dataService.getTerritories().pipe(
       map(territories => {
         let territoriesList = [];
-        territories.forEach((item) => {
+        territories?.forEach((item) => {
           territoriesList.push({ code: item.code, label: item.label });
         })
         return territoriesList;

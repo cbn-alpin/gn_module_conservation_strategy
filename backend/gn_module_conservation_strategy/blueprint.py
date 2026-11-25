@@ -12,7 +12,6 @@ from geonature.utils.env import DB
 from utils_flask_sqla.response import json_resp
 
 from apptax.taxonomie.models import (
-    BibNoms,
     BibAttributs,
     TMedias,
     Taxref,
@@ -264,7 +263,6 @@ def get_priority_taxon_infos(priority_taxon_id):
         Taxref.nom_complet.label("full_name"),
         Taxref.nom_complet_html.label("display_full_name"),
         Taxref.lb_nom.label("short_name"),
-        BibNoms.id_nom.label("taxhub_record_id"),
         TPriorityTaxon.revised_conservation_priority.label("revised_cpi"),
         TPriorityTaxon.computed_conservation_priority.label("computed_cpi"),
         TPriorityTaxon.min_prospect_zone_date.label("date_min"),
@@ -276,7 +274,6 @@ def get_priority_taxon_infos(priority_taxon_id):
     query = (
         select(*fields, func.count(TAssessment.id).label("assessment_count"))
         .join(Taxref, Taxref.cd_nom == TPriorityTaxon.cd_nom)
-        .outerjoin(BibNoms, BibNoms.cd_nom == Taxref.cd_nom)
         .outerjoin(TAssessment, TAssessment.id_priority_taxon == TPriorityTaxon.id)
         .outerjoin(TTerritory, TTerritory.id_territory == TPriorityTaxon.id_territory)
         .filter(TPriorityTaxon.id == priority_taxon_id)
