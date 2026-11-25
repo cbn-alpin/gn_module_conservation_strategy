@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { Observable } from "@librairies/rxjs";
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { ConfigService } from "./config.service";
 import { IOrganism } from "../models/assessment.model";
@@ -29,7 +28,7 @@ export class DataService {
   }
 
   getHomePage(): Observable<string> {
-    const path = "assets/conservation_strategy/assets/templates/home.tpl.html";
+    const path = "modules/conservation_strategy/assets/templates/home.tpl.html";
     return this.http.get(path, { responseType: 'text' });
   }
 

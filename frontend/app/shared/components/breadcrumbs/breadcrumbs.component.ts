@@ -1,8 +1,6 @@
-import { filter, distinctUntilChanged } from 'rxjs/operators';
-
-import { Observable } from 'rxjs';
 import { Component, OnInit, } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, Event, ParamMap, NavigationEnd, Router } from "@angular/router";
+import { ActivatedRoute, Event, ParamMap, NavigationEnd, Router } from "@angular/router";
+import { filter, distinctUntilChanged } from 'rxjs/operators';
 
 import { IBreadCrumb } from './breadcrumb.interface';
 

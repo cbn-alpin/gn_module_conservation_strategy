@@ -58,25 +58,21 @@ WHERE module_code = :moduleCode ;
 INSERT INTO taxonomie.bib_themes (
     nom_theme,
     desc_theme,
-    ordre,
-    id_droit
+    ordre
 ) VALUES (
     'Strat. Conservation',
     'Informations relative à la stratégie de conservation du taxon',
-    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1),
-    4 -- TODO : Voir à quoi cela correspond
+    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1)
 ) ;
 
 INSERT INTO taxonomie.bib_themes (
     nom_theme,
     desc_theme,
-    ordre,
-    id_droit
+    ordre
 ) VALUES (
     'Atlas',
     'Informations relatives à GeoNature-atlas',
-    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1),
-    3 -- TODO : Voir à quoi cela correspond
+    (SELECT MAX(ordre) + 1 FROM taxonomie.bib_themes LIMIT 1)
 ) ON CONFLICT DO NOTHING
 ;
 
